@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using AutoHitCounter.Enums;
 using AutoHitCounter.Interfaces;
 using AutoHitCounter.Models;
 
@@ -14,15 +13,18 @@ public class ProfileService : IProfileService
 {
     private readonly Dictionary<string, List<Profile>> _profiles;
 
-    private static readonly string ProfilesPath = Path.Combine(
+    private static readonly string UserProfilesPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         "AutoHitCounter",
         "Profiles.json");
 
+    private static readonly string DefaultProfilesPath = Path.Combine(
+        AppDomain.CurrentDomain.BaseDirectory,
+        "DefaultProfiles.json");
+
     public ProfileService()
     {
-        _profiles = LoadProfiles();
-        EnsureTestProfile();
+        _profiles = LoadMergedProfiles();
     }
 
     public List<Profile> GetProfiles(string gameName)
@@ -45,24 +47,56 @@ public class ProfileService : IProfileService
         else
             list.Add(profile);
 
-        WriteToDisk();
+        WriteUserProfiles();
     }
 
     public void DeleteProfile(string gameName, string profileName)
     {
         if (!_profiles.TryGetValue(gameName, out var list)) return;
         list.RemoveAll(p => p.Name == profileName);
-        WriteToDisk();
+        WriteUserProfiles();
     }
 
-    private Dictionary<string, List<Profile>> LoadProfiles()
+    private Dictionary<string, List<Profile>> LoadMergedProfiles()
+    {
+        var defaults = LoadFromDisk(DefaultProfilesPath);
+        var user = LoadFromDisk(UserProfilesPath);
+        
+        var merged = new Dictionary<string, List<Profile>>();
+
+        foreach (var kvp in defaults)
+            merged[kvp.Key] = new List<Profile>(kvp.Value);
+
+        foreach (var kvp in user)
+        {
+            if (!merged.TryGetValue(kvp.Key, out var mergedList))
+            {
+                merged[kvp.Key] = new List<Profile>(kvp.Value);
+                continue;
+            }
+
+            foreach (var userProfile in kvp.Value)
+            {
+                var existingIndex = mergedList.FindIndex(p => p.Name == userProfile.Name);
+
+                if (existingIndex >= 0)
+                    mergedList[existingIndex] = userProfile;
+                else
+                    mergedList.Add(userProfile);
+            }
+        }
+
+        return merged;
+    }
+
+    private static Dictionary<string, List<Profile>> LoadFromDisk(string path)
     {
         try
         {
-            if (!File.Exists(ProfilesPath))
+            if (!File.Exists(path))
                 return new Dictionary<string, List<Profile>>();
 
-            var json = File.ReadAllText(ProfilesPath);
+            var json = File.ReadAllText(path);
             return JsonSerializer.Deserialize<Dictionary<string, List<Profile>>>(json)
                    ?? new Dictionary<string, List<Profile>>();
         }
@@ -72,44 +106,13 @@ public class ProfileService : IProfileService
         }
     }
 
-    private void WriteToDisk()
+    private void WriteUserProfiles()
     {
-        var dir = Path.GetDirectoryName(ProfilesPath)!;
+        var dir = Path.GetDirectoryName(UserProfilesPath)!;
         if (!Directory.Exists(dir))
             Directory.CreateDirectory(dir);
 
         var json = JsonSerializer.Serialize(_profiles, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(ProfilesPath, json);
-    }
-    
-    private void EnsureTestProfile()
-    {
-        const string gameName = "Elden Ring";
-    
-        if (!_profiles.TryGetValue(gameName, out var list))
-        {
-            list = new List<Profile>();
-            _profiles[gameName] = list;
-        }
-
-        if (list.Exists(p => p.Name == "Test Profile")) return;
-
-        var testProfile = new Profile
-        {
-            Name = "Test Profile",
-            GameName = gameName,
-            Splits = new List<SplitEntry>
-            {
-                new SplitEntry
-                {
-                    Name = "Test Split",
-                    EventId = null,
-                    Type = SplitType.Child
-                }
-            }
-        };
-
-        list.Add(testProfile);
-        WriteToDisk();
+        File.WriteAllText(UserProfilesPath, json);
     }
 }
