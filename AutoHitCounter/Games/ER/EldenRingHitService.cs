@@ -134,8 +134,8 @@ public class EldenRingHitService(IMemoryService memoryService, HookManager hookM
         var code = EldenRingCustomCodeOffsets.Base + EldenRingCustomCodeOffsets.SpEffectTickDamage;
         AsmHelper.WriteRelativeOffsets(bytes, [
             (code + 0x4, WorldChrMan.Base, 7, 0x4 + 3),
-            (code + 0xCD, hit, 6, 0xCD + 2),
-            (code + 0xDD, Hooks.SpEffectTickDamage + 6, 5, 0xDD + 1),
+            (code + 0xD6, hit, 6, 0xD6 + 2),
+            (code + 0xE6, Hooks.SpEffectTickDamage + 6, 5, 0xE6 + 1),
         ]);
         
         memoryService.WriteBytes(code, bytes);

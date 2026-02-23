@@ -249,10 +249,10 @@ namespace AutoHitCounter.Properties {
         ///41 50                   push   r8
         ///48 8b 1d 00 00 00 00    mov    rbx,QWORD PTR [rip+0x0]        # b &lt;_main+0xb&gt;
         ///48 85 db                test   rbx,rbx
-        ///0f 84 bf 00 00 00       je     d3 &lt;skip&gt;
+        ///0f 84 c8 00 00 00       je     dc &lt;skip&gt;
         ///48 8b 9b 08 e5 01 00    mov    rbx,QWORD PTR [rbx+0x1e508]
         ///48 85 db                test   rbx,rbx
-        ///0f 84 af 00 00 00       je     d3 &lt;skip&gt;
+        ///0f 84 b8 00 00 00       je     dc &lt;skip&gt;
         ///48 8b 83 90 01 00 00    mov    rax,QWORD PTR [rbx+0x190]
         ///48 85 c0                test   rax,rax
         ///0f 8 [rest of string was truncated]&quot;;.
