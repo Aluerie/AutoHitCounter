@@ -80,6 +80,47 @@ namespace AutoHitCounter.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to 50                      push   rax
+        ///e8 00 00 00 00          call   6 &lt;_main+0x6&gt;
+        ///58                      pop    rax
+        ///74 72                   je     7b &lt;skip_all&gt;
+        ///48 85 d2                test   rdx,rdx
+        ///74 00                   je     e &lt;null_attacker&gt;
+        ///
+        ///00000000000e &lt;null_attacker&gt;:
+        ///50                      push   rax
+        ///57                      push   rdi
+        ///52                      push   rdx
+        ///53                      push   rbx
+        ///48 89 d7                mov    rdi,rdx
+        ///48 8b 15 00 00 00 00    mov    rdx,QWORD  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DS3Hit {
+            get {
+                return ResourceManager.GetString("DS3Hit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 50                      push   rax
+        ///e8 00 00 00 00          call   6 &lt;_main+0x6&gt;
+        ///74 16                   je     1e &lt;skip_count&gt;
+        ///48 8b 05 00 00 00 00    mov    rax,QWORD PTR [rip+0x0]        # f &lt;_main+0xf&gt;
+        ///48 3b b0 80 00 00 00    cmp    rsi,QWORD PTR [rax+0x80]
+        ///75 06                   jne    1e &lt;skip_count&gt;
+        ///ff 05 00 00 00 00       inc    DWORD PTR [rip+0x0]        # 1e &lt;skip_count&gt;
+        ///
+        ///00000000001e &lt;skip_count&gt;:
+        ///58                      pop    rax
+        ///f3 0f 10 05 00 00 00    movss  xmm0,DWORD PTR [rip+0x0] [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DS3LethalFall {
+            get {
+                return ResourceManager.GetString("DS3LethalFall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 50                      push   rax
         ///48 8b 05 00 00 00 00    mov    rax,QWORD PTR [rip+0x0]        # 8 &lt;_main+0x8&gt;
         ///48 3b 98 08 e5 01 00    cmp    rbx,QWORD PTR [rax+0x1e508]
         ///75 20                   jne    31 &lt;skip&gt;

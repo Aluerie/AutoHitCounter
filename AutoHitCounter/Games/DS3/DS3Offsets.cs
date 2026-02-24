@@ -60,6 +60,14 @@ public static class DS3Offsets
         
     }
 
+    public static nint FallDamageKillFloor;
+
+    public static class Hooks
+    {
+        public static nint Hit;
+        public static nint LethalFall;
+    }
+
 
 
 
@@ -83,17 +91,82 @@ public static class DS3Offsets
             Version1_15_1_0 or Version1_15_2_0 => 0x477FDB8,
             _ => 0
         };
+        
+        
+        FallDamageKillFloor = moduleBase + Version switch
+        {
+            Version1_3_2_0 => 0x3CF01A0,
+            Version1_4_1_0 => 0x3CF1240,
+            Version1_4_2_0 or Version1_4_3_0 => 0x3CF14C0,
+            Version1_5_0_0 => 0x3CF47A0,
+            Version1_5_1_0 => 0x3CF3A20,
+            Version1_6_0_0 => 0x3CF4940,
+            Version1_7_0_0 => 0x3CF7E10,
+            Version1_8_0_0 => 0x3D3C4B0,
+            Version1_9_0_0 or Version1_10_0_0 => 0x3D3C170,
+            Version1_11_0_0 => 0x3D651D0,
+            Version1_12_0_0 => 0x3D67750,
+            Version1_13_0_0 => 0x3D69E50,
+            Version1_14_0_0 => 0x3D6ADB0,
+            Version1_15_0_0 => 0x3D6ADD0,
+            Version1_15_1_0 => 0x3D7EE50,
+            Version1_15_2_0 => 0x3D7EE10,
+            _ => 0
+        };
 
         
         
-       
+        Hooks.Hit = moduleBase + Version switch
+        {
+            Version1_3_2_0 => 0x99F498,
+            Version1_4_1_0 or Version1_4_2_0 or Version1_4_3_0 => 0x99F398,
+            Version1_5_0_0 => 0x99FE88,
+            Version1_5_1_0 => 0x99FCB8,
+            Version1_6_0_0 => 0x9A0288,
+            Version1_7_0_0 => 0x9A1198,
+            Version1_8_0_0 => 0x9AD8A8,
+            Version1_9_0_0 => 0x9ADE68,
+            Version1_10_0_0 => 0x9ADED8,
+            Version1_11_0_0 => 0x4518542,
+            Version1_12_0_0 => 0x1B8C72D,
+            Version1_13_0_0 => 0xC883DD,
+            Version1_14_0_0 => 0x1B949A1,
+            Version1_15_0_0 => 0xC88A3D,
+            Version1_15_1_0 => 0x51BCD98,
+            Version1_15_2_0 => 0x9C2BF8,
+            _ => 0
+        };
+        
+        Hooks.LethalFall = moduleBase + Version switch
+        {
+            Version1_3_2_0 => 0x626746,
+            Version1_4_1_0 or Version1_4_2_0 or Version1_4_3_0 => 0x626D16,
+            Version1_5_0_0 => 0x627186,
+            Version1_5_1_0 => 0x626FB6,
+            Version1_6_0_0 => 0x627586,
+            Version1_7_0_0 => 0x628496,
+            Version1_8_0_0 or Version1_9_0_0 or Version1_10_0_0 => 0x62EA06,
+            Version1_11_0_0 => 0x632056,
+            Version1_12_0_0 => 0x6326B6,
+            Version1_13_0_0 => 0x6327B6,
+            Version1_14_0_0 or Version1_15_0_0 => 0x6327E6,
+            Version1_15_1_0 => 0x634C06,
+            Version1_15_2_0 => 0x634BF6,
+            _ => 0
+        };
+
+
         
 #if DEBUG
          _baseAddr = moduleBase;
-        Console.WriteLine("--- Base Pointers ---");
+        Console.WriteLine("--- Globals ---");
         PrintOffset("WorldChrMan.Base", WorldChrMan.Base);
+        
+        PrintOffset("FallDamageKillingFloor", FallDamageKillFloor);
             
         Console.WriteLine("\n--- Hooks ---");
+        PrintOffset("Hooks.Hit", Hooks.Hit);
+        PrintOffset("Hooks.LethalFall", Hooks.LethalFall);
 
            
             

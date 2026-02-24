@@ -15,6 +15,8 @@ public enum AsmScript
     ScholarIgtLoadGame,
     
     DS3CheckPlayerDead,
+    DS3Hit,
+    DS3LethalFall,
     
     
     

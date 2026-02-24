@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using AutoHitCounter.Enums;
 using AutoHitCounter.Interfaces;
 using AutoHitCounter.Memory;
+using static AutoHitCounter.Games.DS3.DS3Offsets;
 
 namespace AutoHitCounter.Games.DS3;
 
-public class DS3Module : IGameModule
+public class DS3Module : IGameModule, IDisposable
 {
     private readonly IMemoryService _memoryService;
     private readonly IStateService _stateService;
@@ -53,7 +54,7 @@ public class DS3Module : IGameModule
         // _eventService.InstallHook();
         _hitService.InstallHooks();
         // _igtPtr = _memoryService.Read<nint>(GameDataMan.Base) + GameDataMan.Igt;
-        // _tickService.RegisterGameTick(Tick);
+        _tickService.RegisterGameTick(Tick);
     }
     
     private void InitializeOffsets()
@@ -64,6 +65,38 @@ public class DS3Module : IGameModule
         var moduleBase = _memoryService.BaseAddress;
         DS3Offsets.Initialize(fileVersion, moduleBase);
     }
+    
+    private void Tick()
+    {
+        if (!IsLoaded()) return;
 
+        if (_hitService.HasHit() && (_lastHit == null || (DateTime.Now - _lastHit.Value).TotalSeconds > 3))
+        {
+            OnHit?.Invoke(1);
+            _lastHit = DateTime.Now;
+        }
+
+        // if (_eventService.ShouldSplit())
+        // {
+        //     OnEventSet?.Invoke();
+        // }
+
+        // OnIgtChanged?.Invoke(_memoryService.Read<uint>(_igtPtr));
+    }
+
+    private bool IsLoaded()
+    {
+        var worldChrman = _memoryService.Read<nint>(WorldChrMan.Base);
+        return _memoryService.Read<nint>(worldChrman + WorldChrMan.PlayerIns) != 0;
+    }
+
+    public void Dispose()
+    {
+        _stateService.Unsubscribe(State.Attached, Initialize);
+        _tickService.UnregisterGameTick();
+        OnHit = null;
+        OnEventSet = null;
+        OnIgtChanged = null;
+    }
     
 }

@@ -914,4 +914,72 @@ c3                      ret
 31 c0                   xor    eax,eax
 c3                      ret</value>
   </data>
+  <data name="DS3Hit" xml:space="preserve">
+    <value>50                      push   rax
+e8 00 00 00 00          call   6 &lt;_main+0x6&gt;
+58                      pop    rax
+74 72                   je     7b &lt;skip_all&gt;
+48 85 d2                test   rdx,rdx
+74 00                   je     e &lt;null_attacker&gt;
+
+00000000000e &lt;null_attacker&gt;:
+50                      push   rax
+57                      push   rdi
+52                      push   rdx
+53                      push   rbx
+48 89 d7                mov    rdi,rdx
+48 8b 15 00 00 00 00    mov    rdx,QWORD PTR [rip+0x0]        # 1c &lt;null_attacker+0xe&gt;
+48 8b 82 80 00 00 00    mov    rax,QWORD PTR [rdx+0x80]
+48 39 c7                cmp    rdi,rax
+74 4f                   je     77 &lt;skip_count&gt;
+48 8b 80 90 1f 00 00    mov    rax,QWORD PTR [rax+0x1f90]
+48 3b 88 98 00 00 00    cmp    rcx,QWORD PTR [rax+0x98]
+75 3f                   jne    77 &lt;skip_count&gt;
+45 0f 57 ff             xorps  xmm15,xmm15
+45 0f 2f 38             comiss xmm15,DWORD PTR [r8]
+72 2f                   jb     71 &lt;real_hit&gt;
+45 0f 2f 78 04          comiss xmm15,DWORD PTR [r8+0x4]
+72 28                   jb     71 &lt;real_hit&gt;
+45 0f 2f 78 08          comiss xmm15,DWORD PTR [r8+0x8]
+72 21                   jb     71 &lt;real_hit&gt;
+45 0f 2f 78 0c          comiss xmm15,DWORD PTR [r8+0xc]
+72 1a                   jb     71 &lt;real_hit&gt;
+45 0f 2f 78 10          comiss xmm15,DWORD PTR [r8+0x10]
+72 13                   jb     71 &lt;real_hit&gt;
+41 80 b8 cd 00 00 00    cmp    BYTE PTR [r8+0xcd],0x0
+00 
+75 09                   jne    71 &lt;real_hit&gt;
+41 83 78 7c 00          cmp    DWORD PTR [r8+0x7c],0x0
+7d 02                   jge    71 &lt;real_hit&gt;
+eb 06                   jmp    77 &lt;skip_count&gt;
+
+000000000071 &lt;real_hit&gt;:
+ff 05 00 00 00 00       inc    DWORD PTR [rip+0x0]        # 77 &lt;skip_count&gt;
+
+000000000077 &lt;skip_count&gt;:
+5b                      pop    rbx
+5a                      pop    rdx
+5f                      pop    rdi
+58                      pop    rax
+
+00000000007b &lt;skip_all&gt;:
+48 83 ec 50             sub    rsp,0x50
+48 8b 41 08             mov    rax,QWORD PTR [rcx+0x8]
+e9 00 00 00 00          jmp    88 &lt;skip_all+0xd&gt;</value>
+  </data>
+  <data name="DS3LethalFall" xml:space="preserve">
+    <value>50                      push   rax
+e8 00 00 00 00          call   6 &lt;_main+0x6&gt;
+74 16                   je     1e &lt;skip_count&gt;
+48 8b 05 00 00 00 00    mov    rax,QWORD PTR [rip+0x0]        # f &lt;_main+0xf&gt;
+48 3b b0 80 00 00 00    cmp    rsi,QWORD PTR [rax+0x80]
+75 06                   jne    1e &lt;skip_count&gt;
+ff 05 00 00 00 00       inc    DWORD PTR [rip+0x0]        # 1e &lt;skip_count&gt;
+
+00000000001e &lt;skip_count&gt;:
+58                      pop    rax
+f3 0f 10 05 00 00 00    movss  xmm0,DWORD PTR [rip+0x0]        # 27 &lt;skip_count+0x9&gt;
+00 
+e9 00 00 00 00          jmp    2c &lt;skip_count+0xe&gt;</value>
+  </data>
 </root>

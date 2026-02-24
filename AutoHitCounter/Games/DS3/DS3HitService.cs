@@ -1,5 +1,6 @@
 ﻿// 
 
+using System.Linq;
 using AutoHitCounter.Enums;
 using AutoHitCounter.Interfaces;
 using AutoHitCounter.Memory;
@@ -16,6 +17,9 @@ public class DS3HitService(IMemoryService memoryService, HookManager hookManager
     public void InstallHooks()
     {
         WritePlayerDeadCheck();
+
+        InstallHitHook();
+        InstallLethalFallHook();
     }
 
     public bool HasHit()
@@ -33,5 +37,46 @@ public class DS3HitService(IMemoryService memoryService, HookManager hookManager
         var bytes = AsmLoader.GetAsmBytes(AsmScript.DS3CheckPlayerDead);
         AsmHelper.WriteRelativeOffset(bytes, code, WorldChrMan.Base, 7, 3);
         memoryService.WriteBytes(code, bytes);
+    }
+
+    private void InstallHitHook()
+    {
+        var bytes = AsmLoader.GetAsmBytes(AsmScript.DS3Hit);
+        var hit = Base + Hit;
+        var checkPlayerDeadFunc = Base + CheckPlayerDead;
+        var code = Base + HitCode;
+        
+        AsmHelper.WriteRelativeOffsets(bytes, [
+            (code + 0x1, checkPlayerDeadFunc, 5, 0x1 + 1),
+            (code + 0x15, WorldChrMan.Base, 7, 0x15 + 3),
+            (code + 0x71, hit, 6, 0x71 + 2),
+            (code + 0x83, Hooks.Hit + 8, 5, 0x83 + 1),
+        ]);
+        
+        memoryService.WriteBytes(code, bytes);
+        hookManager.InstallHook(code, Hooks.Hit, [0x48, 0x83, 0xEC, 0x50, 0x48, 0x8B, 0x41, 0x08]);
+    }
+
+    private void InstallLethalFallHook()
+    {
+        var bytes = AsmLoader.GetAsmBytes(AsmScript.DS3LethalFall);
+        var hit = Base + Hit;
+        var checkPlayerDeadFunc = Base + CheckPlayerDead;
+        var code = Base + LethalFall;
+
+        AsmHelper.WriteRelativeOffsets(bytes, [
+            (code + 0x1, checkPlayerDeadFunc, 5, 0x1 + 1),
+            (code + 0x8, WorldChrMan.Base, 7, 0x8 + 3),
+            (code + 0x18, hit, 6, 0x18 + 2),
+            (code + 0x1F, FallDamageKillFloor, 8, 0x1F + 4),
+            (code + 0x27, Hooks.LethalFall + 8, 5, 0x27 + 1)
+        ]);
+        
+        var originalBytes = bytes.Skip(0x1F).Take(8).ToArray();
+        
+        memoryService.WriteBytes(code, bytes);
+        
+        hookManager.InstallHook(code, Hooks.LethalFall, originalBytes);
+        
     }
 }
