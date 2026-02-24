@@ -17,6 +17,8 @@ public enum AsmScript
     DS3CheckPlayerDead,
     DS3Hit,
     DS3LethalFall,
+    DS3CheckAuxAttacker,
+    DS3AuxProc,
     
     
     

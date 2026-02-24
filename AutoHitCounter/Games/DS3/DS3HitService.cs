@@ -20,6 +20,7 @@ public class DS3HitService(IMemoryService memoryService, HookManager hookManager
 
         InstallHitHook();
         InstallLethalFallHook();
+        InstallAuxHitHooks();
     }
 
     public bool HasHit()
@@ -77,6 +78,48 @@ public class DS3HitService(IMemoryService memoryService, HookManager hookManager
         memoryService.WriteBytes(code, bytes);
         
         hookManager.InstallHook(code, Hooks.LethalFall, originalBytes);
+        
+    }
+
+    private void InstallAuxHitHooks()
+    {
+        var auxCheckFlag = Base + CheckAuxProcFlag;
+        InstallCheckAuxAttackerHook(auxCheckFlag);
+        InstallAuxProcHook(auxCheckFlag);
+    }
+
+    private void InstallCheckAuxAttackerHook(nint auxCheckFlag)
+    {
+        var bytes = AsmLoader.GetAsmBytes(AsmScript.DS3CheckAuxAttacker);
+        var checkPlayerDeadFunc = Base + CheckPlayerDead;
+        var code = Base + CheckAuxAttacker;
+        
+        AsmHelper.WriteRelativeOffsets(bytes, [
+            (code + 0x1, checkPlayerDeadFunc, 5, 0x1 + 1),
+            (code + 0x8, WorldChrMan.Base, 7, 0x8 + 3),
+            (code + 0x26, auxCheckFlag, 7, 0x26 + 2),
+            (code + 0x2D, auxCheckFlag, 7, 0x2D + 2),
+            (code + 0x3C, Hooks.CheckAuxAttacker + 7, 5, 0x3C + 1)
+        ]);
+        
+        memoryService.WriteBytes(code, bytes);
+        hookManager.InstallHook(code, Hooks.CheckAuxAttacker, [0x49, 0x89, 0xE3, 0x49, 0x89, 0x4B, 0x08]);
+    }
+
+    private void InstallAuxProcHook(nint auxCheckFlag)
+    {
+        var bytes = AsmLoader.GetAsmBytes(AsmScript.DS3AuxProc);
+        var hit = Base + Hit;
+        var code = Base + AuxProc;
+        
+        AsmHelper.WriteRelativeOffsets(bytes, [
+            (code + 0x9, auxCheckFlag, 7, 0x9 + 2),
+            (code + 0x12, hit, 6, 0x12 + 2),
+            (code + 0x18, Hooks.AuxProc + 9, 5, 0x18 + 1)
+        ]);
+        
+        memoryService.WriteBytes(code, bytes);
+        hookManager.InstallHook(code, Hooks.AuxProc, [0x41, 0x09, 0x42, 0x4C, 0x43, 0x8B, 0x4C, 0x9A, 0x24]);
         
     }
 }

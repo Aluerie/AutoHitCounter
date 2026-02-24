@@ -60,6 +60,42 @@ namespace AutoHitCounter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 41 09 42 4c             or     DWORD PTR [r10+0x4c],eax
+        ///43 8b 4c 9a 24          mov    ecx,DWORD PTR [r10+r11*4+0x24]
+        ///80 3d 00 00 00 00 00    cmp    BYTE PTR [rip+0x0],0x0        # 10 &lt;_main+0x10&gt;
+        ///74 06                   je     18 &lt;skip&gt;
+        ///ff 05 00 00 00 00       inc    DWORD PTR [rip+0x0]        # 18 &lt;skip&gt;
+        ///
+        ///000000000018 &lt;skip&gt;:
+        ///e9 00 00 00 00          jmp    1d &lt;skip+0x5&gt;.
+        /// </summary>
+        internal static string DS3AuxProc {
+            get {
+                return ResourceManager.GetString("DS3AuxProc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 50                      push   rax
+        ///e8 00 00 00 00          call   6 &lt;_main+0x6&gt;
+        ///74 25                   je     2d &lt;skip&gt;
+        ///48 8b 05 00 00 00 00    mov    rax,QWORD PTR [rip+0x0]        # f &lt;_main+0xf&gt;
+        ///48 3b 90 80 00 00 00    cmp    rdx,QWORD PTR [rax+0x80]
+        ///75 15                   jne    2d &lt;skip&gt;
+        ///4d 85 c0                test   r8,r8
+        ///74 09                   je     26 &lt;set_check_proc_flag&gt;
+        ///4c 3b 80 80 00 00 00    cmp    r8,QWORD PTR [rax+0x80]
+        ///74 07                   je     2d &lt;skip&gt;
+        ///
+        ///000000000026 &lt;s [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DS3CheckAuxAttacker {
+            get {
+                return ResourceManager.GetString("DS3CheckAuxAttacker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 48 8b 05 00 00 00 00    mov    rax,QWORD PTR [rip+0x0]        # 7 &lt;_main+0x7&gt;
         ///48 85 c0                test   rax,rax
         ///74 29                   je     35 &lt;dead&gt;

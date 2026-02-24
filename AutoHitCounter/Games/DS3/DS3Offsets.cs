@@ -66,6 +66,8 @@ public static class DS3Offsets
     {
         public static nint Hit;
         public static nint LethalFall;
+        public static nint CheckAuxAttacker;
+        public static nint AuxProc;
     }
 
 
@@ -154,6 +156,50 @@ public static class DS3Offsets
             Version1_15_2_0 => 0x634BF6,
             _ => 0
         };
+        
+        Hooks.CheckAuxAttacker = moduleBase + Version switch
+        {
+            Version1_3_2_0 => 0x96A570,
+            Version1_4_1_0 or Version1_4_2_0 or Version1_4_3_0 => 0x96A470,
+            Version1_5_0_0 => 0x96AF40,
+            Version1_5_1_0 => 0x96AD70,
+            Version1_6_0_0 => 0x96B340,
+            Version1_7_0_0 => 0x96C250,
+            Version1_8_0_0 => 0x978860,
+            Version1_9_0_0 => 0x978E20,
+            Version1_10_0_0 => 0x978E80,
+            Version1_11_0_0 => 0x980A20,
+            Version1_12_0_0 => 0x981440,
+            Version1_13_0_0 => 0x982DE0,
+            Version1_14_0_0 => 0x9830B0,
+            Version1_15_0_0 => 0x983100,
+            Version1_15_1_0 => 0x98D220,
+            Version1_15_2_0 => 0x98D350,
+            _ => 0
+        };
+        
+        Hooks.AuxProc = moduleBase + Version switch
+        {
+            Version1_3_2_0 => 0x9C1E15,
+            Version1_4_1_0 or Version1_4_2_0 or Version1_4_3_0 => 0x9C1D15,
+            Version1_5_0_0 => 0x9C2805,
+            Version1_5_1_0 => 0x9C2635,
+            Version1_6_0_0 => 0x9C2C05,
+            Version1_7_0_0 => 0x9C3B15,
+            Version1_8_0_0 => 0x9D02C5,
+            Version1_9_0_0 => 0x9D0885,
+            Version1_10_0_0 => 0x9D08F5,
+            Version1_11_0_0 => 0x9DA515,
+            Version1_12_0_0 => 0x9DAF65,
+            Version1_13_0_0 => 0x9DC905,
+            Version1_14_0_0 => 0x9DCBD5,
+            Version1_15_0_0 => 0x9DCCD5,
+            Version1_15_1_0 => 0x9E6DC5,
+            Version1_15_2_0 => 0x9E6EF5,
+            _ => 0
+        };
+
+
 
 
         
@@ -167,6 +213,8 @@ public static class DS3Offsets
         Console.WriteLine("\n--- Hooks ---");
         PrintOffset("Hooks.Hit", Hooks.Hit);
         PrintOffset("Hooks.LethalFall", Hooks.LethalFall);
+        PrintOffset("Hooks.CheckAuxAttacker", Hooks.CheckAuxAttacker);
+        PrintOffset("Hooks.AuxProc", Hooks.AuxProc);
 
            
             
