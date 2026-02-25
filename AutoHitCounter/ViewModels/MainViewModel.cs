@@ -325,20 +325,7 @@ namespace AutoHitCounter.ViewModels
 
         private void OnAttached()
         {
-            var processName = _memoryService.TargetProcess?.ProcessName;
-            AttachedText = $"Attached to {processName}.exe";
-            OnPropertyChanged(nameof(TrackingText));
-            
-            if (_activeGame == null && processName != null)
-            {
-                var matches = Games.Where(g =>
-                    g.ProcessName.Equals(processName, StringComparison.OrdinalIgnoreCase)).ToList();
-                if (matches.Count == 1)
-                {
-                    SelectedGame = matches[0];
-                    StartTrackingGame();
-                }
-            }
+            AttachedText = $"Attached to {SelectedGame.ProcessName}.exe";
         }
 
         private void OnNotAttached()
