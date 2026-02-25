@@ -14,13 +14,18 @@ public class DS3HitService(IMemoryService memoryService, HookManager hookManager
 {
     private int _lastHitCount;
     
+    private const string Kernel32 = "kernel32.dll";
+    private const string GetTickCount64 = "GetTickCount64";
+    
     public void InstallHooks()
     {
         WritePlayerDeadCheck();
+        WriteGetPlayerSpEffect();
 
         InstallHitHook();
         InstallLethalFallHook();
         InstallAuxHitHooks();
+        InstallJailerDrainHook();
     }
 
     public bool HasHit()
@@ -36,6 +41,15 @@ public class DS3HitService(IMemoryService memoryService, HookManager hookManager
         var code = Base + CheckPlayerDead;
 
         var bytes = AsmLoader.GetAsmBytes(AsmScript.DS3CheckPlayerDead);
+        AsmHelper.WriteRelativeOffset(bytes, code, WorldChrMan.Base, 7, 3);
+        memoryService.WriteBytes(code, bytes);
+    }
+
+    private void WriteGetPlayerSpEffect()
+    {
+        var code = Base + GetSpEffect;
+
+        var bytes = AsmLoader.GetAsmBytes(AsmScript.DS3GetSpEffect);
         AsmHelper.WriteRelativeOffset(bytes, code, WorldChrMan.Base, 7, 3);
         memoryService.WriteBytes(code, bytes);
     }
@@ -121,5 +135,29 @@ public class DS3HitService(IMemoryService memoryService, HookManager hookManager
         memoryService.WriteBytes(code, bytes);
         hookManager.InstallHook(code, Hooks.AuxProc, [0x41, 0x09, 0x42, 0x4C, 0x43, 0x8B, 0x4C, 0x9A, 0x24]);
         
+    }
+
+    private void InstallJailerDrainHook()
+    {
+        var bytes = AsmLoader.GetAsmBytes(AsmScript.DS3JailerDrain);
+        var getPlayerSpEffect = Base + GetSpEffect;
+        var getTickCount = memoryService.GetProcAddress(Kernel32, GetTickCount64);
+        var lastHitCountTime = Base + LastJailerCountTime;
+        var hit = Base + Hit;
+        var code = Base + JailerDrain;
+        
+        AsmHelper.WriteRelativeOffsets(bytes, [
+            (code, Hooks.HasJailerDrain + 6, 6, 2),
+            (code + 0x16, getPlayerSpEffect, 5, 0x16 + 1),
+            (code + 0x2E, lastHitCountTime, 7, 0x2E + 3),
+            (code + 0x43, lastHitCountTime, 7, 0x43 + 3),
+            (code + 0x4A, hit, 6, 0x4A + 2),
+            (code + 0x53, Hooks.HasJailerDrain + 6, 5, 0x53 + 1)
+        ]);
+        
+        AsmHelper.WriteAbsoluteAddress(bytes, getTickCount, 0x22 + 2);
+        
+        memoryService.WriteBytes(code, bytes);
+        hookManager.InstallHook(code, Hooks.HasJailerDrain, [0x76, 0x04, 0xf3, 0x0f, 0x59, 0xf0]);
     }
 }

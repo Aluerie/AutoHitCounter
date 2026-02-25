@@ -18,18 +18,18 @@ namespace AutoHitCounter.Services
         public IntPtr ProcessHandle { get; private set; } = IntPtr.Zero;
         public nint BaseAddress { get; private set; }
         public int ModuleMemorySize { get; private set; }
-        
+
         private const int ProcessVmRead = 0x0010;
         private const int ProcessVmWrite = 0x0020;
         private const int ProcessVmOperation = 0x0008;
         private const int ProcessQueryInformation = 0x0400;
-        private const int AttachCheckInterval = 2000; 
-        
+        private const int AttachCheckInterval = 2000;
+
         private const uint CodeCaveSize = 0x5000;
         private const int CodeCaveSearchStart = 0x40000000;
         private const int CodeCaveSearchEnd = 0x30000;
         private const int CodeCaveSearchStep = 0x10000;
-        
+
         private Timer _autoAttachTimer;
 
         public byte[] ReadBytes(nint addr, int size)
@@ -71,7 +71,7 @@ namespace AutoHitCounter.Services
             MemoryMarshal.Write(bytes, ref value);
             WriteBytes(addr, bytes);
         }
-        
+
         public void WriteBytes(nint addr, byte[] val)
         {
             Kernel32.WriteProcessMemory(ProcessHandle, addr, val, val.Length, 0);
@@ -91,7 +91,17 @@ namespace AutoHitCounter.Services
                     return allocatedMemory;
                 }
             }
+
             return IntPtr.Zero;
+        }
+
+        public IntPtr GetProcAddress(string moduleName, string procName)
+        {
+            IntPtr moduleHandle = Kernel32.GetModuleHandle(moduleName);
+            if (moduleHandle == IntPtr.Zero)
+                return IntPtr.Zero;
+
+            return Kernel32.GetProcAddress(moduleHandle, procName);
         }
 
         public void StartAutoAttach(string processName)
@@ -144,11 +154,9 @@ namespace AutoHitCounter.Services
                     {
                         BaseAddress = TargetProcess.MainModule.BaseAddress;
                         ModuleMemorySize = TargetProcess.MainModule.ModuleMemorySize;
-                      
                     }
 
                     IsAttached = true;
-                    
                 }
             }
         }

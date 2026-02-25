@@ -115,6 +115,27 @@ namespace AutoHitCounter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 48 8b 05 00 00 00 00    mov    rax,QWORD PTR [rip+0x0]        # 7 &lt;_main+0x7&gt;
+        ///48 85 c0                test   rax,rax
+        ///74 17                   je     23 &lt;null&gt;
+        ///48 8b 80 80 00 00 00    mov    rax,QWORD PTR [rax+0x80]
+        ///48 85 c0                test   rax,rax
+        ///74 0b                   je     23 &lt;null&gt;
+        ///48 8b 80 c8 11 00 00    mov    rax,QWORD PTR [rax+0x11c8]
+        ///48 85 c0                test   rax,rax
+        ///c3                      ret
+        ///
+        ///000000000023 &lt;null&gt;:
+        ///31 c0                   xor    eax,eax
+        ///c3                   [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DS3GetSpEffect {
+            get {
+                return ResourceManager.GetString("DS3GetSpEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 50                      push   rax
         ///e8 00 00 00 00          call   6 &lt;_main+0x6&gt;
         ///58                      pop    rax
@@ -133,6 +154,27 @@ namespace AutoHitCounter.Properties {
         internal static string DS3Hit {
             get {
                 return ResourceManager.GetString("DS3Hit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 0f 86 00 00 00 00       jbe    6 &lt;_main+0x6&gt;
+        ///f3 0f 59 f0             mulss  xmm6,xmm0
+        ///81 7b 60 83 2e 00 00    cmp    DWORD PTR [rbx+0x60],0x2e83
+        ///75 40                   jne    53 &lt;skip&gt;
+        ///50                      push   rax
+        ///51                      push   rcx
+        ///52                      push   rdx
+        ///e8 00 00 00 00          call   1b &lt;_main+0x1b&gt;
+        ///74 33                   je     50 &lt;exit&gt;
+        ///48 39 f0                cmp    rax,rsi
+        ///75 2e                   jne    50 &lt;exit&gt;
+        ///48 b8 00 00 00 00 00    movabs rax,0x0
+        ///00 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DS3JailerDrain {
+            get {
+                return ResourceManager.GetString("DS3JailerDrain", resourceCulture);
             }
         }
         

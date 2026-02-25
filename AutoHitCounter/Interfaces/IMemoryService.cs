@@ -21,6 +21,8 @@ namespace AutoHitCounter.Interfaces
         
         IntPtr AllocCustomCodeMem();
         
+        nint GetProcAddress(string moduleName, string procName);
+        
         void StartAutoAttach(string processName);
         void StopAutoAttach();
     }

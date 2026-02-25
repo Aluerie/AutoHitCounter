@@ -15,6 +15,10 @@ public static class DS3CustomCodeOffsets
     public const int LethalFall = 0x400;
     public const int CheckAuxAttacker = 0x500;
     public const int AuxProc = 0x600;
-    
-    
+    public const int GetSpEffect = 0x660;
+
+    public const int LastJailerCountTime = 0x700;
+    public const int JailerDrain = 0x710;
+
+
 }

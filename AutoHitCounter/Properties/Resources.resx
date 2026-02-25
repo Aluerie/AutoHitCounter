@@ -1017,4 +1017,50 @@ ff 05 00 00 00 00       inc    DWORD PTR [rip+0x0]        # 18 &lt;skip&gt;
 000000000018 &lt;skip&gt;:
 e9 00 00 00 00          jmp    1d &lt;skip+0x5&gt;</value>
   </data>
+  <data name="DS3GetSpEffect" xml:space="preserve">
+    <value>48 8b 05 00 00 00 00    mov    rax,QWORD PTR [rip+0x0]        # 7 &lt;_main+0x7&gt;
+48 85 c0                test   rax,rax
+74 17                   je     23 &lt;null&gt;
+48 8b 80 80 00 00 00    mov    rax,QWORD PTR [rax+0x80]
+48 85 c0                test   rax,rax
+74 0b                   je     23 &lt;null&gt;
+48 8b 80 c8 11 00 00    mov    rax,QWORD PTR [rax+0x11c8]
+48 85 c0                test   rax,rax
+c3                      ret
+
+000000000023 &lt;null&gt;:
+31 c0                   xor    eax,eax
+c3                      ret</value>
+  </data>
+  <data name="DS3JailerDrain" xml:space="preserve">
+    <value>0f 86 00 00 00 00       jbe    6 &lt;_main+0x6&gt;
+f3 0f 59 f0             mulss  xmm6,xmm0
+81 7b 60 83 2e 00 00    cmp    DWORD PTR [rbx+0x60],0x2e83
+75 40                   jne    53 &lt;skip&gt;
+50                      push   rax
+51                      push   rcx
+52                      push   rdx
+e8 00 00 00 00          call   1b &lt;_main+0x1b&gt;
+74 33                   je     50 &lt;exit&gt;
+48 39 f0                cmp    rax,rsi
+75 2e                   jne    50 &lt;exit&gt;
+48 b8 00 00 00 00 00    movabs rax,0x0
+00 00 00 
+ff d0                   call   rax
+48 8b 0d 00 00 00 00    mov    rcx,QWORD PTR [rip+0x0]        # 35 &lt;_main+0x35&gt;
+48 89 c2                mov    rdx,rax
+48 29 c8                sub    rax,rcx
+48 3d 20 4e 00 00       cmp    rax,0x4e20
+72 0d                   jb     50 &lt;exit&gt;
+48 89 15 00 00 00 00    mov    QWORD PTR [rip+0x0],rdx        # 4a &lt;_main+0x4a&gt;
+ff 05 00 00 00 00       inc    DWORD PTR [rip+0x0]        # 50 &lt;exit&gt;
+
+000000000050 &lt;exit&gt;:
+5a                      pop    rdx
+59                      pop    rcx
+58                      pop    rax
+
+000000000053 &lt;skip&gt;:
+e9 00 00 00 00          jmp    58 &lt;skip+0x5&gt;</value>
+  </data>
 </root>
