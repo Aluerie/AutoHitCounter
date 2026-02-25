@@ -115,6 +115,24 @@ namespace AutoHitCounter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 41 89 c6                mov    r14d,eax
+        ///f7 da                   neg    edx
+        ///50                      push   rax
+        ///48 8b 05 00 00 00 00    mov    rax,QWORD PTR [rip+0x0]        # d &lt;_main+0xd&gt;
+        ///48 8b 80 80 00 00 00    mov    rax,QWORD PTR [rax+0x80]
+        ///48 8b 80 90 1f 00 00    mov    rax,QWORD PTR [rax+0x1f90]
+        ///48 3b 48 18             cmp    rcx,QWORD PTR [rax+0x18]
+        ///75 16                   jne    37 &lt;skip&gt;
+        ///48 8b 40 18             mov    rax,QWORD PTR [rax+0x18]
+        ///8b 80 d8 00 00 00       mov    eax,DWORD PTR [ra [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DS3FallDamage {
+            get {
+                return ResourceManager.GetString("DS3FallDamage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 48 8b 05 00 00 00 00    mov    rax,QWORD PTR [rip+0x0]        # 7 &lt;_main+0x7&gt;
         ///48 85 c0                test   rax,rax
         ///74 17                   je     23 &lt;null&gt;

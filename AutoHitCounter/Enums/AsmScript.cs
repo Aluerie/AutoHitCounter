@@ -21,6 +21,7 @@ public enum AsmScript
     DS3AuxProc,
     DS3GetSpEffect,
     DS3JailerDrain,
+    DS3FallDamage,
     
     
     

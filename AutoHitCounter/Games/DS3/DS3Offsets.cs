@@ -69,6 +69,7 @@ public static class DS3Offsets
         public static nint CheckAuxAttacker;
         public static nint AuxProc;
         public static nint HasJailerDrain;
+        public static nint FallDamage;
     }
 
 
@@ -220,11 +221,27 @@ public static class DS3Offsets
             Version1_15_2_0 => 0xA035EB,
             _ => 0
         };
-
-
-
-
-
+        
+        Hooks.FallDamage = moduleBase + Version switch
+        {
+            Version1_3_2_0 => 0x9A31CA,
+            Version1_4_1_0 or Version1_4_2_0 or Version1_4_3_0 => 0x9A30CA,
+            Version1_5_0_0 => 0x9A3BBA,
+            Version1_5_1_0 => 0x9A39EA,
+            Version1_6_0_0 => 0x9A3FBA,
+            Version1_7_0_0 => 0x9A4ECA,
+            Version1_8_0_0 => 0x9B15CA,
+            Version1_9_0_0 => 0x9B1B8A,
+            Version1_10_0_0 => 0x9B1BFA,
+            Version1_11_0_0 => 0x9BB55A,
+            Version1_12_0_0 => 0x9BBFAA,
+            Version1_13_0_0 => 0x9BD94A,
+            Version1_14_0_0 => 0x9BDC1A,
+            Version1_15_0_0 => 0x9BDD1A,
+            Version1_15_1_0 => 0x9C7E0A,
+            Version1_15_2_0 => 0x9C7F3A,
+            _ => 0
+        };
 
         
 #if DEBUG
@@ -240,6 +257,7 @@ public static class DS3Offsets
         PrintOffset("Hooks.CheckAuxAttacker", Hooks.CheckAuxAttacker);
         PrintOffset("Hooks.AuxProc", Hooks.AuxProc);
         PrintOffset("Hooks.HasJailerDrain", Hooks.HasJailerDrain);
+        PrintOffset("Hooks.FallDamage", Hooks.FallDamage);
 
            
             

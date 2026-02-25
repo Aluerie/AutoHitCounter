@@ -26,6 +26,7 @@ public class DS3HitService(IMemoryService memoryService, HookManager hookManager
         InstallLethalFallHook();
         InstallAuxHitHooks();
         InstallJailerDrainHook();
+        InstallFallDamageHook();
     }
 
     public bool HasHit()
@@ -159,5 +160,21 @@ public class DS3HitService(IMemoryService memoryService, HookManager hookManager
         
         memoryService.WriteBytes(code, bytes);
         hookManager.InstallHook(code, Hooks.HasJailerDrain, [0x76, 0x04, 0xf3, 0x0f, 0x59, 0xf0]);
+    }
+
+    private void InstallFallDamageHook()
+    {
+        var bytes = AsmLoader.GetAsmBytes(AsmScript.DS3FallDamage);
+        var hit = Base + Hit;
+        var code = Base + FallDamage;
+        
+        AsmHelper.WriteRelativeOffsets(bytes, [
+            (code + 0x6, WorldChrMan.Base, 7, 0x6 + 3),
+            (code + 0x31, hit, 6, 0x31 + 2),
+            (code + 0x38, Hooks.FallDamage + 5, 5, 0x38 + 1)
+        ]);
+        
+        memoryService.WriteBytes(code, bytes);
+        hookManager.InstallHook(code, Hooks.FallDamage, [0x41, 0x89, 0xC6, 0xF7, 0xDA]);
     }
 }

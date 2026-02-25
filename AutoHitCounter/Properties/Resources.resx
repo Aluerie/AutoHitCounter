@@ -1065,4 +1065,24 @@ ff 05 00 00 00 00       inc    DWORD PTR [rip+0x0]        # 50 &lt;exit&gt;
 000000000053 &lt;skip&gt;:
 e9 00 00 00 00          jmp    58 &lt;skip+0x5&gt;</value>
   </data>
+  <data name="DS3FallDamage" xml:space="preserve">
+    <value>41 89 c6                mov    r14d,eax
+f7 da                   neg    edx
+50                      push   rax
+48 8b 05 00 00 00 00    mov    rax,QWORD PTR [rip+0x0]        # d &lt;_main+0xd&gt;
+48 8b 80 80 00 00 00    mov    rax,QWORD PTR [rax+0x80]
+48 8b 80 90 1f 00 00    mov    rax,QWORD PTR [rax+0x1f90]
+48 3b 48 18             cmp    rcx,QWORD PTR [rax+0x18]
+75 16                   jne    37 &lt;skip&gt;
+48 8b 40 18             mov    rax,QWORD PTR [rax+0x18]
+8b 80 d8 00 00 00       mov    eax,DWORD PTR [rax+0xd8]
+01 d0                   add    eax,edx
+85 c0                   test   eax,eax
+7f 06                   jg     37 &lt;skip&gt;
+ff 05 00 00 00 00       inc    DWORD PTR [rip+0x0]        # 37 &lt;skip&gt;
+
+000000000037 &lt;skip&gt;:
+58                      pop    rax
+e9 00 00 00 00          jmp    3d &lt;skip+0x6&gt;</value>
+  </data>
 </root>
