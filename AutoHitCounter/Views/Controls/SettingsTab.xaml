@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
 
@@ -50,8 +51,27 @@
 
             <TextBlock Text="Overlay settings" FontWeight="Bold" Margin="10,0,0,10" HorizontalAlignment="Left" />
 
-            <StackPanel Orientation="Horizontal">
-                
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <CheckBox Content="Show Diff"
+                          IsChecked="{Binding ShowDiff}"
+                          Margin="0,0,10,0" />
+                <CheckBox Content="Show PB"
+                          IsChecked="{Binding ShowPb}"
+                          Margin="0,0,10,0" />
+                <CheckBox Content="Show IGT"
+                          IsChecked="{Binding ShowIgt}"
+                          Margin="0,0,10,0" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <TextBlock Text="Max Splits" VerticalAlignment="Center" Margin="0,0,5,0" />
+                <xctk:IntegerUpDown Value="{Binding MaxSplits}" Minimum="1" Width="60" Margin="0,0,15,0" />
+
+                <TextBlock Text="Prev Splits" VerticalAlignment="Center" Margin="0,0,5,0" />
+                <xctk:IntegerUpDown Value="{Binding PrevSplits}" Minimum="0" Width="60" Margin="0,0,15,0" />
+
+                <TextBlock Text="Next Splits" VerticalAlignment="Center" Margin="0,0,5,0" />
+                <xctk:IntegerUpDown Value="{Binding NextSplits}" Minimum="0" Width="60" />
             </StackPanel>
 
         </StackPanel>

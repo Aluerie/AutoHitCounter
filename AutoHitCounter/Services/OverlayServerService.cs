@@ -71,7 +71,7 @@ public class OverlayServerService : IDisposable
     public void BroadcastConfig(OverlayConfig config)
     {
         var json = JsonSerializer.Serialize(
-            new { type = "settings", data = config },
+            new { type = "config", data = config },
             new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
         _lastConfigJson = json;
         Broadcast(json);
