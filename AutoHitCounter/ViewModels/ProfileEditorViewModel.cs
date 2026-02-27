@@ -107,6 +107,8 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
     }
 
     public ObservableCollection<SplitEntry> FilteredEvents { get; } = new();
+    
+    public bool IsDirty { get; private set; }
 
     #endregion
 
@@ -137,6 +139,7 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
         Splits.Insert(dropIndex, draggedEntry);
 
         AssignGroupFromPosition(draggedEntry, dropIndex);
+        IsDirty = true;
     }
     
     public void RebuildGroupAssignments()
@@ -169,6 +172,7 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
             Splits.Add(split);
 
         FilterEvents();
+        IsDirty = false;
     }
 
     private void Add(SplitEntry entry)
@@ -182,6 +186,7 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
 
         InsertSplit(newEntry);
         FilterEvents();
+        IsDirty = true;
     }
 
     private void AddManualSplit()
@@ -199,8 +204,9 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
             Name = name,
             Type = SplitType.Child
         });
-        
+
         FilterEvents();
+        IsDirty = true;
     }
     
     private void InsertSplit(SplitEntry newEntry)
@@ -256,6 +262,8 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
         {
             Splits.Add(parent);
         }
+
+        IsDirty = true;
     }
 
     private void RenameSplit(SplitEntry entry)
@@ -273,6 +281,8 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
         {
             entry.Name = newName;
         }
+
+        IsDirty = true;
     }
 
     private void Remove(SplitEntry entry)
@@ -292,6 +302,7 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
         }
 
         FilterEvents();
+        IsDirty = true;
     }
     private void MoveUp(SplitEntry entry)
     {
@@ -321,6 +332,8 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
                 Splits.RemoveAt(index + i);
             for (int i = 0; i < block.Count; i++)
                 Splits.Insert(targetIndex + i, block[i]);
+
+            IsDirty = true;
         }
         else
         {
@@ -330,6 +343,7 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
 
             Splits.Move(index, index - 1);
             AssignGroupFromPosition(entry, index - 1);
+            IsDirty = true;
         }
     }
 
@@ -358,6 +372,8 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
             var insertAt = targetIndex - blockSize;
             for (int i = 0; i < block.Count; i++)
                 Splits.Insert(insertAt + i, block[i]);
+
+            IsDirty = true;
         }
         else
         {
@@ -367,6 +383,7 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
 
             Splits.Move(index, index + 1);
             AssignGroupFromPosition(entry, index + 1);
+            IsDirty = true;
         }
     }
     
@@ -431,6 +448,7 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
 
         _selectedProfile.Splits = Splits.ToList();
         _profileService.SaveProfile(_selectedProfile);
+        IsDirty = false;
     }
 
     private void Delete()
