@@ -51,7 +51,7 @@ public class DS3Module : IGameModule, IDisposable
 
         _hitService = new DS3HitService(_memoryService, _hookManager);
         _eventService = new DS3EventService(_memoryService, _hookManager, _events);
-        // _eventService.InstallHook();
+        _eventService.InstallHook();
         _hitService.InstallHooks();
         // _igtPtr = _memoryService.Read<nint>(GameDataMan.Base) + GameDataMan.Igt;
         _tickService.RegisterGameTick(Tick);
@@ -76,10 +76,10 @@ public class DS3Module : IGameModule, IDisposable
             _lastHit = DateTime.Now;
         }
 
-        // if (_eventService.ShouldSplit())
-        // {
-        //     OnEventSet?.Invoke();
-        // }
+        if (_eventService.ShouldSplit())
+        {
+            OnEventSet?.Invoke();
+        }
 
         // OnIgtChanged?.Invoke(_memoryService.Read<uint>(_igtPtr));
     }

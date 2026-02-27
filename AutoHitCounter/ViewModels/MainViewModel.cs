@@ -466,6 +466,7 @@ namespace AutoHitCounter.ViewModels
             return gameName switch
             {
                 "Dark Souls 2 Scholar" => EventLoader.GetEvents("DS2ScholarEvents"),
+                "Dark Souls 3" => EventLoader.GetEvents("DS3Events"),
                 "Elden Ring" => EventLoader.GetEvents("EldenRingEvents"),
                 _ => new()
             };

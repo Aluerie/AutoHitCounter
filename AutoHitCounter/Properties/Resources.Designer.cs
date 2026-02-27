@@ -134,6 +134,33 @@ namespace AutoHitCounter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to BossName,DeathFlag
+        ///&quot;Aldrich, Devourer of Gods&quot;,13700800
+        ///Abyss Watchers,13300800
+        ///Ancient Wyvern,13200800
+        ///Champion Gundyr,14000830
+        ///Crystal Sage,13300850
+        ///Curse-Rotted Greatwood,13100800
+        ///Dancer of the Boreal Valley,13000890
+        ///Darkeater Midir,15100850
+        ///Deacons of the Deep,13500800
+        ///Demon Prince,15000800
+        ///Dragonslayer Armour,13010800
+        ///Gravetender,14500860
+        ///Halflight,15100800
+        ///High Lord Wolnir,13800800
+        ///Iudex Gundyr,14000800
+        ///Nameless King,13200850
+        ///&quot;Oceiros, the Consumed King&quot;,13000830
+        ///Old Demon King,13800 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DS3Events {
+            get {
+                return ResourceManager.GetString("DS3Events", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 41 89 c6                mov    r14d,eax
         ///f7 da                   neg    edx
         ///50                      push   rax
