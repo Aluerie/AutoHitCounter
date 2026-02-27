@@ -11,13 +11,6 @@ public class StateService : IStateService
 {
     private readonly Dictionary<State, List<Action>> _eventHandlers = new();
 
-    public bool IsLoaded()
-    {
-        // var worldChrman = memoryService.Read<nint>(Offsets.WorldChrMan.Base);
-        // return memoryService.Read<nint>(worldChrman + Offsets.WorldChrMan.PlayerIns) != 0;
-        return true;
-    }
-
     public void Publish(State eventType)
     {
         if (_eventHandlers.ContainsKey(eventType))
