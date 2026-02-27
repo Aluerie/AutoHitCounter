@@ -60,6 +60,25 @@ namespace AutoHitCounter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 50                      push   rax
+        ///48 8b 05 00 00 00 00    mov    rax,QWORD PTR [rip+0x0]        # 8 &lt;_main+0x8&gt;
+        ///48 85 c0                test   rax,rax
+        ///74 34                   je     41 &lt;skip&gt;
+        ///48 8b 80 80 00 00 00    mov    rax,QWORD PTR [rax+0x80]
+        ///48 85 c0                test   rax,rax
+        ///74 28                   je     41 &lt;skip&gt;
+        ///48 8b 80 90 1f 00 00    mov    rax,QWORD PTR [rax+0x1f90]
+        ///48 85 c0                test   rax,rax
+        ///74 1c                   je     41 &lt;skip&gt;
+        ///48 3b 48 18             cmp    rcx, [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DS3ApplyHealthDelta {
+            get {
+                return ResourceManager.GetString("DS3ApplyHealthDelta", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 41 09 42 4c             or     DWORD PTR [r10+0x4c],eax
         ///43 8b 4c 9a 24          mov    ecx,DWORD PTR [r10+r11*4+0x24]
         ///80 3d 00 00 00 00 00    cmp    BYTE PTR [rip+0x0],0x0        # 10 &lt;_main+0x10&gt;
@@ -157,24 +176,6 @@ namespace AutoHitCounter.Properties {
         internal static string DS3Events {
             get {
                 return ResourceManager.GetString("DS3Events", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 41 89 c6                mov    r14d,eax
-        ///f7 da                   neg    edx
-        ///50                      push   rax
-        ///48 8b 05 00 00 00 00    mov    rax,QWORD PTR [rip+0x0]        # d &lt;_main+0xd&gt;
-        ///48 8b 80 80 00 00 00    mov    rax,QWORD PTR [rax+0x80]
-        ///48 8b 80 90 1f 00 00    mov    rax,QWORD PTR [rax+0x1f90]
-        ///48 3b 48 18             cmp    rcx,QWORD PTR [rax+0x18]
-        ///75 16                   jne    37 &lt;skip&gt;
-        ///48 8b 40 18             mov    rax,QWORD PTR [rax+0x18]
-        ///8b 80 d8 00 00 00       mov    eax,DWORD PTR [ra [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string DS3FallDamage {
-            get {
-                return ResourceManager.GetString("DS3FallDamage", resourceCulture);
             }
         }
         

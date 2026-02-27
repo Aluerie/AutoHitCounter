@@ -69,7 +69,7 @@ public static class DS3Offsets
         public static nint CheckAuxAttacker;
         public static nint AuxProc;
         public static nint HasJailerDrain;
-        public static nint FallDamage;
+        public static nint ApplyHealthDelta;
         public static nint SetEvent;
     }
 
@@ -223,26 +223,29 @@ public static class DS3Offsets
             _ => 0
         };
         
-        Hooks.FallDamage = moduleBase + Version switch
+        Hooks.ApplyHealthDelta = moduleBase + Version switch
         {
-            Version1_3_2_0 => 0x9A31CA,
-            Version1_4_1_0 or Version1_4_2_0 or Version1_4_3_0 => 0x9A30CA,
-            Version1_5_0_0 => 0x9A3BBA,
-            Version1_5_1_0 => 0x9A39EA,
-            Version1_6_0_0 => 0x9A3FBA,
-            Version1_7_0_0 => 0x9A4ECA,
-            Version1_8_0_0 => 0x9B15CA,
-            Version1_9_0_0 => 0x9B1B8A,
-            Version1_10_0_0 => 0x9B1BFA,
-            Version1_11_0_0 => 0x9BB55A,
-            Version1_12_0_0 => 0x9BBFAA,
-            Version1_13_0_0 => 0x9BD94A,
-            Version1_14_0_0 => 0x9BDC1A,
-            Version1_15_0_0 => 0x9BDD1A,
-            Version1_15_1_0 => 0x9C7E0A,
-            Version1_15_2_0 => 0x9C7F3A,
+            Version1_3_2_0 => 0x9BE7FA,
+            Version1_4_1_0 => 0x1A6C759,
+            Version1_4_2_0 => 0x19D5BEA,
+            Version1_4_3_0 => 0x4484681,
+            Version1_5_0_0 => 0x448882C,
+            Version1_5_1_0 => 0x4487A39,
+            Version1_6_0_0 => 0x4488B90,
+            Version1_7_0_0 => 0x448D363,
+            Version1_8_0_0 => 0x4BE57F9,
+            Version1_9_0_0 => 0x1A5848D,
+            Version1_10_0_0 => 0x1A5850B,
+            Version1_11_0_0 => 0x1011EF0,
+            Version1_12_0_0 => 0x9D8F21,
+            Version1_13_0_0 => 0x9DA8AC,
+            Version1_14_0_0 => 0xC79C18,
+            Version1_15_0_0 => 0x9B1639,
+            Version1_15_1_0 => 0x125AB60,
+            Version1_15_2_0 => 0x1B9274C,
             _ => 0
         };
+
         
         Hooks.SetEvent = moduleBase + Version switch
         {
@@ -276,7 +279,8 @@ public static class DS3Offsets
         PrintOffset("Hooks.CheckAuxAttacker", Hooks.CheckAuxAttacker);
         PrintOffset("Hooks.AuxProc", Hooks.AuxProc);
         PrintOffset("Hooks.HasJailerDrain", Hooks.HasJailerDrain);
-        PrintOffset("Hooks.FallDamage", Hooks.FallDamage);
+        PrintOffset("Hooks.ApplyHealthDelta", Hooks.ApplyHealthDelta);
+        PrintOffset("Hooks.SetEvent", Hooks.SetEvent);
 
            
             
