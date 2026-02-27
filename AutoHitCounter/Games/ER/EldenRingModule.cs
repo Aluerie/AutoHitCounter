@@ -82,7 +82,7 @@ public class EldenRingModule : IGameModule, IDisposable
             OnEventSet?.Invoke();
         }
 
-        OnIgtChanged?.Invoke(_memoryService.Read<uint>(_igtPtr));
+        OnIgtChanged?.Invoke(_memoryService.Read<long>(_igtPtr));
     }
 
     private bool IsLoaded()

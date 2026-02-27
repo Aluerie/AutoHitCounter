@@ -60,6 +60,13 @@ public static class DS3Offsets
         
     }
 
+    public static class GameDataMan
+    {
+        public static nint Base;
+
+        public const int Igt = 0xA4;
+    }
+
     public static nint FallDamageKillFloor;
 
     public static class Hooks
@@ -97,6 +104,20 @@ public static class DS3Offsets
             Version1_15_1_0 or Version1_15_2_0 => 0x477FDB8,
             _ => 0
         };
+        
+        GameDataMan.Base = moduleBase + Version switch
+        {
+            // WARNING: No match found for: Version1_3_2_0, Version1_4_1_0, Version1_4_2_0, Version1_4_3_0, Version1_5_0_0, Version1_5_1_0, Version1_6_0_0, Version1_7_0_0
+            Version1_8_0_0 => 0x4704268,
+            Version1_9_0_0 or Version1_10_0_0 => 0x47043A8,
+            Version1_11_0_0 => 0x4737698,
+            Version1_12_0_0 => 0x473A818,
+            Version1_13_0_0 => 0x473E018,
+            Version1_14_0_0 or Version1_15_0_0 => 0x4740178,
+            Version1_15_1_0 or Version1_15_2_0 => 0x47572B8,
+            _ => 0
+        };
+
         
         
         FallDamageKillFloor = moduleBase + Version switch
