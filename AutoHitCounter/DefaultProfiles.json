@@ -1904,28 +1904,6 @@
   ],
   "Dark Souls 3": [
     {
-      "Name": "Test",
-      "GameName": "Dark Souls 3",
-      "Splits": [
-        {
-          "EventId": null,
-          "Name": "Test",
-          "DisplayName": null,
-          "PersonalBest": 0,
-          "Type": 1,
-          "GroupId": null,
-          "Notes": null,
-          "Label": "Test",
-          "IsAuto": false
-        }
-      ]
-    },
-    {
-      "Name": "ggyhg",
-      "GameName": "Dark Souls 3",
-      "Splits": []
-    },
-    {
       "Name": "Any%",
       "GameName": "Dark Souls 3",
       "Splits": [
