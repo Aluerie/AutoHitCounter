@@ -1,5 +1,6 @@
-﻿// 
+﻿//
 
+using System.Windows.Media;
 using AutoHitCounter.Enums;
 
 namespace AutoHitCounter.ViewModels;
@@ -22,7 +23,11 @@ public class SplitViewModel : BaseViewModel
         set
         {
             if (SetProperty(ref _numOfHits, value))
+            {
                 OnPropertyChanged(nameof(Diff));
+                OnPropertyChanged(nameof(HitsBrush));
+                OnPropertyChanged(nameof(DiffBrush));
+            }
         }
     }
 
@@ -31,7 +36,11 @@ public class SplitViewModel : BaseViewModel
     public int PersonalBest
     {
         get => _personalBest;
-        set => SetProperty(ref _personalBest, value);
+        set
+        {
+            if (SetProperty(ref _personalBest, value))
+                OnPropertyChanged(nameof(DiffBrush));
+        }
     }
 
     private bool _isCurrent;
@@ -88,4 +97,18 @@ public class SplitViewModel : BaseViewModel
 
     public bool IsParent => Type == SplitType.Parent;
     public int Diff => NumOfHits - PersonalBest;
+
+    public Brush HitsBrush => NumOfHits > 0
+        ? new SolidColorBrush(Color.FromRgb(0xc8, 0x84, 0x3a))
+        : new SolidColorBrush(Color.FromRgb(0x44, 0x44, 0x44));
+
+    public Brush DiffBrush
+    {
+        get
+        {
+            if (Diff > 0) return new SolidColorBrush(Color.FromRgb(0xb8, 0x55, 0x55));
+            if (Diff < 0) return new SolidColorBrush(Color.FromRgb(0x5a, 0x90, 0x68));
+            return new SolidColorBrush(Color.FromRgb(0x55, 0x55, 0x55));
+        }
+    }
 }

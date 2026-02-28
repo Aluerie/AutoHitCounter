@@ -124,6 +124,14 @@ namespace AutoHitCounter.ViewModels
             set => SetProperty(ref _attachedText, value);
         }
 
+        private bool _isAttached;
+
+        public bool IsAttached
+        {
+            get => _isAttached;
+            set => SetProperty(ref _isAttached, value);
+        }
+
         public ObservableCollection<Game> Games { get; } = new();
 
         private Game _selectedGame;
@@ -325,11 +333,13 @@ namespace AutoHitCounter.ViewModels
 
         private void OnAttached()
         {
+            IsAttached = true;
             AttachedText = $"Attached to {SelectedGame.ProcessName}.exe";
         }
 
         private void OnNotAttached()
         {
+            IsAttached = false;
             AttachedText = "Not attached";
             OnPropertyChanged(nameof(TrackingText));
         }

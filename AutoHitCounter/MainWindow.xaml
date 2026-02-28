@@ -32,16 +32,29 @@
         </Grid.RowDefinitions>
         <controls:TitleBar Grid.Row="0" Title="Auto Hit Counter" />
         <!-- Tool Attachment Info -->
-        <Grid Grid.Row="1" Margin="5">
-            <TextBlock Text="{Binding AppVer}" />
-            <Button x:Name="CheckUpdateButton" Content="Check for Updates"
-                    Click="CheckUpdateButton_Click"
-                    Margin="5,0,5,-2"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center">
-            </Button>
-            <TextBlock Text="{Binding AttachedText}"
-                       HorizontalAlignment="Right" />
+        <Grid Grid.Row="1" Margin="5,3,8,3">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="{Binding AppVer}" Foreground="#666" FontSize="11" VerticalAlignment="Center" />
+                <Button x:Name="CheckUpdateButton" Content="Check for Updates"
+                        Click="CheckUpdateButton_Click"
+                        Margin="8,0,0,0" Height="20" FontSize="11"
+                        VerticalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Ellipse Width="8" Height="8" VerticalAlignment="Center" Margin="0,0,6,0">
+                    <Ellipse.Style>
+                        <Style TargetType="Ellipse">
+                            <Setter Property="Fill" Value="#D32F2F" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsAttached}" Value="True">
+                                    <Setter Property="Fill" Value="#4CAF50" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+                <TextBlock Text="{Binding AttachedText}" FontSize="11" VerticalAlignment="Center" />
+            </StackPanel>
         </Grid>
         <!-- Main Tabs -->
         <TabControl Grid.Row="2" x:Name="MainTabControl">
@@ -199,7 +212,7 @@
 
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel>
+                                <StackPanel Margin="0,2">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="4*" />
@@ -219,6 +232,7 @@
 
                                         <TextBlock Grid.Column="1"
                                                    Text="{Binding NumOfHits}"
+                                                   Foreground="{Binding HitsBrush}"
                                                    FontFamily="{StaticResource AppFont}"
                                                    FontSize="{StaticResource FontSizeBody}"
                                                    HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -235,6 +249,7 @@
 
                                         <TextBlock Grid.Column="2"
                                                    Text="{Binding Diff}"
+                                                   Foreground="{Binding DiffBrush}"
                                                    FontFamily="{StaticResource AppFont}"
                                                    FontSize="{StaticResource FontSizeBody}"
                                                    HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -266,7 +281,7 @@
                                         </TextBlock>
                                     </Grid>
 
-                                    <Grid Margin="10,6,10,4">
+                                    <Grid Margin="10,4,10,6">
                                         <Grid.Style>
                                             <Style TargetType="Grid">
                                                 <Setter Property="Visibility" Value="Collapsed" />
@@ -285,48 +300,51 @@
                                             </Style>
                                         </Grid.Style>
 
-                                        <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"
-                                                 TextWrapping="Wrap"
-                                                 AcceptsReturn="True"
-                                                 FontSize="11"
-                                                 Foreground="#777"
-
-                                                 Padding="2">
-                                            <TextBox.Style>
-                                                <Style TargetType="TextBox">
-                                                    <Setter Property="Background" Value="Transparent" />
-                                                    <Setter Property="BorderThickness" Value="0" />
-                                                    <Setter Property="Cursor" Value="IBeam" />
-                                                    <Style.Triggers>
-                                                        <Trigger Property="IsFocused" Value="True">
-                                                            <Setter Property="Background" Value="#1a1a30" />
-                                                            <Setter Property="BorderThickness" Value="1" />
-                                                            <Setter Property="BorderBrush" Value="#333366" />
-                                                        </Trigger>
-                                                        <MultiTrigger>
-                                                            <MultiTrigger.Conditions>
-                                                                <Condition Property="Text" Value="" />
-                                                                <Condition Property="IsFocused" Value="False" />
-                                                            </MultiTrigger.Conditions>
-                                                            <Setter Property="Background">
-                                                                <Setter.Value>
-                                                                    <VisualBrush AlignmentX="Left" AlignmentY="Top"
-                                                                            Stretch="None">
-                                                                        <VisualBrush.Visual>
-                                                                            <TextBlock Text="Add notes..."
-                                                                                    Foreground="#444"
-                                                                                    FontSize="11"
-                                                                                    FontStyle="Italic"
-                                                                                    Margin="4,2,0,0" />
-                                                                        </VisualBrush.Visual>
-                                                                    </VisualBrush>
-                                                                </Setter.Value>
-                                                            </Setter>
-                                                        </MultiTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBox.Style>
-                                        </TextBox>
+                                        <Border BorderThickness="2,0,0,0" BorderBrush="#3d3040" Padding="6,2">
+                                            <Grid>
+                                                <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"
+                                                         TextWrapping="Wrap"
+                                                         AcceptsReturn="True"
+                                                         FontSize="11"
+                                                         Foreground="#999"
+                                                         Padding="2"
+                                                         LostFocus="Notes_LostFocus">
+                                                    <TextBox.Style>
+                                                        <Style TargetType="TextBox">
+                                                            <Setter Property="Background" Value="Transparent" />
+                                                            <Setter Property="BorderThickness" Value="0" />
+                                                            <Setter Property="Cursor" Value="IBeam" />
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsFocused" Value="True">
+                                                                    <Setter Property="Background" Value="#1c1424" />
+                                                                    <Setter Property="BorderThickness" Value="1" />
+                                                                    <Setter Property="BorderBrush" Value="#5a3d63" />
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBox.Style>
+                                                </TextBox>
+                                                <TextBlock Text="Add notes..."
+                                                           FontSize="11" FontStyle="Italic"
+                                                           Foreground="#555"
+                                                           Margin="4,2,0,0"
+                                                           IsHitTestVisible="False">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Notes}" Value="">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Notes}" Value="{x:Null}">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </Grid>
+                                        </Border>
                                     </Grid>
                                 </StackPanel>
                             </DataTemplate>
@@ -334,7 +352,8 @@
                     </ListBox>
 
                     <Grid Grid.Row="3">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
+                                    VerticalAlignment="Center" Margin="5,0,0,0">
                             <StackPanel.Style>
                                 <Style TargetType="StackPanel">
                                     <Style.Triggers>
@@ -344,28 +363,17 @@
                                     </Style.Triggers>
                                 </Style>
                             </StackPanel.Style>
-                            <Button Content="- Hit" Margin="5,0,0,5"
-                                    Height="23" VerticalAlignment="Bottom"
+                            <Button Content="- Hit" Width="50" Height="28"
                                     Command="{Binding DecrementHitCommand}" />
-                            <Button Content="+ Hit" Margin="5,0,0,5"
-                                    Height="23" VerticalAlignment="Bottom"
+                            <Button Content="+ Hit" Width="50" Height="28" Margin="3,0,0,0"
                                     Command="{Binding IncrementHitCommand}" />
-                            <Button Content="← Prev Split" Margin="5,0,0,5"
-                                    Height="23" VerticalAlignment="Bottom"
+                            <Rectangle Width="1" Height="16" Fill="#444" Margin="8,0" VerticalAlignment="Center" />
+                            <Button Content="← Prev" Height="24" Margin="0,0,3,0"
                                     Command="{Binding PrevSplitCommand}" />
-                            <Button Content="Next Split →" Margin="5,0,0,5"
-                                    Height="23" VerticalAlignment="Bottom"
+                            <Button Content="Next →" Height="24" Margin="0,0,3,0"
                                     Command="{Binding AdvanceSplitCommand}" />
-                            <Button Content="Reset" Margin="5,0,0,5"
-                                    Height="23" VerticalAlignment="Bottom"
+                            <Button Content="Reset" Height="24"
                                     Command="{Binding ResetCommand}" />
-                            <!-- Not sure what to do with this -->
-                            <Button Content="Run Notes" Margin="5,0,0,5"
-                                    Height="23" VerticalAlignment="Bottom" />
-                            
-                            <!-- Consider Adding a checkbox for notes Column or something, ask shilkey, 
-                            also consider moving the igt elsewhere for buttons space -->
-                            
                         </StackPanel>
                         <!-- Potentially turn this into a popup window -->
                         <StackPanel Visibility="{Binding IsRunComplete, Converter={StaticResource BoolToVisConverter}}"

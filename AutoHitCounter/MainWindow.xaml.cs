@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using AutoHitCounter.Utilities;
+using AutoHitCounter.ViewModels;
 
 namespace AutoHitCounter
 {
@@ -33,6 +34,12 @@ namespace AutoHitCounter
             SettingsManager.Default.Save();
         
          
+        }
+
+        private void Notes_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is MainViewModel vm)
+                vm.SaveNotesCommand.Execute(null);
         }
 
         private void CheckUpdateButton_Click(object sender, RoutedEventArgs e)
