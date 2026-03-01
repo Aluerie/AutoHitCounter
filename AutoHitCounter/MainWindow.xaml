@@ -163,7 +163,7 @@
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                <Setter Property="BorderThickness" Value="3,0,0,0" />
+                                <Setter Property="BorderThickness" Value="4,0,0,0" />
                                 <Setter Property="BorderBrush" Value="Transparent" />
                                 <Setter Property="Template">
                                     <Setter.Value>
@@ -187,15 +187,12 @@
                                                 <Trigger Property="ListBox.AlternationIndex" Value="1">
                                                     <Setter TargetName="Border" Property="Background" Value="#222222" />
                                                 </Trigger>
-                                                <!-- Split Colours -->
                                                 <Trigger Property="IsMouseOver" Value="True">
                                                     <Setter TargetName="Border" Property="Background" Value="#6683518c" />
                                                 </Trigger>
-                                                <Trigger Property="IsSelected" Value="True">
-                                                    <Setter TargetName="Border" Property="Background" Value="#B37c4d85" />
-                                                </Trigger>
                                                 <DataTrigger Binding="{Binding IsCurrent}" Value="True">
-                                                    <Setter TargetName="Border" Property="BorderBrush" Value="#9D61A8" />
+                                                    <Setter TargetName="Border" Property="BorderBrush" Value="#c47fd4" />
+                                                    <Setter TargetName="Border" Property="Background" Value="#1e1028" />
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding IsParent}" Value="True">
                                                     <Setter TargetName="Border" Property="Background" Value="#1A1A1A" />
