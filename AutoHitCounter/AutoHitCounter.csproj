@@ -178,6 +178,7 @@
         <Compile Include="Services\SettingsService.cs" />
         <Compile Include="Services\StateService.cs" />
         <Compile Include="Services\TickService.cs" />
+        <Compile Include="Utilities\EnumExtensions.cs" />
         <Compile Include="Utilities\AsmHelper.cs" />
         <Compile Include="Utilities\AsmLoader.cs" />
         <Compile Include="Utilities\EventLoader.cs" />

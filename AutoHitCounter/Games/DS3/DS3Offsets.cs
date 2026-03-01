@@ -41,7 +41,7 @@ public static class DS3Offsets
         if (!_version.HasValue)
         {
             MsgBox.Show(
-                $@"Unknown patch version: {_version}, please report it on GitHub",
+                $@"Unknown patch version: {fileVersion}, please report it on GitHub",
                 "Unknown patch version");
             return;
         }

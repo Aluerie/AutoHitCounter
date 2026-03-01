@@ -2052,5 +2052,24 @@
         }
       ]
     }
+  ],
+  "Sekiro": [
+    {
+      "Name": "test",
+      "GameName": "Sekiro",
+      "Splits": [
+        {
+          "EventId": null,
+          "Name": "test",
+          "DisplayName": null,
+          "PersonalBest": 0,
+          "Type": 1,
+          "GroupId": null,
+          "Notes": null,
+          "Label": "test",
+          "IsAuto": false
+        }
+      ]
+    }
   ]
 }

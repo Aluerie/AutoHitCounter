@@ -6,10 +6,11 @@ using System.IO;
 using AutoHitCounter.Enums;
 using AutoHitCounter.Interfaces;
 using AutoHitCounter.Memory;
+using AutoHitCounter.Utilities;
 
 namespace AutoHitCounter.Games.DSR;
 
-public class DSRModule : IGameModule
+public class DSRModule : IGameModule, IDisposable, IVersionedGameModule
 {
     private readonly IMemoryService _memoryService;
     private readonly IStateService _stateService;
@@ -17,6 +18,8 @@ public class DSRModule : IGameModule
     private readonly ITickService _tickService;
     private readonly Dictionary<uint, string> _events;
     
+    public string GameVersion => DSROffsets.Version.GetDescription();
+
     private DateTime? _lastHit;
     private nint _igtPtr;
     private DSRHitService _hitService;
@@ -65,5 +68,13 @@ public class DSRModule : IGameModule
         var fileSize = fileInfo.Length;
         var moduleBase = _memoryService.BaseAddress;
         DSROffsets.Initialize(fileSize, moduleBase);
+    }
+
+    public void Dispose()
+    {
+        _stateService.Unsubscribe(State.Attached, Initialize);
+        OnHit = null;
+        OnEventSet = null;
+        OnIgtChanged = null;
     }
 }

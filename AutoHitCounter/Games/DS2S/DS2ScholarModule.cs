@@ -6,6 +6,7 @@ using System.IO;
 using AutoHitCounter.Enums;
 using AutoHitCounter.Interfaces;
 using AutoHitCounter.Memory;
+using AutoHitCounter.Utilities;
 
 namespace AutoHitCounter.Games.DS2S;
 
@@ -20,12 +21,7 @@ public class DS2ScholarModule : IGameModule, IDisposable, IVersionedGameModule
     private DS2ScholarIgtService _igtService;
     private readonly Dictionary<uint, string> _events;
 
-    public string GameVersion => DS2ScholarOffsets.Version switch
-    {
-        DS2ScholarVersion.Version1_0_2 => "1.0.2",
-        DS2ScholarVersion.Version1_0_3 => "1.0.3",
-        _ => "Unknown"
-    };
+    public string GameVersion => DS2ScholarOffsets.Version.GetDescription();
 
     private DateTime? _lastHit;
 
