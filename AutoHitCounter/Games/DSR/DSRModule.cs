@@ -56,8 +56,8 @@ public class DSRModule : IGameModule, IDisposable, IVersionedGameModule
 #endif
 
          _hitService = new DSRHitService(_memoryService, _hookManager);
-//         _eventService = new SKEventService(_memoryService, _hookManager, _events);
-//         // _eventService.InstallHook();
+         _eventService = new DSREventService(_memoryService, _hookManager, _events);
+         _eventService.InstallHook();
          _hitService.InstallHooks();
 //         // _igtPtr = _memoryService.Read<nint>(GameDataMan.Base) + GameDataMan.Igt;
          _tickService.RegisterGameTick(Tick);

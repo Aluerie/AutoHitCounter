@@ -13,5 +13,12 @@ public class DSRCustomCodeOffsets
 
     public const int ApplyHealthDelta = 0x400;
     public const int KillChr = 0x600;
+    
+    
+    
+    
+    public const int EventLogWriteIdx = 0x2000;
+    public const int EventLogCode = 0x2020;
+    public const int EventLogBuffer = 0x2100;
 
 }

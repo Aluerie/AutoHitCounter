@@ -1,18 +1,35 @@
 ﻿// 
 
+using System.Collections.Generic;
+using AutoHitCounter.Enums;
 using AutoHitCounter.Interfaces;
+using AutoHitCounter.Memory;
+using AutoHitCounter.Services;
+using AutoHitCounter.Utilities;
+using static AutoHitCounter.Games.DSR.DSRCustomCodeOffsets;
+using static AutoHitCounter.Games.DSR.DSROffsets;
 
 namespace AutoHitCounter.Games.DSR;
 
-public class DSREventService : IEventService
+public class DSREventService(IMemoryService memoryService, HookManager hookManager, Dictionary<uint, string> events)
+    : EventServiceBase(memoryService, hookManager, events, Base + EventLogWriteIdx, Base + EventLogBuffer)
 {
-    public void InstallHook()
+    public override void InstallHook()
     {
-        throw new System.NotImplementedException();
-    }
-
-    public bool ShouldSplit()
-    {
-        throw new System.NotImplementedException();
+        var code = Base + EventLogCode;
+        var bytes = AsmLoader.GetAsmBytes(AsmScript.DSREventLog);
+        var writeIndex = Base + EventLogWriteIdx;
+        var buffer = Base + EventLogBuffer;
+        var hookLoc = Hooks.SetEvent;
+        
+        AsmHelper.WriteRelativeOffsets(bytes, [
+            (code + 0x3, writeIndex, 6, 0x3 + 2),
+            (code + 0xE, buffer, 7, 0xE + 3),
+            (code + 0x26, writeIndex, 6, 0x26 + 2),
+            (code + 0x34, hookLoc + 0x5, 5, 0x34 + 1)
+        ]);
+        
+        MemoryService.WriteBytes(code, bytes);
+        HookManager.InstallHook(code, hookLoc, [0x48, 0x89, 0x5C, 0x24, 0x08]);
     }
 }

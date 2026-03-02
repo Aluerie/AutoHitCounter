@@ -55,6 +55,9 @@ public static class DSROffsets
         public static nint Hit;
         public static nint ApplyHealthDelta;
         public static nint KillChr;
+        
+        
+        public static nint SetEvent;
     }
 
     private static void InitializeBaseAddresses(nint moduleBase)
@@ -126,6 +129,17 @@ public static class DSROffsets
             Version1_0_3_1 => 0x2653E32,
             _ => 0
         };
+        
+        Hooks.SetEvent = moduleBase + Version switch
+        {
+            Version1_0_1_0 => 0x4E7490,
+            Version1_0_1_1 => 0x4E7240,
+            Version1_0_1_2 => 0x4EA770,
+            Version1_0_3_0 => 0x4F1470,
+            Version1_0_3_1 => 0x4F22B0,
+            _ => 0
+        };
+
 
 
 
@@ -142,6 +156,10 @@ public static class DSROffsets
         PrintOffset("Hooks.Hit", Hooks.Hit);
         PrintOffset("Hooks.ApplyHealthDelta", Hooks.ApplyHealthDelta);
         PrintOffset("Hooks.KillChr", Hooks.KillChr);
+        
+        
+        
+        PrintOffset("Hooks.SetEvent", Hooks.SetEvent);
       
 
 
