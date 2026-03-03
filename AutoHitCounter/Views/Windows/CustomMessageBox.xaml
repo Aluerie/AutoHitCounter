@@ -13,73 +13,126 @@
         MaxHeight="500"
         WindowStyle="None"
         AllowsTransparency="True"
-        Background="Transparent"
-        >
-    <Border Background="#2D2D30" 
-            BorderBrush="#472d4c" 
-            BorderThickness="1" 
+        Background="Transparent">
+    <Border Background="#2D2D30"
+            BorderBrush="#472d4c"
+            BorderThickness="1"
             CornerRadius="4"
             Margin="10">
         <Border.Effect>
-            <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.5"/>
+            <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.5" />
         </Border.Effect>
-        
+
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            
-            <Border Grid.Row="0" 
-                    Background="#472d4c" 
+
+            <Border Grid.Row="0"
+                    Background="#472d4c"
                     CornerRadius="3,3,0,0"
                     MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
                 <TextBlock x:Name="TitleText"
-                           Text="Message" 
-                           Foreground="White" 
+                           Text="Message"
+                           Foreground="White"
                            FontWeight="SemiBold"
-                           Margin="10,6"/>
+                           Margin="10,6" />
             </Border>
-            
-            <TextBlock x:Name="MessageText" 
-                       Grid.Row="1" 
+
+            <TextBlock x:Name="MessageText"
+                       Grid.Row="1"
                        Foreground="#F1F1F1"
                        TextWrapping="Wrap"
                        Margin="15"
-                       VerticalAlignment="Center"/>
-            
-            <StackPanel Grid.Row="2" 
-                        Orientation="Horizontal" 
+                       VerticalAlignment="Center" />
+
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
                         HorizontalAlignment="Right"
                         Margin="10,5,10,10">
-                
-                <Button x:Name="OkButton" 
-                        Content="OK" 
-                        Width="75" 
+
+                <Button x:Name="YesButton"
+                        Content="Yes"
+                        Width="75"
                         Height="26"
                         Margin="0,0,8,0"
-                        Click="OkButton_Click"
-                     />
+                        Click="YesButton_Click"
+                        Visibility="Collapsed" />
+
+                <Button x:Name="NoButton"
+                        Content="No"
+                        Width="75"
+                        Height="26"
+                        Margin="0,0,8,0"
+                        Click="NoButton_Click"
+                        Visibility="Collapsed" />
+
+                <Button x:Name="OkButton"
+                        Content="OK"
+                        Width="75"
+                        Height="26"
+                        Margin="0,0,8,0"
+                        Click="OkButton_Click" />
                 
-                <Button x:Name="CancelButton" 
-                        Content="Cancel" 
-                        Width="75" 
+                <Button x:Name="ReplaceButton"
+                        Content="Replace"
+                        Width="75"
+                        Height="26"
+                        Margin="0,0,8,0"
+                        Click="ReplaceButton_Click"
+                        Visibility="Collapsed" />
+
+                <Button x:Name="RenameButton"
+                        Content="Rename"
+                        Width="75"
+                        Height="26"
+                        Margin="0,0,8,0"
+                        Click="RenameButton_Click"
+                        Visibility="Collapsed" />
+
+                <Button x:Name="SkipButton"
+                        Content="Skip"
+                        Width="75"
+                        Height="26"
+                        Margin="0,0,8,0"
+                        Click="SkipButton_Click"
+                        Visibility="Collapsed" />
+                <Button x:Name="AllButton"
+                        Content="All"
+                        Width="75"
+                        Height="26"
+                        Margin="0,0,8,0"
+                        Click="AllButton_Click"
+                        Visibility="Collapsed" />
+
+                <Button x:Name="CurrentButton"
+                        Content="Current"
+                        Width="75"
+                        Height="26"
+                        Margin="0,0,8,0"
+                        Click="CurrentButton_Click"
+                        Visibility="Collapsed" />
+
+                <Button x:Name="CancelButton"
+                        Content="Cancel"
+                        Width="75"
                         Height="26"
                         Click="CancelButton_Click"
-                        
-                        Visibility="Collapsed"/>
+                        Visibility="Collapsed" />
+                
             </StackPanel>
         </Grid>
     </Border>
 
     <Window.Resources>
         <Style x:Key="MessageBoxButton" TargetType="Button">
-            <Setter Property="Background" Value="#3E3E42"/>
-            <Setter Property="Foreground" Value="#F1F1F1"/>
-            <Setter Property="BorderBrush" Value="#555555"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Background" Value="#3E3E42" />
+            <Setter Property="Foreground" Value="#F1F1F1" />
+            <Setter Property="BorderBrush" Value="#555555" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -87,18 +140,18 @@
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="2">
-                            <ContentPresenter HorizontalAlignment="Center" 
-                                              VerticalAlignment="Center"/>
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#505054"/>
+                    <Setter Property="Background" Value="#505054" />
                 </Trigger>
                 <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#92400E"/>
+                    <Setter Property="Background" Value="#92400E" />
                 </Trigger>
             </Style.Triggers>
         </Style>

@@ -48,6 +48,8 @@ public class SettingsManager
     [DefaultValue(300)]
     public int OverlayWidth { get; set; }
     public bool IsUnlocked { get; set; }
+    
+    public string LastImportExportPath { get; set; }
 
     public void Save()
     {
