@@ -46,6 +46,8 @@ public class SettingsManager
     [DefaultValue(true)]
     public bool ShowIgt { get; set; }
     public bool IsUnlocked { get; set; }
+    
+    public string LastImportExportPath { get; set; }
 
     public void Save()
     {

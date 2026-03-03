@@ -108,10 +108,12 @@
         </ApplicationDefinition>
         <Compile Include="Behaviors\InsertionAdorner.cs" />
         <Compile Include="Behaviors\SplitListDragDropBehavior.cs" />
+        <Compile Include="Behaviors\TemplatesDragDropBehavior.cs" />
         <Compile Include="Converters\ExpanderArrowConverter.cs" />
         <Compile Include="Converters\InverseBoolConverter.cs" />
         <Compile Include="Converters\LockIconConverter.cs" />
         <Compile Include="Converters\ParentChildMarginConverter.cs" />
+        <Compile Include="Converters\ParentChildMarginMultiConverter.cs" />
         <Compile Include="Core\DelegateCommand.cs" />
         <Compile Include="Enums\AsmScript.cs" />
         <Compile Include="Enums\HotkeyActions.cs" />
@@ -194,12 +196,16 @@
         <Compile Include="ViewModels\MainViewModel.cs" />
         <Compile Include="ViewModels\ProfileEditorViewModel.cs" />
         <Compile Include="ViewModels\SettingsViewModel.cs" />
+        <Compile Include="ViewModels\SplitEventEditorViewModel.cs" />
         <Compile Include="ViewModels\SplitViewModel.cs" />
         <Compile Include="Views\Controls\HotkeysTab.xaml.cs">
           <DependentUpon>HotkeysTab.xaml</DependentUpon>
         </Compile>
         <Compile Include="Views\Controls\SettingsTab.xaml.cs">
           <DependentUpon>SettingsTab.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Views\Controls\SplitEventEditorWindow.xaml.cs">
+          <DependentUpon>SplitEventEditorWindow.xaml</DependentUpon>
         </Compile>
         <Compile Include="Views\Controls\TitleBar.xaml.cs">
           <DependentUpon>TitleBar.xaml</DependentUpon>
@@ -224,6 +230,7 @@
         </Compile>
         <Page Include="Views\Controls\HotkeysTab.xaml" />
         <Page Include="Views\Controls\SettingsTab.xaml" />
+        <Page Include="Views\Controls\SplitEventEditorWindow.xaml" />
         <Page Include="Views\Controls\TitleBar.xaml" />
         <Page Include="Views\Windows\CustomMessageBox.xaml" />
         <Page Include="Views\Windows\InputBox.xaml" />

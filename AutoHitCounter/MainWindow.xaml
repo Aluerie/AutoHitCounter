@@ -23,57 +23,6 @@
         <converters:LockTooltipConverter x:Key="LockTooltipConverter" />
         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#9D61A8" />
         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White" />
-        <!-- Styling the menu items -->
-        <Style x:Key="MenuItemStyle" TargetType="MenuItem">
-            <Setter Property="Foreground" Value="#DDDDDD" />
-            <Setter Property="Background" Value="#1e1e1e" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Padding" Value="12,6" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="MenuItem">
-                        <Border x:Name="Bd"
-                                Background="{TemplateBinding Background}"
-                                BorderThickness="2,0,0,0"
-                                BorderBrush="Transparent"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter ContentSource="Header" />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsHighlighted" Value="True">
-                                <Setter TargetName="Bd" Property="Background" Value="#6683518c" />
-                                <Setter TargetName="Bd" Property="BorderBrush" Value="#9D61A8" />
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Foreground" Value="#555555" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <!-- styling the context menu -->
-        <Style x:Key="ContextMenuStyle" TargetType="ContextMenu">
-            <Setter Property="Background" Value="#1e1e1e" />
-            <Setter Property="BorderBrush" Value="#5a3d63" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="Padding" Value="0,4" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ContextMenu">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="3"
-                                Padding="{TemplateBinding Padding}">
-                            <ItemsPresenter />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-
     </Window.Resources>
 
     <Grid>
@@ -222,17 +171,14 @@
 
                         <!-- Context Menu -->
                         <ListBox.ContextMenu>
-                            <ContextMenu Style="{StaticResource ContextMenuStyle}">
+                            <ContextMenu>
                                 <MenuItem Header="Rename"
-                                          Style="{StaticResource MenuItemStyle}"
                                           Command="{Binding PlacementTarget.DataContext.RenameSelectedSplitCommand,
                             RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                                 <MenuItem Header="Reset Split Hits"
-                                          Style="{StaticResource MenuItemStyle}"
                                           Command="{Binding PlacementTarget.DataContext.ResetSelectedSplitHitsCommand,
                             RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                                 <MenuItem Header="Save Notes"
-                                          Style="{StaticResource MenuItemStyle}"
                                           Command="{Binding PlacementTarget.DataContext.SaveNotesCommand,
                             RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                             </ContextMenu>

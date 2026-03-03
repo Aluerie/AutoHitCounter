@@ -9,6 +9,7 @@ using AutoHitCounter.Enums;
 using AutoHitCounter.Interfaces;
 using AutoHitCounter.Models;
 using AutoHitCounter.Utilities;
+using AutoHitCounter.Views.Controls;
 
 namespace AutoHitCounter.ViewModels;
 
@@ -35,8 +36,8 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
 
         AddCommand = new DelegateCommand<SplitEntry>(Add, e => Splits.All(s => s.EventId != e.EventId));
         RemoveCommand = new DelegateCommand<SplitEntry>(Remove);
-        MoveUpCommand = new DelegateCommand<SplitEntry>(MoveUp, e => Splits.IndexOf(e) > 0);
-        MoveDownCommand = new DelegateCommand<SplitEntry>(MoveDown, e => Splits.IndexOf(e) < Splits.Count - 1);
+        MoveUpCommand = new DelegateCommand<SplitEntry>(MoveUp, e => CanMoveUp());
+        MoveDownCommand = new DelegateCommand<SplitEntry>(MoveDown, e => CanMoveDown());
         AddManualSplitCommand = new DelegateCommand(AddManualSplit);
         AddGroupCommand = new DelegateCommand(AddGroup);
         RenameSplitCommand = new DelegateCommand<SplitEntry>(RenameSplit);
@@ -44,13 +45,27 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
         RenameProfileCommand = new DelegateCommand(RenameProfile, () => SelectedProfile != null);
         SaveCommand = new DelegateCommand(Save, () => SelectedProfile != null);
         DeleteCommand = new DelegateCommand(Delete, () => SelectedProfile != null);
+        AddSelectedCommand = new DelegateCommand(AddSelected, () => SelectedTemplates.Any());
+        RemoveSelectedCommand = new DelegateCommand(RemoveSelected, () => SelectedSplits.Any());
 
-        Splits.CollectionChanged += (_, _) => OnPropertyChanged(nameof(SplitCount));
+        Splits.CollectionChanged += (_, _) =>
+        {
+            OnPropertyChanged(nameof(SplitCount));
+            OnPropertyChanged(nameof(HasGroups));
+            MoveUpCommand.RaiseCanExecuteChange();
+            MoveDownCommand.RaiseCanExecuteChange();
+        };
+
+        SelectedTemplates.CollectionChanged += (_, _) => AddSelectedCommand.RaiseCanExecuteChanged();
+        SelectedSplits.CollectionChanged += (_, _) => RemoveSelectedCommand.RaiseCanExecuteChanged();
 
         if (activeProfile != null)
         {
             SelectedProfile = Profiles.FirstOrDefault(p => p.Name == activeProfile.Name);
         }
+
+        EditSplitEventCommand = new DelegateCommand(EditSplitEvent,
+            () => SelectedSplit?.Type == SplitType.Child);
     }
 
     #region Commands
@@ -66,6 +81,10 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
     public DelegateCommand RenameProfileCommand { get; }
     public DelegateCommand SaveCommand { get; }
     public DelegateCommand DeleteCommand { get; }
+    public DelegateCommand EditSplitEventCommand { get; private set; }
+
+    public DelegateCommand AddSelectedCommand { get; private set; }
+    public DelegateCommand RemoveSelectedCommand { get; private set; }
 
     #endregion
 
@@ -74,6 +93,9 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
     public ObservableCollection<SplitEntry> AllEvents { get; } = new();
     public ObservableCollection<SplitEntry> Splits { get; } = new();
     public ObservableCollection<Profile> Profiles { get; }
+
+    public ObservableCollection<SplitEntry> SelectedTemplates { get; } = new();
+    public ObservableCollection<SplitEntry> SelectedSplits { get; } = new();
 
     private Profile _selectedProfile;
 
@@ -95,7 +117,15 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
     public SplitEntry SelectedSplit
     {
         get => _selectedSplit;
-        set => SetProperty(ref _selectedSplit, value);
+        set
+        {
+            if (SetProperty(ref _selectedSplit, value))
+            {
+                MoveUpCommand.RaiseCanExecuteChange();
+                MoveDownCommand.RaiseCanExecuteChange();
+                EditSplitEventCommand.RaiseCanExecuteChanged();
+            }
+        }
     }
 
     private string _searchText = string.Empty;
@@ -110,9 +140,26 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
         }
     }
 
+    public string GameName => _gameName;
+
+    public void ImportProfile(Profile profile)
+    {
+        _profileService.SaveProfile(profile);
+        var existing = Profiles.FirstOrDefault(p => p.Name == profile.Name);
+        if (existing != null)
+            Profiles[Profiles.IndexOf(existing)] = profile;
+        else
+            Profiles.Add(profile);
+        
+    }
+
+    
+
     public ObservableCollection<SplitEntry> FilteredEvents { get; } = new();
 
     public bool IsDirty { get; private set; }
+
+    public bool HasGroups => Splits.Any(s => s.Type == SplitType.Parent);
 
     public int SplitCount => Splits.Count(s => s.Type == SplitType.Child);
 
@@ -145,6 +192,31 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
         Splits.Insert(dropIndex, draggedEntry);
 
         AssignGroupFromPosition(draggedEntry, dropIndex);
+        IsDirty = true;
+    }
+
+    public void DropFromTemplates(IList<SplitEntry> items, int dropIndex)
+    {
+        foreach (var item in items)
+        {
+            if (Splits.Any(s => s.EventId == item.EventId)) continue;
+
+            var newEntry = new SplitEntry
+            {
+                EventId = item.EventId,
+                Name = item.Name,
+                Type = SplitType.Child
+            };
+
+            if (dropIndex >= Splits.Count)
+                Splits.Add(newEntry);
+            else
+                Splits.Insert(dropIndex, newEntry);
+
+            dropIndex++;
+        }
+
+        FilterEvents();
         IsDirty = true;
     }
 
@@ -272,6 +344,18 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
         IsDirty = true;
     }
 
+    private void AddSelected()
+    {
+        foreach (var item in SelectedTemplates.ToList())
+            Add(item);
+    }
+
+    private void RemoveSelected()
+    {
+        foreach (var item in SelectedSplits.ToList())
+            Remove(item);
+    }
+
     private void RenameSplit(SplitEntry entry)
     {
         if (entry == null) return;
@@ -322,6 +406,9 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
 
     private void MoveUp(SplitEntry entry)
     {
+        if (entry == null)
+            return;
+
         var index = Splits.IndexOf(entry);
         if (index <= 0) return;
 
@@ -363,8 +450,17 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
         }
     }
 
+    private bool CanMoveUp()
+    {
+        return SelectedSplit != null &&
+               Splits.IndexOf(SelectedSplit) > 0;
+    }
+
     private void MoveDown(SplitEntry entry)
     {
+        if (entry == null)
+            return;
+
         var index = Splits.IndexOf(entry);
         if (index >= Splits.Count - 1) return;
 
@@ -403,6 +499,12 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
         }
     }
 
+    private bool CanMoveDown()
+    {
+        return SelectedSplit != null &&
+               Splits.IndexOf(SelectedSplit) < Splits.Count - 1;
+    }
+
     private int FindLastChildIndex(int parentIndex)
     {
         var lastIndex = parentIndex;
@@ -416,6 +518,21 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
         }
 
         return lastIndex;
+    }
+
+    private void EditSplitEvent()
+    {
+        if (SelectedSplit == null || SelectedSplit.Type != SplitType.Child) return;
+
+        var vm = new SplitEventEditorViewModel(SelectedSplit, _allEvents);
+        var window = new SplitEventEditorWindow();
+        window.SetViewModel(vm);
+        window.ShowDialog();
+
+        if (!vm.Confirmed) return;
+
+        SelectedSplit.EventId = vm.ResultEventId;
+        IsDirty = true;
     }
 
 
@@ -437,32 +554,28 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
 
     private void NewProfile()
     {
-        var result = MsgBox.ShowInput("Profile Name", "", "New Profile");
+        List<SplitEntry> splitsToKeep = null;
 
-        if (string.IsNullOrWhiteSpace(result))
+        if (Splits.Any())
         {
-            MsgBox.Show("Profile name required", "New Profile");
-            return;
+            var keepSplits = MsgBox.ShowYesNoCancel(
+                $"Current splits list is not empty.{Environment.NewLine}Would you like to add them to the new profile?",
+                "New Profile");
+
+
+            if (keepSplits == null) return;
+            if (keepSplits == true) splitsToKeep = Splits.ToList();
         }
 
-        var currentSplits = Splits.ToList();
+        var name = MsgBox.ShowInput("Profile Name", "", "New Profile");
+        if (string.IsNullOrWhiteSpace(name)) return;
 
         var profile = new Profile
         {
-            Name = result,
+            Name = name,
             GameName = _gameName,
-            Splits = []
+            Splits = splitsToKeep ?? []
         };
-
-        if (currentSplits.Any())
-        {
-            var keepSplits = MsgBox.ShowOkCancel(
-                $"Current splits list is not empty.{Environment.NewLine}Would you like to add the splits into the new profile?",
-                "New Profile");
-
-            if (keepSplits)
-                profile.Splits = currentSplits;
-        }
 
         _profileService.SaveProfile(profile);
         Profiles.Add(profile);

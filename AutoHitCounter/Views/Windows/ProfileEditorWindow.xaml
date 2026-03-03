@@ -15,7 +15,7 @@
         Title="Profile Editor" Height="800" Width="800">
     <Window.Resources>
         <converters:ExpanderArrowConverter x:Key="ExpanderArrowConverter" />
-        <converters:ParentChildMarginConverter x:Key="ParentChildMarginConverter" />
+        <converters:ParentChildMarginMultiConverter x:Key="ParentChildMarginMultiConverter" />
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
     </Window.Resources>
 
@@ -29,35 +29,41 @@
 
         <controls:TitleBar Grid.Row="0" Title="Profile Editor" />
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,5.5,0,17.5">
-            <TextBlock Text="PROFILE"
-                       VerticalAlignment="Center" Margin="0,0,8,0"
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,0,10">
+            <TextBlock Text="Profile"
+                       VerticalAlignment="Center" Margin="8,0,8,0"
                        FontWeight="SemiBold" />
 
             <ComboBox
-                Width="200"
+                Width="445"
                 ItemsSource="{Binding Profiles}"
                 SelectedItem="{Binding SelectedProfile}"
                 DisplayMemberPath="Name"
                 Margin="0,0,8,0" />
-
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,10,10" HorizontalAlignment="Right">
             <Button Content="New" Margin="0,0,4,0"
                     Command="{Binding NewProfileCommand}" />
-             <Button Content="Rename" Margin="0,0,4,0"
+            <Button Content="Rename" Margin="0,0,4,0"
                     Command="{Binding RenameProfileCommand}" />
             <Button Content="Delete" Margin="0,0,4,0"
                     Command="{Binding DeleteCommand}" />
-            <Button Content="Save"
+            <Button Content="Save" Margin="0,0,4,0"
                     Command="{Binding SaveCommand}" />
+            <Button Content="Import" Margin="0,0,4,0"
+                    Click="ImportButton_Click" />
+            <Button Content="Export"
+                    Click="ExportButton_Click" />
         </StackPanel>
 
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="2" Margin="0,4,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="3" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0" Margin="0,0,6,0">
+            <Border Grid.Column="0" Margin="3,0,6,4">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -66,24 +72,99 @@
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0" Margin="10,8">
-                        <TextBlock Text="ALL EVENTS" FontSize="11" FontWeight="SemiBold"
-                                   Foreground="#aaa" />
+
+                        <StackPanel>
+                            <TextBlock Text="Available Templates" FontSize="13" FontWeight="SemiBold"
+                                       Foreground="#aaa" />
+                            <TextBlock Margin="0,3,0,-1"
+                                       Text="A list of pre-made splits that automatically advance once a boss is defeated."
+                                       FontSize="11" FontStyle="Italic"
+                                       Foreground="#878686" TextWrapping="Wrap" />
+                            <TextBlock
+                                Text="To add a boss to the current profile, click the + sign next to the name."
+                                FontSize="11" FontStyle="Italic"
+                                Foreground="#878686" />
+                        </StackPanel>
                         <TextBlock HorizontalAlignment="Right" FontSize="11"
                                    Foreground="#555" FontFamily="JetBrains Mono"
                                    Text="{Binding FilteredEvents.Count, StringFormat='{}{0} events'}" />
                     </Grid>
-
                     <Border Grid.Row="1" BorderBrush="#B37c4d85" BorderThickness="0,0,0,1"
                             Padding="8,0,8,8">
-                        <TextBox
-                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBox.Template>
+                                <ControlTemplate TargetType="TextBox">
+                                    <Border x:Name="border"
+                                            Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="3">
+                                        <Grid>
+                                            <ScrollViewer x:Name="PART_ContentHost"
+                                                          Focusable="false"
+                                                          HorizontalScrollBarVisibility="Hidden"
+                                                          VerticalScrollBarVisibility="Hidden"
+                                                          VerticalAlignment="Center"
+                                                          Margin="5,0,0,0" />
+
+                                            <TextBlock Text="Search For Boss..."
+                                                       VerticalAlignment="Center"
+                                                       HorizontalAlignment="Left"
+                                                       Margin="5,0,0,0"
+                                                       Foreground="Gray"
+                                                       IsHitTestVisible="False">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                        <Style.Triggers>
+                                                            <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition
+                                                                        Binding="{Binding Path=Text, RelativeSource={RelativeSource AncestorType=TextBox}}"
+                                                                        Value="" />
+                                                                    <Condition
+                                                                        Binding="{Binding Path=IsKeyboardFocused, RelativeSource={RelativeSource AncestorType=TextBox}}"
+                                                                        Value="False" />
+                                                                </MultiDataTrigger.Conditions>
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </MultiDataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Grid>
+                                    </Border>
+
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsKeyboardFocused" Value="True">
+                                            <Setter TargetName="border"
+                                                    Property="BorderBrush"
+                                                    Value="{StaticResource AccentBrush}" />
+                                            <Setter TargetName="border"
+                                                    Property="BorderThickness"
+                                                    Value="1.5" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </TextBox.Template>
+                        </TextBox>
                     </Border>
 
                     <ListBox Grid.Row="2"
                              ItemsSource="{Binding FilteredEvents}"
                              Background="Transparent"
                              BorderThickness="0"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             SelectionMode="Extended"
+                             behaviors:TemplatesDragDropBehavior.IsSource="True"
+                             x:Name="TemplatesListBox">
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Add"
+                                          Command="{Binding PlacementTarget.DataContext.AddSelectedCommand,
+                            RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="Padding" Value="0" />
@@ -99,6 +180,9 @@
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
                                                     <Setter TargetName="Bd" Property="Background" Value="#6683518c" />
+                                                </Trigger>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter TargetName="Bd" Property="Background" Value="#B37c4d85" />
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -137,7 +221,9 @@
                 </Grid>
             </Border>
 
-            <Border Grid.Column="1" Margin="6,0,0,0">
+            <Border Grid.Column="1" VerticalAlignment="Stretch" Width="0.5" Background="#B37c4d85" Margin="1,20,1,10"></Border>
+
+            <Border Grid.Column="2" Margin="4,0,3,4">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -146,22 +232,40 @@
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0" Margin="10,8">
-                        <TextBlock Text="SPLITS" FontSize="11" FontWeight="SemiBold"
-                                   Foreground="#aaa" />
+                        <StackPanel>
+                            <TextBlock Text="Profile Splits" FontSize="13" FontWeight="SemiBold"
+                                       Foreground="#aaa" />
+                            <TextBlock Margin="0,3,0,-1"
+                                       Text="This is the list of splits that are used during a run."
+                                       FontSize="11" FontStyle="Italic"
+                                       Foreground="#878686" TextWrapping="Wrap" />
+                            <TextBlock
+                                Text="You can reorder, group or create custom entries that require manual splitting."
+                                FontSize="11" FontStyle="Italic"
+                                Foreground="#878686" />
+                        </StackPanel>
                         <TextBlock HorizontalAlignment="Right" FontSize="11"
                                    Foreground="#555" FontFamily="JetBrains Mono"
                                    Text="{Binding SplitCount, StringFormat='{}{0} selected'}" />
                     </Grid>
 
                     <!-- Action buttons -->
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10,0,10,6">
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10,2,10,6">
+                        <Button Content="⬆️" Margin="0,0,4,0"
+                                Command="{Binding MoveUpCommand}"
+                                CommandParameter="{Binding SelectedSplit}" />
+                        <Button Content="⬇️" Margin="0,0,4,0"
+                                Command="{Binding MoveDownCommand}"
+                                CommandParameter="{Binding SelectedSplit}" />
                         <Button Content="+ Group" Margin="0,0,4,0"
                                 Command="{Binding AddGroupCommand}" />
-                        <Button Content="+ Manual Split" Margin="0,0,4,0"
+                        <Button Content="+ Custom Split" Margin="0,0,4,0"
                                 Command="{Binding AddManualSplitCommand}" />
                         <Button Content="Rename" Margin="0,0,4,0"
                                 Command="{Binding RenameSplitCommand}"
                                 CommandParameter="{Binding SelectedSplit}" />
+                        <Button Content="Edit Event" Margin="0,0,4,0"
+                                Command="{Binding EditSplitEventCommand}" />
                     </StackPanel>
 
                     <ListBox Grid.Row="2"
@@ -170,7 +274,27 @@
                              behaviors:SplitListDragDropBehavior.IsEnabled="True"
                              Background="Transparent"
                              BorderThickness="0"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             SelectionMode="Extended"
+                             behaviors:TemplatesDragDropBehavior.IsTarget="True"
+                             x:Name="SplitsListBox">
+
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Rename"
+                                          Command="{Binding PlacementTarget.DataContext.RenameSplitCommand,
+                            RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                          CommandParameter="{Binding PlacementTarget.SelectedItem,
+                            RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                                <MenuItem Header="Remove"
+                                          Command="{Binding PlacementTarget.DataContext.RemoveSelectedCommand,
+                            RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                                <MenuItem Header="Edit Event"
+                                          Command="{Binding PlacementTarget.DataContext.EditSplitEventCommand,
+                            RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
+
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="Padding" Value="0" />
@@ -203,11 +327,59 @@
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-
                                     <StackPanel Grid.Column="0" Orientation="Horizontal"
-                                                VerticalAlignment="Center"
-                                                Margin="{Binding Type,
-                                        Converter={StaticResource ParentChildMarginConverter}}">
+                                                VerticalAlignment="Center">
+                                        <StackPanel.Margin>
+                                            <MultiBinding Converter="{StaticResource ParentChildMarginMultiConverter}">
+                                                <Binding Path="Type" />
+                                                <Binding Path="DataContext.HasGroups"
+                                                         RelativeSource="{RelativeSource AncestorType=ListBox}" />
+                                            </MultiBinding>
+                                        </StackPanel.Margin>
+
+                                        <!-- Auto split indicator -->
+                                        <TextBlock Text="⚡" FontSize="10" Foreground="#666"
+                                                   Margin="0,0,6,0" VerticalAlignment="Center"
+                                                   HorizontalAlignment="Left"
+                                                   ToolTip="Auto split">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsAuto}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Type}"
+                                                                     Value="{x:Static enums:SplitType.Parent}">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+
+                                        <!-- Manual split indicator -->
+                                        <TextBlock Text="⌨" FontSize="10" Foreground="#666"
+                                                   Margin="0,0,6,0" VerticalAlignment="Center"
+                                                   HorizontalAlignment="Left"
+                                                   ToolTip="Manual split">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsAuto}" Value="False">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Type}"
+                                                                     Value="{x:Static enums:SplitType.Parent}">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+
+                                        <!-- Splits -->
                                         <TextBlock Text="{Binding Name}"
                                                    FontSize="13"
                                                    TextTrimming="CharacterEllipsis">
@@ -225,26 +397,8 @@
                                                 </Style>
                                             </TextBlock.Style>
                                         </TextBlock>
-                                        <!-- Manual split indicator -->
-                                        <TextBlock Text="⌨" FontSize="10" Foreground="#666"
-                                                   Margin="6,0,0,0" VerticalAlignment="Center"
-                                                   ToolTip="Manual split">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="Visibility" Value="Collapsed" />
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsAuto}" Value="False">
-                                                            <Setter Property="Visibility" Value="Visible" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Type}"
-                                                                     Value="{x:Static enums:SplitType.Parent}">
-                                                            <Setter Property="Visibility" Value="Collapsed" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
                                     </StackPanel>
+
 
                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                                         <Button Content="×" Foreground="#c05050"
@@ -259,11 +413,5 @@
                 </Grid>
             </Border>
         </Grid>
-
-        <!-- <StackPanel Grid.Row="2" Orientation="Horizontal" -->
-        <!--             HorizontalAlignment="Right" Margin="0,12,0,0"> -->
-        <!--     <Button Content="Close" Style="{StaticResource EditorButton}" -->
-        <!--             Padding="16,6" Click="OnCloseClick"/> -->
-        <!-- </StackPanel> -->
     </Grid>
 </Window>
