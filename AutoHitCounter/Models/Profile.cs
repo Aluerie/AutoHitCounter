@@ -21,6 +21,7 @@ public class Profile : INotifyPropertyChanged
 
     public string GameName { get; set; }
     public List<SplitEntry> Splits { get; set; }
+    public Dictionary<string, bool> GameSettings { get; set; } = new();
 
     public event PropertyChangedEventHandler PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string name = null)

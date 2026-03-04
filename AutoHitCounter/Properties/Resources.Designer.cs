@@ -642,6 +642,26 @@ namespace AutoHitCounter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 48 8b 05 00 00 00 00    mov    rax,QWORD PTR [rip+0x0]        # 7 &lt;_main+0x7&gt;
+        ///48 85 c0                test   rax,rax
+        ///74 14                   je     20 &lt;dead&gt;
+        ///48 8b 80 d0 00 00 00    mov    rax,QWORD PTR [rax+0xd0]
+        ///48 85 c0                test   rax,rax
+        ///74 08                   je     20 &lt;dead&gt;
+        ///83 b8 68 01 00 00 00    cmp    DWORD PTR [rax+0x168],0x0
+        ///c3                      ret
+        ///
+        ///000000000020 &lt;dead&gt;:
+        ///31 c0                   xor    eax,eax
+        ///c3                      ret.
+        /// </summary>
+        internal static string ScholarCheckPlayerDead {
+            get {
+                return ResourceManager.GetString("ScholarCheckPlayerDead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 4c 8b 01                mov    r8,QWORD PTR [rcx]
         ///48 63 c2                movsxd rax,edx
         ///80 3d 00 00 00 00 00    cmp    BYTE PTR [rip+0x0],0x0        # d &lt;_main+0xd&gt;
@@ -726,15 +746,16 @@ namespace AutoHitCounter.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to c6 05 00 00 00 00 00    mov    BYTE PTR [rip+0x0],0x0        # 7 &lt;_main+0x7&gt;
+        ///50                      push   rax
+        ///e8 00 00 00 00          call   d &lt;_main+0xd&gt;
+        ///58                      pop    rax
+        ///74 65                   je     75 &lt;exit&gt;
         ///81 7c 24 4c e6 50 f5    cmp    DWORD PTR [rsp+0x4c],0x5f550e6
         ///05 
-        ///74 30                   je     41 &lt;exit&gt;
+        ///74 5b                   je     75 &lt;exit&gt;
         ///53                      push   rbx
-        ///48 8b 1d 00 00 00 00    mov    rbx,QWORD PTR [rip+0x0]        # 19 &lt;_main+0x19&gt;
-        ///48 8b 9b d0 00 00 00    mov    rbx,QWORD PTR [rbx+0xd0]
-        ///48 3b 59 08             cmp    rbx,QWORD PTR [rcx+0x8]
-        ///75 1a                   jne    40 &lt;normal&gt;
-        ///49 3b 59 70             cmp    rbx,QWORD PTR [r9+0 [rest of string was truncated]&quot;;.
+        ///48 8b 1d 00 00 00 00    mov    rbx,QWORD PTR [rip+0x0]        # 22 &lt;_main+0x22&gt;
+        ///48 8b 9b d0 00 00 00    mov    rbx,QWORD PTR [r [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ScholarHit {
             get {

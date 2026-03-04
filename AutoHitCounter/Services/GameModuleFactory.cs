@@ -12,6 +12,7 @@ using AutoHitCounter.Interfaces;
 using AutoHitCounter.Memory;
 using AutoHitCounter.Models;
 using AutoHitCounter.Utilities;
+using AutoHitCounter.ViewModels;
 
 namespace AutoHitCounter.Services;
 
@@ -22,13 +23,13 @@ public class GameModuleFactory(
     ITickService tickService)
 {
     
-    public IGameModule CreateModule(Game game, Dictionary<uint, string> events)
+    public IGameModule CreateModule(Game game, Dictionary<uint, string> events, IGameSettingsProvider settings)
     {
         return game.GameName switch
         {
             "Dark Souls Remastered" => new DSRModule(memoryService, stateService, hookManager, tickService, events),
             "Dark Souls 2 Vanilla" => new DS2VanillaModule(memoryService, stateService, hookManager, tickService, events),
-            "Dark Souls 2 Scholar" => new DS2ScholarModule(memoryService, stateService, hookManager, tickService, events),
+            "Dark Souls 2 Scholar" => new DS2ScholarModule(memoryService, stateService, hookManager, tickService, events, settings),
             "Dark Souls 3" => new DS3Module(memoryService, stateService, hookManager, tickService, events),
             "Sekiro" => new SKModule(memoryService, stateService, hookManager, tickService, events),
             "Elden Ring" => new EldenRingModule(memoryService, stateService, hookManager, tickService, events),

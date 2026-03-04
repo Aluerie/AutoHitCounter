@@ -8,6 +8,7 @@ using AutoHitCounter.Core;
 using AutoHitCounter.Enums;
 using AutoHitCounter.Interfaces;
 using AutoHitCounter.Models;
+using AutoHitCounter.Services;
 using AutoHitCounter.Utilities;
 using AutoHitCounter.Views.Controls;
 
@@ -159,6 +160,10 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
 
     public bool IsDirty { get; private set; }
 
+    public ObservableCollection<GameFlagViewModel> GameFlags { get; } = new();
+
+    public bool HasGameFlags => GameFlags.Count > 0;
+
     public bool HasGroups => Splits.Any(s => s.Type == SplitType.Parent);
 
     public int SplitCount => Splits.Count(s => s.Type == SplitType.Child);
@@ -244,6 +249,7 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
     private void LoadProfile(Profile profile)
     {
         Splits.Clear();
+        RebuildGameFlags(profile);
         if (profile == null) return;
 
         foreach (var split in profile.Splits)
@@ -251,6 +257,28 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
 
         FilterEvents();
         IsDirty = false;
+    }
+
+    private void RebuildGameFlags(Profile profile)
+    {
+        GameFlags.Clear();
+        if (profile == null)
+        {
+            OnPropertyChanged(nameof(HasGameFlags));
+            return;
+        }
+
+        foreach (var (key, displayName) in GameFlagRegistry.GetFlags(_gameName))
+        {
+            profile.GameSettings.TryGetValue(key, out var current);
+            GameFlags.Add(new GameFlagViewModel(key, displayName, current, (k, v) =>
+            {
+                profile.GameSettings[k] = v;
+                IsDirty = true;
+            }));
+        }
+
+        OnPropertyChanged(nameof(HasGameFlags));
     }
 
     private void Add(SplitEntry entry)

@@ -23,6 +23,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -56,7 +57,25 @@
                     Click="ExportButton_Click" />
         </StackPanel>
 
-        <Grid Grid.Row="2" Margin="0,4,0,0">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="8,0,8,8"
+                    Visibility="{Binding HasGameFlags, Converter={StaticResource BoolToVisConverter}}">
+            <ItemsControl ItemsSource="{Binding GameFlags}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox Content="{Binding DisplayName}"
+                                  IsChecked="{Binding IsEnabled}"
+                                  Margin="0,0,16,0" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+
+        <Grid Grid.Row="3" Margin="0,4,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="3" />

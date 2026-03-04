@@ -15,6 +15,8 @@ public class DS2ScholarHitService(IMemoryService memoryService, HookManager hook
 
     public void InstallHooks()
     {
+        WritePlayerDeadCheck();
+        
         InstallHitHook();
         InstallGeneralDamageHook();
         InstallKillBoxHook();
@@ -36,19 +38,33 @@ public class DS2ScholarHitService(IMemoryService memoryService, HookManager hook
 
         var hit = Base + Hit;
         var auxCheckFlag = Base + CheckAuxProcFlag;
+        var shouldIgnoreShulvaSpikesFlag = Base + ShouldIgnoreShulvaSpikesFlag;
+        var checkPlayerDeadFunc = Base + CheckPlayerDead;
 
         var code = Base + HitCode;
 
         AsmHelper.WriteRelativeOffsets(bytes, [
             (code, auxCheckFlag, 7, 2),
-            (code + 0x12, GameManagerImp.Base, 7, 0x12 + 3),
-            (code + 0x2C, auxCheckFlag, 7, 0x2C + 2),
-            (code + 0x3A, hit, 6, 0x3A + 2),
-            (code + 0x46, Hooks.Hit + 5, 5, 0x46 + 1)
+            (code + 0x8, checkPlayerDeadFunc, 5, 0x8 + 1),
+            (code + 0x1B, GameManagerImp.Base, 7, 0x1B + 3),
+            (code + 0x39, MapId, 10, 0x39 + 2),
+            (code + 0x45, shouldIgnoreShulvaSpikesFlag, 7, 0x45 + 2),
+            (code + 0x60, auxCheckFlag, 7, 0x60 + 2),
+            (code + 0x6E, hit, 6, 0x6E + 2),
+            (code + 0x7A, Hooks.Hit + 5, 5, 0x7A + 1)
         ]);
 
         memoryService.WriteBytes(code, bytes);
         hookManager.InstallHook(code, Hooks.Hit, [0x48, 0x89, 0x5C, 0x24, 0x10]);
+    }
+
+    private void WritePlayerDeadCheck()
+    {
+        var code = Base + CheckPlayerDead;
+
+        var bytes = AsmLoader.GetAsmBytes(AsmScript.ScholarCheckPlayerDead);
+        AsmHelper.WriteRelativeOffset(bytes, code, GameManagerImp.Base, 7, 3);
+        memoryService.WriteBytes(code, bytes);
     }
 
     //Handles fall damage and self aux kill
@@ -118,4 +134,7 @@ public class DS2ScholarHitService(IMemoryService memoryService, HookManager hook
         memoryService.WriteBytes(code, bytes);
         hookManager.InstallHook(code, Hooks.LightPoiseStagger, [0x8B, 0x42, 0x04, 0x89, 0x02]);
     }
+
+    public void SetIsShulvaSpikesIgnored(bool isEnabled) =>
+        memoryService.Write(Base + ShouldIgnoreShulvaSpikesFlag, isEnabled);
 }

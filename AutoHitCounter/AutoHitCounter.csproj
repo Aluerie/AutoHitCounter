@@ -159,6 +159,7 @@
         <Compile Include="Games\SK\SKVersion.cs" />
         <Compile Include="Interfaces\IEventService.cs" />
         <Compile Include="Interfaces\IGameModule.cs" />
+        <Compile Include="Interfaces\IGameSettingsProvider.cs" />
         <Compile Include="Interfaces\IHitService.cs" />
         <Compile Include="Interfaces\IProfileService.cs" />
         <Compile Include="Interfaces\IReorderHandler.cs" />
@@ -175,6 +176,7 @@
         <Compile Include="Models\Profile.cs" />
         <Compile Include="Models\SplitEntry.cs" />
         <Compile Include="Services\EventServiceBase.cs" />
+        <Compile Include="Services\GameFlagRegistry.cs" />
         <Compile Include="Services\GameModuleFactory.cs" />
         <Compile Include="Services\MemoryService.cs" />
         <Compile Include="Services\OverlayServerService.cs" />
@@ -193,6 +195,7 @@
         <Compile Include="Utilities\User32.cs" />
         <Compile Include="Utilities\VisualTreeHelpers.cs" />
         <Compile Include="ViewModels\BaseViewModel.cs" />
+        <Compile Include="ViewModels\GameFlagViewModel.cs" />
         <Compile Include="ViewModels\HotkeyBindingViewModel.cs" />
         <Compile Include="ViewModels\HotkeyTabViewModel.cs" />
         <Compile Include="ViewModels\MainViewModel.cs" />

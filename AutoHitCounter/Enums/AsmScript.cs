@@ -18,6 +18,7 @@ public enum AsmScript
     ScholarIgtNewGame,
     ScholarIgtStop,
     ScholarIgtLoadGame,
+    ScholarCheckPlayerDead,
     
     DS3CheckPlayerDead,
     DS3Hit,

@@ -15,7 +15,7 @@ using AutoHitCounter.Views.Windows;
 
 namespace AutoHitCounter.ViewModels
 {
-    public class MainViewModel : BaseViewModel, IReorderHandler
+    public class MainViewModel : BaseViewModel, IReorderHandler, IGameSettingsProvider
     {
         private readonly IMemoryService _memoryService;
         private readonly HotkeyManager _hotkeyManager;
@@ -254,6 +254,7 @@ namespace AutoHitCounter.ViewModels
                 }
 
                 LoadProfile(value);
+                OnSettingsChanged?.Invoke();
             }
         }
 
@@ -293,6 +294,12 @@ namespace AutoHitCounter.ViewModels
 
         public int TotalHits => Splits.Where(s => s.Type == SplitType.Child).Sum(s => s.NumOfHits);
         public int TotalPb => Splits.Where(s => s.Type == SplitType.Child).Sum(s => s.PersonalBest);
+
+        public event Action OnSettingsChanged;
+
+        public bool GetFlag(string key) => _activeProfile != null
+            && _activeProfile.GameSettings.TryGetValue(key, out var val)
+            && val;
 
         public void CommitRename(SplitViewModel split)
         {
@@ -436,7 +443,7 @@ namespace AutoHitCounter.ViewModels
 
             if (_activeGame == null) return;
 
-            _currentModule = _gameModuleFactory.CreateModule(_activeGame, GetActiveEvents());
+            _currentModule = _gameModuleFactory.CreateModule(_activeGame, GetActiveEvents(), this);
 
             if (_currentModule is IVersionedGameModule versioned)
                 versioned.OnVersionDetected += UpdateAttachedText;

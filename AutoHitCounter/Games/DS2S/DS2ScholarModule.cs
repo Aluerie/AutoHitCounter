@@ -20,6 +20,7 @@ public class DS2ScholarModule : IGameModule, IDisposable, IVersionedGameModule
     private DS2ScholarEventService _eventService;
     private DS2ScholarIgtService _igtService;
     private readonly Dictionary<uint, string> _events;
+    private readonly IGameSettingsProvider _settings;
 
     public string GameVersion => DS2ScholarOffsets.Version.GetDescription();
 
@@ -31,16 +32,22 @@ public class DS2ScholarModule : IGameModule, IDisposable, IVersionedGameModule
     public event Action OnVersionDetected;
 
     public DS2ScholarModule(IMemoryService memoryService, IStateService stateService, HookManager hookManager,
-        ITickService tickService, Dictionary<uint, string> events)
+        ITickService tickService, Dictionary<uint, string> events, IGameSettingsProvider settings)
     {
         _memoryService = memoryService;
         _stateService = stateService;
         _hookManager = hookManager;
         _tickService = tickService;
         _events = events;
+        _settings = settings;
+        settings.OnSettingsChanged += ApplySettings;
 
         stateService.Subscribe(State.Attached, Initialize);
         _lastHit = DateTime.Now;
+    }
+
+    private void ApplySettings()                                                                                            {
+        _hitService?.SetIsShulvaSpikesIgnored(_settings.GetFlag("ignore_shulva_spikes"));
     }
 
     private void Initialize()
@@ -60,6 +67,8 @@ public class DS2ScholarModule : IGameModule, IDisposable, IVersionedGameModule
         _eventService.InstallHook();
         _igtService = new DS2ScholarIgtService(_memoryService, _hookManager);
         _igtService.InstallHooks();
+        
+        ApplySettings();
 
         _tickService.RegisterGameTick(Tick);
     }
@@ -93,6 +102,7 @@ public class DS2ScholarModule : IGameModule, IDisposable, IVersionedGameModule
 
     public void Dispose()
     {
+        _settings.OnSettingsChanged -= ApplySettings;
         _stateService.Unsubscribe(State.Attached, Initialize);
         _tickService.UnregisterGameTick();
         OnHit = null;
