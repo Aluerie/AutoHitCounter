@@ -341,6 +341,41 @@ namespace AutoHitCounter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to BossName,DeathFlag
+        ///4 Kings,13
+        ///Artorias,11210001
+        ///Asylum Demon,16
+        ///Bed of Chaos,10
+        ///Bell Gargoyles,3
+        ///Capra Demon,11010902
+        ///Ceaseless Discharge,11410900
+        ///Centipede Demon,11410901
+        ///Chaos Witch Quelaag,9
+        ///Demon Firesage,11410410
+        ///Gaping Dragon,2
+        ///Gwyndolin,11510900
+        ///Gwyn,15
+        ///Iron Golem,11
+        ///Kalameet,11210004
+        ///Manus,11210002
+        ///Moonlight Butterfly,11200900
+        ///Nito,7
+        ///Ornstein &amp; Smough,12
+        ///Pinwheel,6
+        ///Priscilla,4
+        ///Sanctuary Guardian,11210000
+        ///Seath,14
+        ///Sif,5
+        ///Stray Demon,11810900
+        ///Taurus Demon,11010901.
+        /// </summary>
+        internal static string DSREvents {
+            get {
+                return ResourceManager.GetString("DSREvents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to c6 05 00 00 00 00 00    mov    BYTE PTR [rip+0x0],0x0        # 7 &lt;_main+0x7&gt;
         ///50                      push   rax
         ///48 8b 05 00 00 00 00    mov    rax,QWORD PTR [rip+0x0]        # f &lt;_main+0xf&gt;

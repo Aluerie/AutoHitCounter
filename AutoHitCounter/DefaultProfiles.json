@@ -2091,10 +2091,10 @@
       ]
     }
   ],
-  "Dark Souls 2 Scholar": [
+  "Dark Souls 2": [
     {
       "Name": "Test",
-      "GameName": "Dark Souls 2 Scholar",
+      "GameName": "Dark Souls 2",
       "Splits": [
         {
           "EventId": null,

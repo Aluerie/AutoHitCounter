@@ -1865,4 +1865,33 @@ c7 05 00 00 00 00 03    mov    DWORD PTR ds:0x0,0x3
 00 00 00 
 e9 fc ff ff ff          jmp    11 &lt;_main+0x11&gt;</value>
   </data>
+  <data name="DSREvents" xml:space="preserve">
+    <value>BossName,DeathFlag
+4 Kings,13
+Artorias,11210001
+Asylum Demon,16
+Bed of Chaos,10
+Bell Gargoyles,3
+Capra Demon,11010902
+Ceaseless Discharge,11410900
+Centipede Demon,11410901
+Chaos Witch Quelaag,9
+Demon Firesage,11410410
+Gaping Dragon,2
+Gwyndolin,11510900
+Gwyn,15
+Iron Golem,11
+Kalameet,11210004
+Manus,11210002
+Moonlight Butterfly,11200900
+Nito,7
+Ornstein &amp; Smough,12
+Pinwheel,6
+Priscilla,4
+Sanctuary Guardian,11210000
+Seath,14
+Sif,5
+Stray Demon,11810900
+Taurus Demon,11010901</value>
+  </data>
 </root>
