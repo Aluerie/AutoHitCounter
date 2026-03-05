@@ -16,6 +16,9 @@ public enum AsmScript
     VanillaKillBox,
     VanillaLightPoiseStagger,
     VanillaEventLog,
+    VanillaIgtNewGame,
+    VanillaIgtStop,
+    VanillaIgtLoadGame,
     
     ScholarHit,
     ScholarGeneralApplyDamage,

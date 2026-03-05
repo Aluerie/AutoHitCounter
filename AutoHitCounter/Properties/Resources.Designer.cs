@@ -1169,6 +1169,42 @@ namespace AutoHitCounter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 89 8f 60 13 00 00       mov    DWORD PTR [edi+0x1360],ecx
+        ///c7 05 00 00 00 00 03    mov    DWORD PTR ds:0x0,0x3
+        ///00 00 00 
+        ///e9 fc ff ff ff          jmp    11 &lt;_main+0x11&gt;.
+        /// </summary>
+        internal static string VanillaIgtLoadGame {
+            get {
+                return ResourceManager.GetString("VanillaIgtLoadGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 89 8b 60 13 00 00       mov    DWORD PTR [ebx+0x1360],ecx
+        ///c7 05 00 00 00 00 01    mov    DWORD PTR ds:0x0,0x1
+        ///00 00 00 
+        ///e9 fc ff ff ff          jmp    11 &lt;_main+0x11&gt;.
+        /// </summary>
+        internal static string VanillaIgtNewGame {
+            get {
+                return ResourceManager.GetString("VanillaIgtNewGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to e8 fc ff ff ff          call   1 &lt;_main+0x1&gt;
+        ///c7 05 00 00 00 00 02    mov    DWORD PTR ds:0x0,0x2
+        ///00 00 00 
+        ///e9 fc ff ff ff          jmp    10 &lt;_main+0x10&gt;.
+        /// </summary>
+        internal static string VanillaIgtStop {
+            get {
+                return ResourceManager.GetString("VanillaIgtStop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 8b 01                   mov    eax,DWORD PTR [ecx]
         ///8b 4d 08                mov    ecx,DWORD PTR [ebp+0x8]
         ///57                      push   edi

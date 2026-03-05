@@ -1840,4 +1840,22 @@ e9 fc ff ff ff          jmp    1e &lt;exit+0x8&gt;</value>
 b8 59 17 b7 d1          mov    eax,0xd1b71759
 e9 fc ff ff ff          jmp    34 &lt;_main+0x34&gt;</value>
   </data>
+  <data name="VanillaIgtNewGame" xml:space="preserve">
+    <value>89 8b 60 13 00 00       mov    DWORD PTR [ebx+0x1360],ecx
+c7 05 00 00 00 00 01    mov    DWORD PTR ds:0x0,0x1
+00 00 00 
+e9 fc ff ff ff          jmp    11 &lt;_main+0x11&gt;</value>
+  </data>
+  <data name="VanillaIgtStop" xml:space="preserve">
+    <value>e8 fc ff ff ff          call   1 &lt;_main+0x1&gt;
+c7 05 00 00 00 00 02    mov    DWORD PTR ds:0x0,0x2
+00 00 00 
+e9 fc ff ff ff          jmp    10 &lt;_main+0x10&gt;</value>
+  </data>
+  <data name="VanillaIgtLoadGame" xml:space="preserve">
+    <value>89 8f 60 13 00 00       mov    DWORD PTR [edi+0x1360],ecx
+c7 05 00 00 00 00 03    mov    DWORD PTR ds:0x0,0x3
+00 00 00 
+e9 fc ff ff ff          jmp    11 &lt;_main+0x11&gt;</value>
+  </data>
 </root>
