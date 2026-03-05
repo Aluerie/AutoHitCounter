@@ -19,16 +19,19 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
     private readonly IProfileService _profileService;
     private readonly Dictionary<uint, string> _allEvents;
     private readonly string _gameName;
+    private readonly GameTitle _gameTitle;
 
     public ProfileEditorViewModel(
         Dictionary<uint, string> allEvents,
         IProfileService profileService,
         string gameName,
+        GameTitle gameTitle,
         Profile activeProfile)
     {
         _allEvents = allEvents;
         _profileService = profileService;
         _gameName = gameName;
+        _gameTitle = gameTitle;
 
         Profiles = new ObservableCollection<Profile>(profileService.GetProfiles(gameName));
 
@@ -268,7 +271,7 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
             return;
         }
 
-        foreach (var (key, displayName) in GameFlagRegistry.GetFlags(_gameName))
+        foreach (var (key, displayName) in GameFlagRegistry.GetFlags(_gameTitle))
         {
             profile.GameSettings.TryGetValue(key, out var current);
             GameFlags.Add(new GameFlagViewModel(key, displayName, current, (k, v) =>

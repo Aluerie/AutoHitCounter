@@ -2,16 +2,15 @@
 
 using System.Collections.Generic;
 using AutoHitCounter.Enums;
-using AutoHitCounter.Games.ER;
 using AutoHitCounter.Interfaces;
 using AutoHitCounter.Memory;
 using AutoHitCounter.Services;
 using AutoHitCounter.Utilities;
-using static AutoHitCounter.Games.DS2S.DS2ScholarCustomCodeOffsets;
+using static AutoHitCounter.Games.DS2.DS2CustomCodeOffsets;
 
-namespace AutoHitCounter.Games.DS2S;
+namespace AutoHitCounter.Games.DS2;
 
-public class DS2ScholarEventService(
+public class DS2EventService(
     IMemoryService memoryService,
     HookManager hookManager,
     Dictionary<uint,string> events)
@@ -23,7 +22,7 @@ public class DS2ScholarEventService(
         var bytes = AsmLoader.GetAsmBytes(AsmScript.ScholarEventLog);
         var writeIndex = Base + EventLogWriteIdx;
         var buffer = Base + EventLogBuffer;
-        var hookLoc = DS2ScholarOffsets.Hooks.SetEvent;
+        var hookLoc = DS2Offsets.Hooks.SetEvent;
         
         AsmHelper.WriteRelativeOffsets(bytes, [
             (code + 0x3, writeIndex, 6, 0x3 + 2),

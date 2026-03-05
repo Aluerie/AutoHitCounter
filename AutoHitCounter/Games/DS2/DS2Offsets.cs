@@ -1,25 +1,30 @@
 ﻿// 
 
 using System;
+using AutoHitCounter.Games.DS2S;
 using AutoHitCounter.Utilities;
-using static AutoHitCounter.Games.DS2S.DS2ScholarVersion;
+using static AutoHitCounter.Games.DS2S.DS2Version;
 
-namespace AutoHitCounter.Games.DS2S;
+namespace AutoHitCounter.Games.DS2;
 
-public static class DS2ScholarOffsets
+public static class DS2Offsets
 {
     
-    private static DS2ScholarVersion? _version;
+    private static DS2Version? _version;
 
-    public static DS2ScholarVersion Version => _version
-                                               ?? Version1_0_3;
+    public static DS2Version Version => _version
+                                               ?? Scholar1_0_3;
+    
+    public static bool IsScholar => Version is Scholar1_0_2 or Scholar1_0_3;
 
     public static void Initialize(long fileSize, nint moduleBase)
     {
         _version = fileSize switch
         {
-            31605096 => Version1_0_2,
-            28200992 => Version1_0_3,
+            32340760 => Vanilla1_0_11,
+            29588960 => Vanilla1_0_12,
+            31605096 => Scholar1_0_2,
+            28200992 => Scholar1_0_3,
             _ => null
         };
 
@@ -83,15 +88,15 @@ public static class DS2ScholarOffsets
         
         GameManagerImp.Base = moduleBase + Version switch
         {
-            Version1_0_2 => 0x160B8D0,
-            Version1_0_3 => 0x16148F0,
+            Scholar1_0_2 => 0x160B8D0,
+            Scholar1_0_3 => 0x16148F0,
             _ => 0
         };
         
         MapId = moduleBase + Version switch
         {
-            Version1_0_2 => 0x15641B4,
-            Version1_0_3 => 0x156D1C4,
+            Scholar1_0_2 => 0x15641B4,
+            Scholar1_0_3 => 0x156D1C4,
             _ => 0
         };
 
@@ -99,71 +104,71 @@ public static class DS2ScholarOffsets
         
         Hooks.Hit = moduleBase+ Version switch
         {
-            Version1_0_2 => 0x133BB0,
-            Version1_0_3 => 0x136220,
+            Scholar1_0_2 => 0x133BB0,
+            Scholar1_0_3 => 0x136220,
             _ => 0
         };
         
         Hooks.GeneralApplyDamage = moduleBase + Version switch
         {
-            Version1_0_2 => 0x16727A,
-            Version1_0_3 => 0x16A39A,
+            Scholar1_0_2 => 0x16727A,
+            Scholar1_0_3 => 0x16A39A,
             _ => 0
         };
         
         Hooks.KillBox = moduleBase + Version switch
         {
-            Version1_0_2 => 0x167440,
-            Version1_0_3 => 0x16A560,
+            Scholar1_0_2 => 0x167440,
+            Scholar1_0_3 => 0x16A560,
             _ => 0
         };
         
         Hooks.CountAuxHit = moduleBase + Version switch
         {
-            Version1_0_2 => 0x143D20,
-            Version1_0_3 => 0x146430,
+            Scholar1_0_2 => 0x143D20,
+            Scholar1_0_3 => 0x146430,
             _ => 0
         };
 
         Hooks.LightPoiseStagger = moduleBase + Version switch
         {
-            Version1_0_2 => 0x1432A7,
-            Version1_0_3 => 0x145997,
+            Scholar1_0_2 => 0x1432A7,
+            Scholar1_0_3 => 0x145997,
             _ => 0
         };
         
         Hooks.SetEvent = moduleBase + Version switch
         {
-            Version1_0_2 => 0x46DED0,
-            Version1_0_3 => 0x4750C0,
+            Scholar1_0_2 => 0x46DED0,
+            Scholar1_0_3 => 0x4750C0,
             _ => 0
         };
         
         Hooks.IgtNewGame = moduleBase + Version switch
         {
-            Version1_0_2 => 0xFC35F,
-            Version1_0_3 => 0xFC41F,
+            Scholar1_0_2 => 0xFC35F,
+            Scholar1_0_3 => 0xFC41F,
             _ => 0
         };
         
         Hooks.IgtStop = moduleBase + Version switch
         {
-            Version1_0_2 => 0x1BC25F,
-            Version1_0_3 => 0x1BF9CF,
+            Scholar1_0_2 => 0x1BC25F,
+            Scholar1_0_3 => 0x1BF9CF,
             _ => 0
         };
         
         Hooks.IgtLoadGame = moduleBase + Version switch
         {
-            Version1_0_2 => 0xFCDBD,
-            Version1_0_3 => 0xFCE7D,
+            Scholar1_0_2 => 0xFCDBD,
+            Scholar1_0_3 => 0xFCE7D,
             _ => 0
         };
         
         Functions.RequestSave = moduleBase + Version switch
         {
-            Version1_0_2 => 0x2E1080,
-            Version1_0_3 => 0x2E7410,
+            Scholar1_0_2 => 0x2E1080,
+            Scholar1_0_3 => 0x2E7410,
             _ => 0
         };
 

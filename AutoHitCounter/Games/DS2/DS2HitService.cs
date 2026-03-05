@@ -4,12 +4,12 @@ using AutoHitCounter.Enums;
 using AutoHitCounter.Interfaces;
 using AutoHitCounter.Memory;
 using AutoHitCounter.Utilities;
-using static AutoHitCounter.Games.DS2S.DS2ScholarCustomCodeOffsets;
-using static AutoHitCounter.Games.DS2S.DS2ScholarOffsets;
+using static AutoHitCounter.Games.DS2.DS2CustomCodeOffsets;
+using static AutoHitCounter.Games.DS2.DS2Offsets;
 
-namespace AutoHitCounter.Games.DS2S;
+namespace AutoHitCounter.Games.DS2;
 
-public class DS2ScholarHitService(IMemoryService memoryService, HookManager hookManager) : IHitService
+public class DS2HitService(IMemoryService memoryService, HookManager hookManager) : IHitService
 {
     private int _lastHitCount;
 
@@ -46,12 +46,12 @@ public class DS2ScholarHitService(IMemoryService memoryService, HookManager hook
         AsmHelper.WriteRelativeOffsets(bytes, [
             (code, auxCheckFlag, 7, 2),
             (code + 0x8, checkPlayerDeadFunc, 5, 0x8 + 1),
-            (code + 0x1B, GameManagerImp.Base, 7, 0x1B + 3),
-            (code + 0x39, MapId, 10, 0x39 + 2),
-            (code + 0x45, shouldIgnoreShulvaSpikesFlag, 7, 0x45 + 2),
-            (code + 0x60, auxCheckFlag, 7, 0x60 + 2),
-            (code + 0x6E, hit, 6, 0x6E + 2),
-            (code + 0x7A, Hooks.Hit + 5, 5, 0x7A + 1)
+            (code + 0x1A, GameManagerImp.Base, 7, 0x1A + 3),
+            (code + 0x38, MapId, 10, 0x38 + 2),
+            (code + 0x44, shouldIgnoreShulvaSpikesFlag, 7, 0x44 + 2),
+            (code + 0x6D, auxCheckFlag, 7, 0x6D + 2),
+            (code + 0x7B, hit, 6, 0x7B + 2),
+            (code + 0x88, Hooks.Hit + 5, 5, 0x88 + 1)
         ]);
 
         memoryService.WriteBytes(code, bytes);

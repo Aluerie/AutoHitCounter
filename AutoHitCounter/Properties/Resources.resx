@@ -513,45 +513,49 @@ e9 00 00 00 00          jmp    39 &lt;_main+0x39&gt;</value>
     <value>c6 05 00 00 00 00 00    mov    BYTE PTR [rip+0x0],0x0        # 7 &lt;_main+0x7&gt;
 50                      push   rax
 e8 00 00 00 00          call   d &lt;_main+0xd&gt;
-58                      pop    rax
-74 65                   je     75 &lt;exit&gt;
-81 7c 24 4c e6 50 f5    cmp    DWORD PTR [rsp+0x4c],0x5f550e6
+74 73                   je     82 &lt;exit&gt;
+81 7c 24 54 e6 50 f5    cmp    DWORD PTR [rsp+0x54],0x5f550e6
 05 
-74 5b                   je     75 &lt;exit&gt;
+74 69                   je     82 &lt;exit&gt;
 53                      push   rbx
-48 8b 1d 00 00 00 00    mov    rbx,QWORD PTR [rip+0x0]        # 22 &lt;_main+0x22&gt;
+48 8b 1d 00 00 00 00    mov    rbx,QWORD PTR [rip+0x0]        # 21 &lt;_main+0x21&gt;
 48 8b 9b d0 00 00 00    mov    rbx,QWORD PTR [rbx+0xd0]
 48 3b 59 08             cmp    rbx,QWORD PTR [rcx+0x8]
-75 45                   jne    74 &lt;normal&gt;
-81 7c 24 54 42 59 f4    cmp    DWORD PTR [rsp+0x54],0xbf45942
+75 53                   jne    81 &lt;normal&gt;
+81 7c 24 5c 42 59 f4    cmp    DWORD PTR [rsp+0x5c],0xbf45942
 0b 
-75 17                   jne    50 &lt;check_wall&gt;
-81 3d 00 00 00 00 00    cmp    DWORD PTR [rip+0x0],0x32230000        # 43 &lt;_main+0x43&gt;
+75 17                   jne    4f &lt;check_wall&gt;
+81 3d 00 00 00 00 00    cmp    DWORD PTR [rip+0x0],0x32230000        # 42 &lt;_main+0x42&gt;
 00 23 32 
-75 2f                   jne    74 &lt;normal&gt;
-80 3d 00 00 00 00 00    cmp    BYTE PTR [rip+0x0],0x0        # 4c &lt;_main+0x4c&gt;
-74 20                   je     6e &lt;count_hit&gt;
-eb 24                   jmp    74 &lt;normal&gt;
+75 3d                   jne    81 &lt;normal&gt;
+80 3d 00 00 00 00 00    cmp    BYTE PTR [rip+0x0],0x0        # 4b &lt;_main+0x4b&gt;
+74 2e                   je     7b &lt;count_hit&gt;
+eb 32                   jmp    81 &lt;normal&gt;
 
-000000000050 &lt;check_wall&gt;:
-81 7c 24 54 5a 55 f4    cmp    DWORD PTR [rsp+0x54],0xbf4555a
+00000000004f &lt;check_wall&gt;:
+81 7c 24 5c 5a 55 f4    cmp    DWORD PTR [rsp+0x5c],0xbf4555a
 0b 
-74 14                   je     6e &lt;count_hit&gt;
+74 22                   je     7b &lt;count_hit&gt;
+8b 44 24 5c             mov    eax,DWORD PTR [rsp+0x5c]
+2d 30 8a f3 0b          sub    eax,0xbf38a30
+83 f8 14                cmp    eax,0x14
+76 1a                   jbe    81 &lt;normal&gt;
 49 3b 59 70             cmp    rbx,QWORD PTR [r9+0x70]
-74 14                   je     74 &lt;normal&gt;
-c6 05 00 00 00 00 01    mov    BYTE PTR [rip+0x0],0x1        # 67 &lt;check_wall+0x17&gt;
+74 14                   je     81 &lt;normal&gt;
+c6 05 00 00 00 00 01    mov    BYTE PTR [rip+0x0],0x1        # 74 &lt;check_wall+0x25&gt;
 41 83 78 34 00          cmp    DWORD PTR [r8+0x34],0x0
-7e 06                   jle    74 &lt;normal&gt;
+7e 06                   jle    81 &lt;normal&gt;
 
-00000000006e &lt;count_hit&gt;:
-ff 05 00 00 00 00       inc    DWORD PTR [rip+0x0]        # 74 &lt;normal&gt;
+00000000007b &lt;count_hit&gt;:
+ff 05 00 00 00 00       inc    DWORD PTR [rip+0x0]        # 81 &lt;normal&gt;
 
-000000000074 &lt;normal&gt;:
+000000000081 &lt;normal&gt;:
 5b                      pop    rbx
 
-000000000075 &lt;exit&gt;:
+000000000082 &lt;exit&gt;:
+58                      pop    rax
 48 89 5c 24 10          mov    QWORD PTR [rsp+0x10],rbx
-e9 00 00 00 00          jmp    7f &lt;exit+0xa&gt;</value>
+e9 00 00 00 00          jmp    8d &lt;exit+0xb&gt;</value>
   </data>
   <data name="ScholarGeneralApplyDamage" xml:space="preserve">
     <value>51                      push   rcx

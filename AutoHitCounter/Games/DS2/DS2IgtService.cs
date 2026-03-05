@@ -2,19 +2,18 @@
 
 using System.Diagnostics;
 using AutoHitCounter.Enums;
-using AutoHitCounter.Games.ER;
 using AutoHitCounter.Interfaces;
 using AutoHitCounter.Memory;
 using AutoHitCounter.Utilities;
-using static AutoHitCounter.Games.DS2S.DS2ScholarOffsets;
+using static AutoHitCounter.Games.DS2.DS2Offsets;
 
-namespace AutoHitCounter.Games.DS2S;
+namespace AutoHitCounter.Games.DS2;
 
-public class DS2ScholarIgtService(IMemoryService memoryService, HookManager hookManager)
+public class DS2IgtService(IMemoryService memoryService, HookManager hookManager)
 {
     private long _baseMs;
     private readonly Stopwatch _stopwatch = new();
-    private readonly nint _igtState = DS2ScholarCustomCodeOffsets.Base + DS2ScholarCustomCodeOffsets.IgtState;
+    private readonly nint _igtState = DS2CustomCodeOffsets.Base + DS2CustomCodeOffsets.IgtState;
 
     private readonly nint _saveDataManager = memoryService.FollowPointers(GameManagerImp.Base,
     [
@@ -34,7 +33,7 @@ public class DS2ScholarIgtService(IMemoryService memoryService, HookManager hook
 
     private void InstallIgtNewGameHook()
     {
-        var code = DS2ScholarCustomCodeOffsets.Base + DS2ScholarCustomCodeOffsets.IgtNewGameCode;
+        var code = DS2CustomCodeOffsets.Base + DS2CustomCodeOffsets.IgtNewGameCode;
         var bytes = AsmLoader.GetAsmBytes(AsmScript.ScholarIgtNewGame);
         var hook = Hooks.IgtNewGame;
         
@@ -49,7 +48,7 @@ public class DS2ScholarIgtService(IMemoryService memoryService, HookManager hook
 
     private void InstallIgtStopHook()
     {
-        var code = DS2ScholarCustomCodeOffsets.Base + DS2ScholarCustomCodeOffsets.IgtStopCode;
+        var code = DS2CustomCodeOffsets.Base + DS2CustomCodeOffsets.IgtStopCode;
         var bytes = AsmLoader.GetAsmBytes(AsmScript.ScholarIgtStop);
         var hook = Hooks.IgtStop;
         var originalBytes = memoryService.ReadBytes(hook, 5);
@@ -66,7 +65,7 @@ public class DS2ScholarIgtService(IMemoryService memoryService, HookManager hook
 
     private void InstallIgtLoadGameHook()
     {
-        var code = DS2ScholarCustomCodeOffsets.Base + DS2ScholarCustomCodeOffsets.IgtLoadGameCode;
+        var code = DS2CustomCodeOffsets.Base + DS2CustomCodeOffsets.IgtLoadGameCode;
         var bytes = AsmLoader.GetAsmBytes(AsmScript.ScholarIgtLoadGame);
         var hook = Hooks.IgtLoadGame;
         
