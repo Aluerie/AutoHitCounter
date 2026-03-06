@@ -253,15 +253,15 @@ namespace AutoHitCounter.Properties {
         ///   Looks up a localized string similar to 50                      push   rax
         ///e8 00 00 00 00          call   6 &lt;_main+0x6&gt;
         ///58                      pop    rax
-        ///0f 84 ae 00 00 00       je     bb &lt;skip_all&gt;
+        ///0f 84 b2 00 00 00       je     bf &lt;skip_all&gt;
         ///48 85 d2                test   rdx,rdx
-        ///75 29                   jne    3b &lt;continue&gt;
+        ///75 2d                   jne    3f &lt;continue&gt;
         ///41 81 78 40 c6 16 00    cmp    DWORD PTR [r8+0x40],0x16c6
         ///00 
-        ///74 14                   je     30 &lt;real_hit_no_pop&gt;
+        ///74 18                   je     34 &lt;real_hit_no_pop&gt;
         ///41 81 78 40 b4 14 00    cmp    DWORD PTR [r8+0x40],0x14b4
         ///00 
-        ///74 0a                   je     30 &lt;real_hit_no_pop&gt;
+        ///74 0e                   je     34 &lt;real_hit_no_pop&gt;
         ///41 81 78 40 58 1b 00    cmp  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DS3Hit {
