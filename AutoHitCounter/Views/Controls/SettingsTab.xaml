@@ -93,6 +93,23 @@
                             <CheckBox Content="Disable Achievements" IsChecked="{Binding ERDisableAchievements}" />
                         </StackPanel>
                     </StackPanel>
+                    
+                    <StackPanel Margin="0,0,0,0">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedSettingsGame}" Value="{x:Static enums:GameTitle.DarkSouls3}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox Content="No Logo" IsChecked="{Binding DS3NoLogo}" Margin="0, 0, 5, 0" />
+                            <CheckBox Content="Stutter Fix" IsChecked="{Binding DS3StutterFix}" Margin="0, 0, 5, 0" />
+                        </StackPanel>
+                    </StackPanel>
                 </StackPanel>
             </Border>
 

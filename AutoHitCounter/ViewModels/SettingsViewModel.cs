@@ -18,7 +18,8 @@ public class SettingsViewModel : BaseViewModel
 
     public event Action OnGameSettingChanged;
 
-    public IReadOnlyList<GameTitle> GameTitles { get; } = EnumExtensions.GetValues<GameTitle>().ToList();
+    public IReadOnlyList<GameTitle> GameTitles { get; } = EnumExtensions.GetValues<GameTitle>()
+        .Where(title => title != GameTitle.DarkSoulsRemastered).ToList();
 
     private GameTitle _selectedSettingsGame;
 
@@ -31,12 +32,12 @@ public class SettingsViewModel : BaseViewModel
     public SettingsViewModel(IStateService stateService, OverlayServerService overlayServerService)
     {
         _overlayServerService = overlayServerService;
+        SelectedSettingsGame = GameTitle.DarkSouls2;
         stateService.Subscribe(State.AppStart, OnAppStart);
     }
 
-    
     #region Properties
-    
+
     private bool _isAlwaysOnTopEnabled;
 
     public bool IsAlwaysOnTopEnabled
@@ -51,7 +52,7 @@ public class SettingsViewModel : BaseViewModel
             if (mainWindow != null) mainWindow.Topmost = _isAlwaysOnTopEnabled;
         }
     }
-    
+
     private bool _isShowNotesEnabled;
 
     public bool IsShowNotesEnabled
@@ -64,7 +65,7 @@ public class SettingsViewModel : BaseViewModel
             SettingsManager.Default.Save();
         }
     }
-    
+
     private bool _allowManualSplitOnAutoSplits;
 
     public bool AllowManualSplitOnAutoSplits
@@ -146,7 +147,7 @@ public class SettingsViewModel : BaseViewModel
             BroadcastConfigChanged();
         }
     }
-    
+
     private bool _showPb;
 
     public bool ShowPb
@@ -160,7 +161,7 @@ public class SettingsViewModel : BaseViewModel
             BroadcastConfigChanged();
         }
     }
-    
+
     private bool _showIgt;
 
     public bool ShowIgt
@@ -188,7 +189,9 @@ public class SettingsViewModel : BaseViewModel
             BroadcastConfigChanged();
         }
     }
-    
+
+    #region Elden Ring
+
     private bool _erNoLogo;
 
     public bool ErNoLogo
@@ -202,7 +205,7 @@ public class SettingsViewModel : BaseViewModel
             OnGameSettingChanged?.Invoke();
         }
     }
-    
+
     private bool _erStutterFix;
 
     public bool ERStutterFix
@@ -216,7 +219,7 @@ public class SettingsViewModel : BaseViewModel
             OnGameSettingChanged?.Invoke();
         }
     }
-    
+
     private bool _erDisableAchievements;
 
     public bool ERDisableAchievements
@@ -233,6 +236,40 @@ public class SettingsViewModel : BaseViewModel
 
     #endregion
 
+    #region Dark Souls 3
+
+    private bool _ds3NoLogo;
+
+    public bool DS3NoLogo
+    {
+        get => _ds3NoLogo;
+        set
+        {
+            if (!SetProperty(ref _ds3NoLogo, value)) return;
+            SettingsManager.Default.DS3NoLogo = value;
+            SettingsManager.Default.Save();
+            OnGameSettingChanged?.Invoke();
+        }
+    }
+
+    private bool _ds3StutterFix;
+
+    public bool DS3StutterFix
+    {
+        get => _ds3StutterFix;
+        set
+        {
+            if (!SetProperty(ref _ds3StutterFix, value)) return;
+            SettingsManager.Default.DS3StutterFix = value;
+            SettingsManager.Default.Save();
+            OnGameSettingChanged?.Invoke();
+        }
+    }
+
+    #endregion
+    
+
+    #endregion
 
     #region Private Methods
 
@@ -241,8 +278,20 @@ public class SettingsViewModel : BaseViewModel
         _erNoLogo = SettingsManager.Default.ERNoLogo;
         OnPropertyChanged(nameof(ErNoLogo));
 
-        IsAlwaysOnTopEnabled = SettingsManager.Default.AlwaysOnTop;
+        _erStutterFix = SettingsManager.Default.ERStutterFix;
+        OnPropertyChanged(nameof(ERStutterFix));
+
+        _erDisableAchievements = SettingsManager.Default.ERDisableAchievements;
+        OnPropertyChanged(nameof(ERDisableAchievements));
         
+        _ds3NoLogo = SettingsManager.Default.DS3NoLogo;
+        OnPropertyChanged(nameof(DS3NoLogo));
+        
+        _ds3StutterFix = SettingsManager.Default.DS3StutterFix;
+        OnPropertyChanged(nameof(DS3StutterFix));
+
+        IsAlwaysOnTopEnabled = SettingsManager.Default.AlwaysOnTop;
+
         _isShowNotesEnabled = SettingsManager.Default.ShowNotesSection;
         OnPropertyChanged(nameof(IsShowNotesEnabled));
 
@@ -251,7 +300,7 @@ public class SettingsViewModel : BaseViewModel
 
         _isPracticeMode = SettingsManager.Default.PracticeMode;
         OnPropertyChanged(nameof(IsPracticeMode));
-        
+
         LoadSplitConfig();
     }
 
@@ -259,19 +308,19 @@ public class SettingsViewModel : BaseViewModel
     {
         _maxSplits = SettingsManager.Default.MaxSplits;
         OnPropertyChanged(nameof(MaxSplits));
-        
+
         _prevSplits = SettingsManager.Default.PrevSplits;
         OnPropertyChanged(nameof(PrevSplits));
-        
+
         _nextSplits = SettingsManager.Default.NextSplits;
         OnPropertyChanged(nameof(NextSplits));
-        
+
         _showDiff = SettingsManager.Default.ShowDiff;
         OnPropertyChanged(nameof(ShowDiff));
-        
+
         _showPb = SettingsManager.Default.ShowPb;
         OnPropertyChanged(nameof(ShowPb));
-        
+
         _showIgt = SettingsManager.Default.ShowIgt;
         OnPropertyChanged(nameof(ShowIgt));
 
@@ -288,5 +337,4 @@ public class SettingsViewModel : BaseViewModel
     }
 
     #endregion
-    
 }

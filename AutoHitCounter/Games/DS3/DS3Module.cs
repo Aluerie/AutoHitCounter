@@ -22,8 +22,9 @@ public class DS3Module : IGameModule, IDisposable, IVersionedGameModule
     
     private DateTime? _lastHit;
     private nint _igtPtr;
-    private DS3HitService _hitService;
-    private DS3EventService _eventService;
+    private readonly DS3HitService _hitService;
+    private readonly DS3EventService _eventService;
+    private readonly DS3SettingsService _settingsService;
     
     public event Action<int> OnHit;
     public event Action OnEventSet;
@@ -42,6 +43,7 @@ public class DS3Module : IGameModule, IDisposable, IVersionedGameModule
         
         _hitService = new DS3HitService(_memoryService, _hookManager);
         _eventService = new DS3EventService(_memoryService, _hookManager, _events);
+        _settingsService = new DS3SettingsService(_memoryService);
         
         stateService.Subscribe(State.Attached, Initialize);
         _lastHit = DateTime.Now;
@@ -115,6 +117,7 @@ public class DS3Module : IGameModule, IDisposable, IVersionedGameModule
 
     public void ApplySettings()
     {
-       
+        _settingsService.ToggleNoLogo(SettingsManager.Default.DS3NoLogo);
+        _settingsService.ToggleStutterFix(SettingsManager.Default.DS3StutterFix);
     }
 }
