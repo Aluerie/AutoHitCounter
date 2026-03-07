@@ -34,8 +34,8 @@ public class SettingsManager
     public bool ShowNotesSection { get; set; }
     public bool AllowManualSplitOnAutoSplits { get; set; }
     public bool PracticeMode { get; set; }
-    [DefaultValue(12)]
-    public int MaxSplits { get; set; }
+    [DefaultValue(true)]
+    public bool ShowAttempts { get; set; }
     [DefaultValue(4)]
     public int PrevSplits { get; set; }
     [DefaultValue(8)]

@@ -43,12 +43,12 @@
                 <CheckBox Content="Show IGT"
                           IsChecked="{Binding ShowIgt}"
                           Margin="0,0,10,0" />
+                <CheckBox Content="Show Attempts"
+                          IsChecked="{Binding ShowAttempts}"
+                          Margin="0,0,10,0" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                <TextBlock Text="Max Splits" VerticalAlignment="Center" Margin="0,0,5,0" />
-                <xctk:IntegerUpDown Value="{Binding MaxSplits}" Minimum="1" Width="60" Margin="0,0,15,0" />
-
                 <TextBlock Text="Prev Splits" VerticalAlignment="Center" Margin="0,0,5,0" />
                 <xctk:IntegerUpDown Value="{Binding PrevSplits}" Minimum="0" Width="60" Margin="0,0,15,0" />
 

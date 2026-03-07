@@ -2,9 +2,9 @@
 
 namespace AutoHitCounter.Models;
 
-public class OverlayConfig(int maxSplits, int prevSplits, int nextSplits, bool showDiff, bool showPb, bool showIgt, int overlayWidth)
+public class OverlayConfig(bool showAttempts, int prevSplits, int nextSplits, bool showDiff, bool showPb, bool showIgt, int overlayWidth)
 {
-    public int MaxSplits { get; } = maxSplits;
+    public bool ShowAttempts { get; } = showAttempts;
     public int PrevSplits { get; } = prevSplits;
     public int NextSplits { get; } = nextSplits;
     public bool ShowDiff { get; } = showDiff;

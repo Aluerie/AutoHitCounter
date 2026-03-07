@@ -11,6 +11,7 @@ public class OverlayState
     public int TotalPb { get; set; }
     public string InGameTime { get; set; }
     public bool IsRunComplete { get; set; }
+    public int AttemptCount { get; set; }
 }
 
 public class OverlaySplit

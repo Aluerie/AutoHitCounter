@@ -15,6 +15,7 @@ public static class OverlayMapper
             IsRunComplete = vm.IsRunComplete,
             TotalHits = vm.TotalHits,
             TotalPb = vm.TotalPb,
+            AttemptCount = vm.AttemptCount,
             InGameTime = vm.InGameTime.ToString(@"hh\:mm\:ss"),
             Splits = vm.Splits.Select(s => new OverlaySplit
             {

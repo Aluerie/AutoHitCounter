@@ -31,13 +31,14 @@
             font-weight: 600;
             letter-spacing: 0.08em;
             text-transform: uppercase;
-            color: #777;
+            color: #bbb;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             margin-bottom: 2px;
         }
 
         .header span:not(:first-child) {
             text-align: center;
+            color: #bbb;
         }
 
         .split-row {
@@ -114,18 +115,18 @@
         }
 
         .footer .totals .label {
-            color: #666;
+            color: #aaa;
         }
 
         .footer .totals .value {
-            color: #ccc;
+            color: #fff;
             font-weight: 600;
         }
 
         .igt {
             font-family: Consolas, monospace;
-            font-size: 14px;
-            color: #aaa;
+            font-size: 16px;
+            color: #c47fd4;
         }
 
         .run-complete {
@@ -145,8 +146,14 @@
         }
 
         @keyframes highlight-in {
-            from { background: transparent; border-left-color: transparent; }
-            to   { background: rgba(0, 204, 102, 0.06); border-left-color: #00cc66; }
+            from {
+                background: transparent;
+                border-left-color: transparent;
+            }
+            to {
+                background: rgba(0, 204, 102, 0.06);
+                border-left-color: #00cc66;
+            }
         }
 
     </style>
@@ -168,7 +175,7 @@
         const RECONNECT_INTERVAL = 3000;
 
         const DEFAULTS = {
-            maxSplits: 12,
+            showAttempts: true,
             prevSplits: 4,
             nextSplits: 8,
             showDiff: true,
@@ -248,7 +255,7 @@
                 const end = Math.min(splits.length, currentIndex + config.nextSplits + 1);
                 splits = splits.slice(start, end);
             } else {
-                splits = splits.slice(0, config.maxSplits);
+                splits = splits.slice(0, config.prevSplits + config.nextSplits + 1);
             }
 
             for (const split of splits) {
@@ -260,8 +267,13 @@
             if (config.showPb) {
                 totalsHtml += `<span><span class="label">PB </span><span class="value">${state.totalPb}</span></span>`;
             }
-            totalsEl.innerHTML = totalsHtml;
 
+            if (config.showAttempts && state.attemptCount != null) {
+                totalsHtml += `<span><span class="label"># </span><span class="value">${state.attemptCount}</span></span>`;
+            }
+
+            totalsEl.innerHTML = totalsHtml;
+            
             if (config.showIgt && state.inGameTime) {
                 igtEl.textContent = state.inGameTime;
             }

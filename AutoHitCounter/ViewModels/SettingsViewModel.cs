@@ -92,15 +92,15 @@ public class SettingsViewModel : BaseViewModel
         }
     }
 
-    private int _maxSplits;
+    private bool _showAttempts;
 
-    public int MaxSplits
+    public bool ShowAttempts
     {
-        get => _maxSplits;
+        get => _showAttempts;
         set
         {
-            if (!SetProperty(ref _maxSplits, value)) return;
-            SettingsManager.Default.MaxSplits = value;
+            if (!SetProperty(ref _showAttempts, value)) return;
+            SettingsManager.Default.ShowAttempts = value;
             SettingsManager.Default.Save();
             BroadcastConfigChanged();
         }
@@ -416,8 +416,8 @@ public class SettingsViewModel : BaseViewModel
 
     private void LoadSplitConfig()
     {
-        _maxSplits = SettingsManager.Default.MaxSplits;
-        OnPropertyChanged(nameof(MaxSplits));
+        _showAttempts = SettingsManager.Default.ShowAttempts;
+        OnPropertyChanged(nameof(ShowAttempts));
 
         _prevSplits = SettingsManager.Default.PrevSplits;
         OnPropertyChanged(nameof(PrevSplits));
@@ -442,7 +442,7 @@ public class SettingsViewModel : BaseViewModel
 
     private void BroadcastConfigChanged()
     {
-        var config = new OverlayConfig(MaxSplits, PrevSplits, NextSplits, ShowDiff, ShowPb, ShowIgt, OverlayWidth);
+        var config = new OverlayConfig(ShowAttempts, PrevSplits, NextSplits, ShowDiff, ShowPb, ShowIgt, OverlayWidth);
         _overlayServerService.BroadcastConfig(config);
     }
 
