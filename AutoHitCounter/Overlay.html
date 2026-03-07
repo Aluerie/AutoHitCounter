@@ -128,6 +128,27 @@
             color: #aaa;
         }
 
+        .run-complete {
+            text-align: center;
+            padding: 8px 12px;
+            margin-top: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #00cc66;
+            border-top: 1px solid rgba(0, 204, 102, 0.15);
+            background: rgba(0, 204, 102, 0.06);
+            letter-spacing: 0.05em;
+        }
+
+        .split-row.current {
+            animation: highlight-in 0.3s ease-out;
+        }
+
+        @keyframes highlight-in {
+            from { background: transparent; border-left-color: transparent; }
+            to   { background: rgba(0, 204, 102, 0.06); border-left-color: #00cc66; }
+        }
+
     </style>
 </head>
 <body>
