@@ -55,6 +55,8 @@ namespace AutoHitCounter.ViewModels
             stateService.Subscribe(State.Attached, OnAttached);
             stateService.Subscribe(State.NotAttached, OnNotAttached);
 
+            Settings.OnGameSettingChanged += () => _currentModule?.ApplySettings();
+
             RegisterHotkeys();
 
             OpenProfileEditorCommand = new DelegateCommand(OpenProfileEditor);

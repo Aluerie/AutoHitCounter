@@ -48,6 +48,9 @@ public class SettingsManager
     [DefaultValue(300)]
     public int OverlayWidth { get; set; }
     public bool IsUnlocked { get; set; }
+    public bool ERNoLogo { get; set; }
+    public bool ERStutterFix { get; set; }
+    public bool ERDisableAchievements { get; set; }
     
     public string LastImportExportPath { get; set; }
 

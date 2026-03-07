@@ -1,5 +1,8 @@
 ﻿// 
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using AutoHitCounter.Enums;
 using AutoHitCounter.Interfaces;
@@ -12,6 +15,18 @@ namespace AutoHitCounter.ViewModels;
 public class SettingsViewModel : BaseViewModel
 {
     private readonly OverlayServerService _overlayServerService;
+
+    public event Action OnGameSettingChanged;
+
+    public IReadOnlyList<GameTitle> GameTitles { get; } = EnumExtensions.GetValues<GameTitle>().ToList();
+
+    private GameTitle _selectedSettingsGame;
+
+    public GameTitle SelectedSettingsGame
+    {
+        get => _selectedSettingsGame;
+        set => SetProperty(ref _selectedSettingsGame, value);
+    }
 
     public SettingsViewModel(IStateService stateService, OverlayServerService overlayServerService)
     {
@@ -173,8 +188,48 @@ public class SettingsViewModel : BaseViewModel
             BroadcastConfigChanged();
         }
     }
+    
+    private bool _erNoLogo;
 
+    public bool ErNoLogo
+    {
+        get => _erNoLogo;
+        set
+        {
+            if (!SetProperty(ref _erNoLogo, value)) return;
+            SettingsManager.Default.ERNoLogo = value;
+            SettingsManager.Default.Save();
+            OnGameSettingChanged?.Invoke();
+        }
+    }
+    
+    private bool _erStutterFix;
 
+    public bool ERStutterFix
+    {
+        get => _erStutterFix;
+        set
+        {
+            if (!SetProperty(ref _erStutterFix, value)) return;
+            SettingsManager.Default.ERStutterFix = value;
+            SettingsManager.Default.Save();
+            OnGameSettingChanged?.Invoke();
+        }
+    }
+    
+    private bool _erDisableAchievements;
+
+    public bool ERDisableAchievements
+    {
+        get => _erDisableAchievements;
+        set
+        {
+            if (!SetProperty(ref _erDisableAchievements, value)) return;
+            SettingsManager.Default.ERDisableAchievements = value;
+            SettingsManager.Default.Save();
+            OnGameSettingChanged?.Invoke();
+        }
+    }
 
     #endregion
 
@@ -183,6 +238,9 @@ public class SettingsViewModel : BaseViewModel
 
     private void OnAppStart()
     {
+        _erNoLogo = SettingsManager.Default.ERNoLogo;
+        OnPropertyChanged(nameof(ErNoLogo));
+
         IsAlwaysOnTopEnabled = SettingsManager.Default.AlwaysOnTop;
         
         _isShowNotesEnabled = SettingsManager.Default.ShowNotesSection;

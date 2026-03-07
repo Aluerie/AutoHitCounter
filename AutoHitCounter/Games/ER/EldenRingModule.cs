@@ -19,6 +19,7 @@ public class EldenRingModule : IGameModule, IDisposable, IVersionedGameModule
     private readonly Dictionary<uint, string> _events;
     private EldenRingHitService _hitService;
     private EldenRingEventService _eventService;
+    private EldenRingSettingsService _settingsService;
     public string GameVersion => EldenRingOffsets.Version.GetDescription();
 
     private DateTime? _lastHit;
@@ -39,6 +40,10 @@ public class EldenRingModule : IGameModule, IDisposable, IVersionedGameModule
         _hookManager = hookManager;
         _tickService = tickService;
         _events = events;
+        
+        _hitService = new EldenRingHitService(_memoryService, _hookManager);
+        _eventService = new EldenRingEventService(_memoryService, _hookManager, _events);
+        _settingsService = new EldenRingSettingsService(_memoryService);
 
         stateService.Subscribe(State.Attached, Initialize);
         _lastHit = DateTime.Now;
@@ -53,9 +58,6 @@ public class EldenRingModule : IGameModule, IDisposable, IVersionedGameModule
 #if DEBUG
         Console.WriteLine($@"Code cave: 0x{(long)EldenRingCustomCodeOffsets.Base:X}");
 #endif
-
-        _hitService = new EldenRingHitService(_memoryService, _hookManager);
-        _eventService = new EldenRingEventService(_memoryService, _hookManager, _events);
         _eventService.InstallHook();
         _hitService.InstallHooks();
         _igtPtr = _memoryService.Read<nint>(GameDataMan.Base) + GameDataMan.Igt;
@@ -112,6 +114,8 @@ public class EldenRingModule : IGameModule, IDisposable, IVersionedGameModule
 
     public void ApplySettings()
     {
-        
+        _settingsService.ToggleNoLogo(SettingsManager.Default.ERNoLogo);
+        _settingsService.ToggleStutterFix(SettingsManager.Default.ERStutterFix);
+        _settingsService.ToggleDisableAchievements(SettingsManager.Default.ERDisableAchievements);
     }
 }

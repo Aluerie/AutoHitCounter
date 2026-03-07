@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 
@@ -11,5 +12,10 @@ public static class EnumExtensions
         var field = typeof(T).GetField(value.ToString());
         var attribute = field?.GetCustomAttribute<DescriptionAttribute>();
         return attribute?.Description ?? value.ToString();
+    }
+    
+    public static IEnumerable<T> GetValues<T>()
+    {
+        return (T[])Enum.GetValues(typeof(T));
     }
 }
