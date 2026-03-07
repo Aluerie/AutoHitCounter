@@ -342,8 +342,7 @@ namespace AutoHitCounter.ViewModels
                 return new SolidColorBrush(Color.FromRgb(0x90, 0x90, 0x90));
             }
         }
-
-        public event Action OnSettingsChanged;
+        
         public event Action OnHitRulesChanged;
 
         public bool GetRule(string key) => _activeProfile != null
