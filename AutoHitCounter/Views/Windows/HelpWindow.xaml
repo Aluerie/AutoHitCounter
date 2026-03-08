@@ -5,7 +5,7 @@
         Style="{StaticResource DefaultWindowStyle}"
         WindowStyle="None"
         AllowsTransparency="True"
-        Title="Help" Height="420" Width="500"
+        Title="Help" Height="600" Width="600"
         WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
@@ -33,8 +33,8 @@
                 </StackPanel.Resources>
                 <Button x:Name="TabOverview" Content="Overview" Click="Tab_Click" Tag="0" />
                 <Button x:Name="TabSplits" Content="Splits" Click="Tab_Click" Tag="1" />
-                <Button x:Name="TabHotkeys" Content="Hotkeys" Click="Tab_Click" Tag="2" />
-                <Button x:Name="TabProfileEditor" Content="Profile Editor" Click="Tab_Click" Tag="3" Margin="0,0,115,0" />
+                <Button x:Name="TabProfileEditor" Content="Profile Editor" Click="Tab_Click" Tag="2" />
+                <Button x:Name="TabHotkeys" Content="Hotkeys" Click="Tab_Click" Tag="3" Margin="0,0,210,0" />
                 <Button Content="A-" FontSize="11" Click="FontDecrease_Click" HorizontalAlignment="Right" />
                 <Button Content="A+" FontSize="11" Click="FontIncrease_Click" HorizontalAlignment="Right" />
             </StackPanel>
@@ -63,12 +63,24 @@
 
                         <!-- Splits -->
                         <StackPanel x:Name="PageSplits" Visibility="Collapsed">
-                            <TextBlock Text="Splits" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,10" />
+                            <TextBlock Text="Splits" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,10" />
 
                             <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
-                                Welcome to the Splits section! This is the main view and what you'll see when you first open the tool. Right under the Splits tab you can see a dropdown menu called Game.
-                                Here is where you choose what game the tool should track hits for. Depending on the game certain features will unlock for both the settings tab and the profile editor settings.
-                                Make sure to click the "Track" Button to let the tool know what you want to attach it to, give it a quick try here! 
+                                Welcome to the Splits section! This is the main view and what you'll see when you first open the tool.
+                            </TextBlock>
+
+                            <!-- Tracking Games -->
+                            <TextBlock FontSize="15" FontWeight="SemiBold"
+                                       Margin="0,0,0,10">
+                                <LineBreak />
+                                Tracking Games
+                            </TextBlock>
+
+                            <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                Right under the Splits tab you can see a dropdown menu called Game.
+                                Here is where you choose what game the tool should track hits for.
+                                Depending on the game certain features will unlock for both the settings tab and the profile editor settings.
+                                Make sure to click the "Track" Button to let the tool know what you want to attach it to, give it a quick try here!
                             </TextBlock>
 
                             <!-- Example Track -->
@@ -80,67 +92,308 @@
                                             Content="Track"
                                             Height="22"
                                             Margin="4,0,0,0"
-                                            Click="TrackExample_Click"/>
-                                    <ComboBox x:Name="ExampleGame" Width="150" SelectedIndex="0">
+                                            Click="TrackExample_Click" />
+                                    <ComboBox x:Name="ExampleGame" Width="200" SelectedIndex="0">
                                         <ComboBoxItem Content="Dark Souls Remastered" />
                                         <ComboBoxItem Content="Dark Souls 2" />
                                         <ComboBoxItem Content="Dark Souls 3" />
                                         <ComboBoxItem Content="Sekiro" />
                                         <ComboBoxItem Content="Elden Ring" />
-                                        </ComboBox>
+                                    </ComboBox>
                                 </DockPanel>
                                 <TextBlock x:Name="TrackingText" Text="Currently Tracking: "
                                            FontSize="9" Foreground="#555555" Margin="2,1,0,0" />
                             </StackPanel>
-                            
-                            <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
-                                Next to that from left to right are the Available Profiles Dropdown Menu, the Edit Profiles button and the Splits Lock button. But we will tackle the first two later on.
-                                The Splits Lock button works as follows: When unlocked, the splits can be freely moved around and reordered. Double clicking any split will also open up a Split Rename box.
-                                When locked however, the splits cannot be moved and double click goes from a renaming tool to a splitting tool.
+
+                            <!-- Profile Editor -->
+                            <TextBlock FontSize="15" FontWeight="SemiBold"
+                                       Margin="0,0,0,10">
+                                <LineBreak />
+                                Profile Editor
                             </TextBlock>
-                            
+
                             <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
-                                Below those two are the actual splits, you can double click the attempts count to edit it to whatever number you want or click the rewind button to reset it back to 0.
-                                The splits section also has a context menu where you can easily access multiple features or rename splits even when they're locked. Just right click any split and check them out :)
+                                Next to Tracking is another dropdown menu.
+                                This contains all the available profiles for the selected game (both default templates and personal profiles).
+                                You do not need to track a game to check out different game profiles and the tool will remember all the ongoing progress if you decide to check out other profiles temporarily.
+                                <LineBreak />
+                                The button marked with a pencil is to edit these Profiles.
+                                The Profile Editor will open up a separate window with a lot of info and features;
+                                more information about this is found in the Profile Editor tab!
                             </TextBlock>
-                            
-                            <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
-                                At the very bottom you will see the Total hits and the various buttons to navigate through splits, adjust the hit counter values, reset the attempt or clear all PBs. to the bottom right you can also see the In-Game Time.
-                            </TextBlock>
-                            
-                            <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
-                                Once you finish a run, the bottom section will change to mark it as complete and you will get a prompt to mark that run as the new pb or to reset the splits.
-                            </TextBlock>
-                        </StackPanel>
 
 
-                        <!-- Hotkeys -->
-                        <StackPanel x:Name="PageHotkeys" Visibility="Collapsed">
-                            <TextBlock Text="Hotkeys" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,10" />
-                            <TextBlock TextWrapping="Wrap" Foreground="#CCC" LineHeight="22">
-                                
+                            <!-- Lock/Unlock Buttons -->
+                            <TextBlock FontSize="15" FontWeight="SemiBold"
+                                       Margin="0,0,0,10">
+                                <LineBreak />
+                                🔒Lock or 🔓Unlock Button
                             </TextBlock>
+
                             <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
-                                
-                                <Run Foreground="White">Next Split, Previous Split, Increment Hit, Decrement Hit,</Run>
-                                and
-                                <Run Foreground="White">Reset.</Run>
+                                The Splits Lock/Unlock feature prevents accidental edits while allowing minimal customization.
+                                <LineBreak />
+                                This button works as follows:<LineBreak />
+                                When 🔓 Unlocked: the splits can be freely moved around and reordered (this is indicated with a ⋮⋮ that shows if you hover over a split).
+                                Double clicking any split will also open up a Split Rename box in the same place as the split.
+                                <LineBreak />When 🔒 Locked: the splits cannot be moved, and double clicking a split advances the current split to the selected one.
+                                Basic options provided through the context menu are still available when Locked; see below.
                             </TextBlock>
+
+                            <!-- Splits Header Elements -->
+                            <TextBlock FontSize="15" FontWeight="SemiBold"
+                                       Margin="0,0,0,10">
+                                <LineBreak />
+                                Splits Header Elements
+                            </TextBlock>
+
                             <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
-                                
+                                Next to “Split” is the current progress through all splits, indicated by ([current split] / [total splits]).
+                                <LineBreak />
+                                The number of attempts is also shown - as #[attempts] - alongside a reset button for attempts. Resetting the attempts counter will set it back to 0.
+                                The number of attempts changes from white to purple after you reset a run and can be double clicked to edit the attempts to any value.
+                                <LineBreak />
+                                The "Hits" section indicates the number of hits recorded on the current run.
+                                The colour of the number will turn orange if the player had a hit recorded on that split.
+                                <LineBreak />
+                                The "Diff" section contains the difference between the current run and the personal best run. Red is bad, Green is good.
+                                <LineBreak />
+                                The "PB" section (meaning "Personal Best") shows the player’s lowest number of hits recorded on a single run, stored in each split.
                             </TextBlock>
+
+                            <!-- The Splits Section -->
+                            <TextBlock FontSize="15" FontWeight="SemiBold"
+                                       Margin="0,0,0,10">
+                                <LineBreak />
+                                The Splits Section
+                            </TextBlock>
+
+                            <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                Using ⋯ found on the right of the hovered split or right click, you can open a context menu with basic options to edit a split.
+                                This includes things like renaming the split, editing the Personal Best, opening the Profile Editor and more.
+                            </TextBlock>
+
+                            <!-- Splits Footer Elements -->
+                            <TextBlock FontSize="15" FontWeight="SemiBold"
+                                       Margin="0,0,0,10">
+                                <LineBreak />
+                                Splits Footer Elements
+                            </TextBlock>
+
+                            <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                Underneath the splits you will find the “Total” row.
+                                This contains the total number of recorded hits,
+                                the total Difference between the current run and the personal best,
+                                as well as the number of hits recorded in your Personal Best.
+                                <LineBreak />
+                                Below, the "- Hit" and "+ Hit" buttons will remove or add hits from the current split respectively.
+                                <LineBreak />
+                                The "Previous" and "Next" buttons advance or backtrack the currently selected split by one.
+                                <LineBreak />
+                                The "Reset" button restarts the attempt from scratch - resetting hits to 0 and jumping back to the first split.
+                                <LineBreak />
+                                The "Clear PBs" button is used to reset all PB data. This allows for a fresh start in all categories.
+                            </TextBlock>
+
+                            <!-- Completing A Run -->
+                            <TextBlock FontSize="15" FontWeight="SemiBold"
+                                       Margin="0,0,0,10">
+                                <LineBreak />
+                                Completing A Run
+                            </TextBlock>
+
+                            <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                Upon advancing past the last split - the run is complete,
+                                and the bottom section will provide a prompt to mark that run as the new pb and/or to reset splits.
+                                It looks something like this:
+                            </TextBlock>
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="✓ Run Complete"
+                                           FontSize="14" FontWeight="SemiBold"
+                                           Foreground="#00CC66"
+                                           HorizontalAlignment="Center" Margin="0,4,0,6" />
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,6">
+                                    <TextBlock Text="Total Hits: " Foreground="#999" />
+                                    <TextBlock Text="10" Foreground="White" Margin="0,0,12,0" />
+                                    <TextBlock Text="PB: " Foreground="#999" />
+                                    <TextBlock Text="50" Foreground="White" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button Content="Mark as PB" Margin="4,0" />
+                                    <Button Content="Reset" Margin="4,0" />
+                                </StackPanel>
+                            </StackPanel>
                         </StackPanel>
+
+                        <!-- End of Splits Page, Start of Profile Editor Page -->
+
 
                         <!-- Profile Editor -->
                         <StackPanel x:Name="PageProfileEditor" Visibility="Collapsed">
-                            <TextBlock Text="Profile Editor" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,10" />
+                            <TextBlock Text="Profile Editor" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,10" />
                             <TextBlock TextWrapping="Wrap" Foreground="#CCC" LineHeight="22">
-                                
+                                Welcome to the Profile Editor section! This is where the magic happens
                             </TextBlock>
+
+                            <!-- Completing A Run -->
+                            <TextBlock FontSize="15" FontWeight="SemiBold"
+                                       Margin="0,0,0,10">
+                                <LineBreak />
+                                Window Summary
+                            </TextBlock>
+
+
                             <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
-                                
+                                Profile dropdown - Selects which profile you are currently editing.
+                                <LineBreak />
+                                </TextBlock>
+                            
+                            
+                                <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                <Run FontWeight="SemiBold">New</Run>
+                                <LineBreak />
+                                Creates a new blank profile.
+                                <LineBreak />
+                                If the profile is populated with items New will show a prompt asking the user whether they want to add the current items to the new profile or not.
+                                <LineBreak />
+                                In both instances the user will get a new prompt asking for the profile name.
+                                <LineBreak />
+                                </TextBlock>
+                            
+                            
+                                <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                <Run FontWeight="SemiBold">Rename</Run>
+                                <LineBreak />
+                                Changes the name of the currently selected profile.
+                                <LineBreak />
+                                </TextBlock>
+                            
+                            
+                                <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                <Run FontWeight="SemiBold">Delete</Run>
+                                <LineBreak />
+                                Removes the selected profile.
+                                <LineBreak />
+                                </TextBlock>
+                            
+                                <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                <Run FontWeight="SemiBold">Saved ✓</Run>
+                                <LineBreak />
+                                Indicates that the current profile has been saved.
+                                 <LineBreak />
+                                If there are unsaved data the button will switch into "Save" instead to prompt the user to save.
+                                <LineBreak />
+                                Closing the window will also prompt the user and ask if they want to save the changes or discard them.
+                                <LineBreak />
+                                </TextBlock>
+                            
+                                <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                <Run FontWeight="SemiBold">Import</Run>
+                                <LineBreak />
+                                Loads any profile file from your computer.
+                                <LineBreak />
+                                </TextBlock>
+                            
+                            
+                                <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                <Run FontWeight="SemiBold">Export</Run>
+                                <LineBreak />
+                                Saves the current profile or all profiles as a file so it can be backed up or shared to others.
+                                <LineBreak />
+                                </TextBlock>
+                            
+                            
+                                <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                <Run FontWeight="SemiBold">Available Templates Panel</Run> 
+                                <LineBreak />
+                                This section is a list of pre-made splits that will automatically advance to the next split once a boss is defeated.
+                                <LineBreak />
+                                For example if you kill Margit, the Fell Omen and you have that split in your current profile it will automatically advance to the next split (say Godrick the Grafted).
+                                <LineBreak />
+                                You can use the search bar to look up any boss easily.
+                                <LineBreak />
+                                You can also add bosses to the Profile Splits panel by using the + sign, selecting one or multiple bosses then dragging them to the Profile Splits panel on the right, or opening the context menu with a right click then clicking Add.
+                                <LineBreak />
+                                </TextBlock>
+                            
+                            
+                                <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                <Run FontWeight="SemiBold">Profile Splits Panel</Run>  
+                                <LineBreak />
+                                This section shows the splits that you have added to a specific profile and are the ones that will show up on the main window when you select it.
+                                <LineBreak />
+                                You can reorder the splits by dragging them around or by clicking the Up and Down Arrows.
+                                <LineBreak />
+                                You can also group the splits by using the Group button for a cleaner look.
+                                <LineBreak />
+                                You can create your custom splits (needs to be manually split by default) and give them an event of your choice by right clicking on the split and picking Edit Event or using the Edit Event button with the split highlighted.
+                                <LineBreak />
+                                You can also rename any of the splits by either right clicking on the split and picking Rename or using the Rename button with the split highlighted.
+                                <LineBreak />
+                            </TextBlock>
+
+                            <!-- Creating your first profile -->
+                            <TextBlock FontSize="15" FontWeight="SemiBold"
+                                       Margin="0,0,0,10">
+                                <LineBreak />
+                                Creating your first profile
+                            </TextBlock>
+
+
+                            <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                1. Click on the New button.
+                            </TextBlock>
+                            
+                            <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                2. -Optional- Choose whether you want to keep any existing items into the profile or not.
+                            </TextBlock>
+                            
+                            <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                3. Choose a name for the profile.
+                            </TextBlock>
+                            
+                            <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                4. Create your very first split. 
+                                You can either do so by adding one of the templates and clicking the + button, opening the context menu and clicking "Add" or dragging the items you want into the profile panel.
+                                Alternatively you can make a split of your own which will require manual splitting with the Custom Split button.
+                            </TextBlock>
+                            
+                            <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                5. Organize it to your liking, rename stuff, group others, re-order the items however you prefer.
+                            </TextBlock>
+                            
+                            <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                6. Click the save button and close the window.
+                            </TextBlock>
+                            
+                            <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                7. Congratulations! your profile is now ready to be used :)
                             </TextBlock>
                         </StackPanel>
+
+                        <!-- Hotkeys -->
+                        <StackPanel x:Name="PageHotkeys" Visibility="Collapsed">
+                            <TextBlock Text="Hotkeys" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,10" />
+                            <TextBlock TextWrapping="Wrap" Foreground="#CCC" LineHeight="22">
+
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                Hotkeys are essentially shortcuts you can assign to your keyboard to trigger certain actions from the tool without needing to keep it in focus.
+                                <LineBreak />
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                To Assign a hotkey you need to click the box next to each action and press the key combination you want to assign it to.
+                                <LineBreak />
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                Make sure you toggle the Enable Hotkeys checkbox for the hotkeys to register and function otherwise they will not do anything.
+                                <LineBreak />
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap" Foreground="#CCC" Margin="0,10,0,0" LineHeight="22">
+                                You can set it so hotkeys would function globally regardless of what app is being focused at the time.
+                            </TextBlock>
+                        </StackPanel>
+
                     </Grid>
                 </ScrollViewer>
             </Border>
