@@ -58,6 +58,8 @@ public enum AsmScript
     SKAuxProc,
     SKCheckAuxAttacker,
     SKHkbFireEvent,
+    SKFadeFallHeight,
+    SKDeferredFallCheck,
     SKEventLog,
 
     EldenRingHit,

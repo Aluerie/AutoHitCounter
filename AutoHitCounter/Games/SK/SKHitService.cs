@@ -26,6 +26,8 @@ public class SKHitService(IMemoryService memoryService, HookManager hookManager)
         InstallAuxProcHook();
         InstallCheckAuxAttackerHook();
         InstallHkbFireEventHook();
+        InstallFadeFallHeightHook();
+        InstallDeferredFallCheckHook();
     }
 
     public bool HasHit()
@@ -35,7 +37,7 @@ public class SKHitService(IMemoryService memoryService, HookManager hookManager)
         _lastHitCount = current;
         return newHits > 0;
     }
-    
+
     public void SetRobertoStaggerCounts(bool isEnabled) =>
         memoryService.Write(Base + ShouldCountRobertoStagger, isEnabled);
 
@@ -140,15 +142,18 @@ public class SKHitService(IMemoryService memoryService, HookManager hookManager)
     {
         var bytes = AsmLoader.GetAsmBytes(AsmScript.SKApplyHealthDelta);
         var hit = Base + Hit;
+        var deferredFallCheckFlag = Base + DeferredFallCheckFlag;
         var code = Base + ApplyHealthDelta;
 
         AsmHelper.WriteRelativeOffsets(bytes, [
-            (code + 0x12, WorldChrMan.Base, 7, 0x12 + 3),
-            (code + 0x4C, hit, 6, 0x4C + 2),
-            (code + 0x58, Hooks.ApplyHealthDelta + 5, 5, 0x58 + 1),
+            (code, deferredFallCheckFlag, 7, 2),
+            (code + 0x8, WorldChrMan.Base, 7, 0x8 + 3),
+            (code + 0x43, deferredFallCheckFlag, 7, 0x43 + 2),
+            (code + 0x5C, hit, 6, 0x5C + 2),
+            (code + 0x68, Hooks.ApplyHealthDelta + 5, 5, 0x68 + 1),
         ]);
 
-        AsmHelper.WriteAbsoluteAddress(bytes, FallDmgRetAddr, 0x1 + 2);
+        AsmHelper.WriteAbsoluteAddress(bytes, FallDmgRetAddr, 0x32 + 2);
 
         memoryService.WriteBytes(code, bytes);
         hookManager.InstallHook(code, Hooks.ApplyHealthDelta, [0x48, 0x89, 0x5C, 0x24, 0x08]);
@@ -222,5 +227,37 @@ public class SKHitService(IMemoryService memoryService, HookManager hookManager)
         ]);
         memoryService.WriteBytes(code, bytes);
         hookManager.InstallHook(code, Hooks.HkbFireEvent, [0x48, 0x8B, 0x5F, 0x20, 0x48, 0x85, 0xDB]);
+    }
+
+    private void InstallFadeFallHeightHook()
+    {
+        var bytes = AsmLoader.GetAsmBytes(AsmScript.SKFadeFallHeight);
+        var hit = Base + Hit;
+        var code = Base + FadeFallHeight;
+        
+        AsmHelper.WriteRelativeOffsets(bytes, [
+            (code + 0x1, WorldChrMan.Base, 7, 0x1 + 3),
+            (code + 0x16, hit, 6, 0x16 + 2),
+            (code + 0x24, Hooks.FadeFallHeight + 7, 5, 0x24 + 1),
+        ]);
+        memoryService.WriteBytes(code, bytes);
+        hookManager.InstallHook(code, Hooks.FadeFallHeight, [0x48, 0x8B, 0x88, 0xF8, 0x1F, 0x00, 0x00]);
+    }
+
+    private void InstallDeferredFallCheckHook()
+    {
+        var bytes = AsmLoader.GetAsmBytes(AsmScript.SKDeferredFallCheck);
+        var hit = Base + Hit;
+        var deferredFallCheckFlag = Base + DeferredFallCheckFlag;
+        var code = Base + DeferredFallCheck;
+
+        AsmHelper.WriteRelativeOffsets(bytes, [
+            (code + 0x7, deferredFallCheckFlag, 7, 0x7 + 2),
+            (code + 0x10, hit, 6, 0x10 + 2),
+            (code + 0x16, Hooks.DeferredFallCheck + 7, 5, 0x16 + 1),
+        ]);
+        
+        memoryService.WriteBytes(code, bytes);
+        hookManager.InstallHook(code, Hooks.DeferredFallCheck, [0x48, 0x8B, 0x06, 0x41, 0x0F, 0x28, 0xC9]);
     }
 }

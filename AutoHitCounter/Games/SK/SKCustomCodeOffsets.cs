@@ -10,6 +10,7 @@ public class SKCustomCodeOffsets
     public const int StaggerCheckFlag = 0x1;
     public const int CheckAuxFlag = 0x2;
     public const int ShouldCountRobertoStagger = 0x3;
+    public const int DeferredFallCheckFlag = 0x4;
 
     public const int Hit = 0x10;
     public const int CheckPlayerDead = 0x20;
@@ -23,6 +24,8 @@ public class SKCustomCodeOffsets
     public const int CheckAux = 0x800;
     public const int CheckAuxAttacker = 0x850;
     public const int HkbFireEvent = 0x900;
+    public const int FadeFallHeight = 0xB00;
+    public const int DeferredFallCheck = 0xC00;
     
     public const int EventLogWriteIdx = 0x2000;
     public const int EventLogCode = 0x2020;

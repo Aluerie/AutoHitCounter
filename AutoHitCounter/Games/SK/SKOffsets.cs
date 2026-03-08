@@ -68,6 +68,8 @@ public static class SKOffsets
         public static nint AuxProc;
         public static nint CheckAuxAttacker;
         public static nint HkbFireEvent;
+        public static nint FadeFallHeight;
+        public static nint DeferredFallCheck;
         public static nint SetEvent;
     }
 
@@ -198,6 +200,22 @@ public static class SKOffsets
             _ => 0
         };
         
+        Hooks.FadeFallHeight = moduleBase + Version switch
+        {
+            Version1_2_0 => 0xB81165,
+            Version1_3_0 or Version1_4_0 => 0xB81815,
+            Version1_5_0 or Version1_6_0 => 0xB97F65,
+            _ => 0
+        };
+
+        Hooks.DeferredFallCheck = moduleBase + Version switch
+        {
+            Version1_2_0 => 0xB812B3,
+            Version1_3_0 or Version1_4_0 => 0xB81963,
+            Version1_5_0 or Version1_6_0 => 0xB980B3,
+            _ => 0
+        };
+        
         Hooks.SetEvent = moduleBase + Version switch
         {
             Version1_2_0 => 0x6C1B90,
@@ -276,6 +294,8 @@ public static class SKOffsets
         PrintOffset("AuxProc", Hooks.AuxProc);
         PrintOffset("CheckAuxAttacker", Hooks.CheckAuxAttacker);
         PrintOffset("HkbFireEvent", Hooks.HkbFireEvent);
+        PrintOffset("FadeFallHeight", Hooks.FadeFallHeight);
+        PrintOffset("FadeFallHeight", Hooks.DeferredFallCheck);
         PrintOffset("SetEvent", Hooks.SetEvent);
 
 
