@@ -609,7 +609,7 @@ namespace AutoHitCounter.ViewModels
                 _activeProfile);
 
             var window = new ProfileEditorWindow { DataContext = vm };
-            window.ShowDialog();
+            window.Show();
 
             if (_activeProfile != null)
             {

@@ -1,6 +1,10 @@
+using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
+using AutoHitCounter.Utilities;
 
 namespace AutoHitCounter.Views.Windows;
 
@@ -9,6 +13,7 @@ public partial class HelpWindow
     private readonly StackPanel[] _pages;
     private readonly Button[] _tabs;
     private int _currentPage;
+    
 
     public HelpWindow()
     {
@@ -17,18 +22,24 @@ public partial class HelpWindow
         [
             (StackPanel)FindName("PageOverview"),
             (StackPanel)FindName("PageSplits"),
-            (StackPanel)FindName("PageHotkeys"),
-            (StackPanel)FindName("PageProfileEditor")
+            (StackPanel)FindName("PageProfileEditor"),
+            (StackPanel)FindName("PageHotkeys")
+            
         ];
         _tabs =
         [
             (Button)FindName("TabOverview"),
             (Button)FindName("TabSplits"),
-            (Button)FindName("TabHotkeys"),
-            (Button)FindName("TabProfileEditor")
+            (Button)FindName("TabProfileEditor"),
+            (Button)FindName("TabHotkeys")
         ];
         ShowPage(0);
     }
+    
+
+    
+    
+    
 
     private void ShowPage(int index)
     {
@@ -84,5 +95,16 @@ public partial class HelpWindow
     {
         var selected = (ExampleGame.SelectedItem as ComboBoxItem)?.Content?.ToString();
         TrackingText.Text = $"Currently Tracking: {selected}";
+    }
+
+    private void LockedItem_DoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is not ListBoxItem item) return;
+        var lockedList = (ListBox)FindName("LockedDemo");
+        if (lockedList == null) return;
+
+        lockedList.SelectedItem = null;
+        item.IsSelected = true;
+        e.Handled = true;
     }
 }
