@@ -689,9 +689,11 @@ namespace AutoHitCounter.ViewModels
         {
             if (ActiveProfile == null) return new();
 
-            return ActiveProfile.Splits
-                .Where(s => s.EventId.HasValue)
-                .ToDictionary(s => s.EventId.Value, s => s.Label);
+            var dict = new Dictionary<uint, string>();
+            foreach (var s in ActiveProfile.Splits.Where(s => s.EventId.HasValue))
+                if (s.EventId != null && !dict.ContainsKey(s.EventId.Value))
+                    dict[s.EventId.Value] = s.Label;
+            return dict;
         }
 
         private Dictionary<uint, string> GetAllEventsForGame(GameTitle title)
