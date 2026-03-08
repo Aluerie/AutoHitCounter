@@ -415,21 +415,10 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
     {
         if (entry.Type == SplitType.Parent)
         {
-            var childCount = Splits.Count(s => s.GroupId == entry.GroupId && s.Type == SplitType.Child);
-            if (childCount > 0)
-            {
-                var confirmed = MsgBox.ShowOkCancel(
-                    $"Delete \"{entry.Name}\" and its {childCount} split{(childCount == 1 ? "" : "s")}?",
-                    "Delete Group");
-                if (!confirmed) return;
-            }
+            foreach (var child in Splits.Where(s => s.GroupId == entry.GroupId && s.Type == SplitType.Child))
+                child.GroupId = null;
 
-            var toRemove = Splits
-                .Where(s => s.GroupId == entry.GroupId)
-                .ToList();
-
-            foreach (var s in toRemove)
-                Splits.Remove(s);
+            Splits.Remove(entry);
         }
         else
         {
