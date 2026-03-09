@@ -514,7 +514,7 @@ namespace AutoHitCounter.ViewModels
         private void OnNotAttached()
         {
             IsAttached = false;
-            AttachedText = "Not attached";
+            AttachedText = _activeGame != null ? $"Waiting for {_activeGame.GameName}..." : "Not attached";
             OnPropertyChanged(nameof(TrackingText));
         }
 

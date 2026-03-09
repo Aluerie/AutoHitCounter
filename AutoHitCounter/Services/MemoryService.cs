@@ -126,6 +126,17 @@ namespace AutoHitCounter.Services
             _autoAttachTimer?.Stop();
             _autoAttachTimer?.Dispose();
 
+            lock (_attachLock)
+            {
+                if (ProcessHandle != IntPtr.Zero)
+                {
+                    Kernel32.CloseHandle(ProcessHandle);
+                    ProcessHandle = IntPtr.Zero;
+                    TargetProcess = null;
+                    IsAttached = false;
+                }
+            }
+
             _autoAttachTimer = new Timer(AttachCheckInterval);
             _autoAttachTimer.Elapsed += (sender, e) => TryAttachToProcess(processName);
             _autoAttachTimer.Start();
