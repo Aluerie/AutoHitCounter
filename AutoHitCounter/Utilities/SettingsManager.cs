@@ -20,6 +20,7 @@ public class SettingsManager
         "AutoHitCounter",
         "settings.txt");
     
+    [DefaultValue(true)] public bool EnableUpdateChecks { get; set; }
     [DefaultValue("Dark Souls Remastered")]
     public string LastSelectedGame { get; set; }
     
