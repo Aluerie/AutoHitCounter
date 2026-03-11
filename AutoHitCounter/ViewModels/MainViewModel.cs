@@ -613,6 +613,7 @@ namespace AutoHitCounter.ViewModels
                 CurrentSplit.IsCurrent = false;
                 IsRunComplete = true;
                 OnPropertyChanged(nameof(TotalHits));
+                OnPropertyChanged(nameof(TotalDiff));
                 OnPropertyChanged(nameof(TotalPb));
             }
             else
@@ -638,9 +639,17 @@ namespace AutoHitCounter.ViewModels
             }
         }
 
+        private ProfileEditorWindow _profileEditorWindow;
+
         private void OpenProfileEditor()
         {
             if (_selectedGame == null) return;
+
+            if (_profileEditorWindow != null)
+            {
+                _profileEditorWindow.Activate();
+                return;
+            }
 
             var vm = new ProfileEditorViewModel(
                 GetAllEventsForGame(_selectedGame.Title),
@@ -649,10 +658,12 @@ namespace AutoHitCounter.ViewModels
                 _selectedGame.Title,
                 _activeProfile);
 
-            var window = new ProfileEditorWindow { DataContext = vm };
+            _profileEditorWindow = new ProfileEditorWindow { DataContext = vm };
 
-            window.Closed += (s, e) =>
+            _profileEditorWindow.Closed += (s, e) =>
             {
+                _profileEditorWindow = null;
+
                 if (_activeProfile != null)
                 {
                     var key = $"{_selectedGame.GameName}|{_activeProfile.Name}";
@@ -674,7 +685,8 @@ namespace AutoHitCounter.ViewModels
 
                 ActiveProfile = vm.SelectedProfile;
             };
-            window.Show();
+
+            _profileEditorWindow.Show();
         }
 
         private void UpdateSplits()
@@ -783,6 +795,7 @@ namespace AutoHitCounter.ViewModels
 
             OnPropertyChanged(nameof(TotalHits));
             OnPropertyChanged(nameof(TotalPb));
+            OnPropertyChanged(nameof(TotalDiff));
             _overlayServerService.BroadcastState(OverlayMapper.MapFrom(this));
         }
 
@@ -861,6 +874,7 @@ namespace AutoHitCounter.ViewModels
 
         private void PreviousSplit()
         {
+            if (CurrentSplit == null || !Settings.AllowManualSplitOnAutoSplits) return;
             var currentIndex = Splits.IndexOf(CurrentSplit);
             if (currentIndex < 0) return;
             var prev = Splits.Take(currentIndex).LastOrDefault(s => s.Type == SplitType.Child);

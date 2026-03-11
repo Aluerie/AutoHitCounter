@@ -33,6 +33,24 @@
             <RowDefinition Height="*"  />
         </Grid.RowDefinitions>
         <controls:TitleBar Grid.Row="0" Title="Auto Hit Counter" />
+        
+        <!-- Focus outline -->
+        <Border Grid.Row="0" Grid.RowSpan="3"
+                BorderThickness="1" IsHitTestVisible="False" Panel.ZIndex="99"
+                CornerRadius="4">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource AncestorType=Window}}"
+                                     Value="True">
+                            <Setter Property="BorderBrush" Value="#4a2d52" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+        </Border>
+        
         <!-- Tool Attachment Info -->
         <Grid Grid.Row="1" Margin="5,3,8,3">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -750,7 +768,7 @@
         Grid.Row="2"
         HorizontalAlignment="Right"
         VerticalAlignment="Top"
-        Margin="0,2,3,0"
+        Margin="0,2,5,0"
         Height="25" Width="60" FontSize="12"
         Panel.ZIndex="1"
         Click="HelpButton_Click" />
