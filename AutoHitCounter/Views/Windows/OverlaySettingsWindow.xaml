@@ -137,7 +137,7 @@
                         <Separator Style="{StaticResource Separator}" />
                         <TextBlock Text="BACKGROUND OPACITY" Style="{StaticResource SectionLabel}" />
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                            <Slider Value="{Binding BackgroundOpacity}" Minimum="0" Maximum="1"
+                            <Slider Value="{Binding BackgroundOpacity, Delay=400}" Minimum="0" Maximum="1"
                                     Width="110" VerticalAlignment="Center" />
                             <TextBlock Text="{Binding BackgroundOpacity, StringFormat={}{0:F2}}"
                                        Foreground="#888888" FontSize="11" Margin="6,0,0,0"
