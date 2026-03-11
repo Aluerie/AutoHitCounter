@@ -11,7 +11,7 @@ using static AutoHitCounter.Games.SK.SKOffsets;
 
 namespace AutoHitCounter.Games.SK;
 
-public class SKEventService(IMemoryService memoryService, HookManager hookManager, Dictionary<uint, string> events) 
+public class SKEventService(IMemoryService memoryService, HookManager hookManager, Dictionary<uint, (string Name, int Required, int Hit)> events) 
     : EventServiceBase(memoryService, hookManager, events, Base + EventLogWriteIdx, Base + EventLogBuffer)
 {
     

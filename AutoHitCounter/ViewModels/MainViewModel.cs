@@ -686,15 +686,16 @@ namespace AutoHitCounter.ViewModels
             }
         }
 
-        private Dictionary<uint, string> GetActiveEvents()
+        private Dictionary<uint, (string Name, int Required, int Hit)> GetActiveEvents()
         {
             if (ActiveProfile == null) return new();
 
-            var dict = new Dictionary<uint, string>();
-            foreach (var s in ActiveProfile.Splits.Where(s => s.EventId.HasValue))
-                if (s.EventId != null && !dict.ContainsKey(s.EventId.Value))
-                    dict[s.EventId.Value] = s.Label;
-            return dict;
+            return ActiveProfile.Splits
+                .Where(s => s.EventId.HasValue)
+                .GroupBy(s => s.EventId!.Value)
+                .ToDictionary(
+                    g => g.Key,
+                    g => (Name: g.First().Label, Required: g.Count(), Hit: 0));
         }
 
         private Dictionary<uint, string> GetAllEventsForGame(GameTitle title)

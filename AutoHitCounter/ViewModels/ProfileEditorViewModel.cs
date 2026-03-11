@@ -626,23 +626,7 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
     private void Save()
     {
         if (_selectedProfile == null) return;
-
-        var duplicates = Splits
-            .Where(s => s.EventId.HasValue)
-            .GroupBy(s => s.EventId.Value)
-            .Where(g => g.Count() > 1)
-            .Select(g => g.First().Label)
-            .ToList();
-
-        if (duplicates.Any())
-        {
-            var names = string.Join(", ", duplicates);
-            var proceed = MsgBox.ShowOkCancel(
-                $"The following events appear more than once: {names}.\n\nOnly the first occurrence will auto-split at runtime. Save anyway?",
-                "Duplicate Events");
-            if (!proceed) return;
-        }
-
+        
         RebuildGroupAssignments();
 
         _selectedProfile.Splits = Splits.ToList();

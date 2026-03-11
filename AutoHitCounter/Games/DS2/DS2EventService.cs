@@ -14,7 +14,7 @@ namespace AutoHitCounter.Games.DS2;
 public class DS2EventService(
     IMemoryService memoryService,
     HookManager hookManager,
-    Dictionary<uint, string> events)
+    Dictionary<uint, (string Name, int Required, int Hit)> events)
     : EventServiceBase(memoryService, hookManager, events, Base + EventLogWriteIdx, Base + EventLogBuffer)
 {
     public override void InstallHook()

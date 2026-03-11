@@ -16,7 +16,7 @@ public class SKModule : IGameModule, IDisposable, IVersionedGameModule
     private readonly IStateService _stateService;
     private readonly HookManager _hookManager;
     private readonly ITickService _tickService;
-    private readonly Dictionary<uint, string> _events;
+    private readonly Dictionary<uint, (string Name, int Required, int Hit)> _events;
     private readonly IHitRulesProvider _rules;
 
     public string GameVersion => SKOffsets.Version.GetDescription();
@@ -33,7 +33,7 @@ public class SKModule : IGameModule, IDisposable, IVersionedGameModule
     public event Action OnVersionDetected;
 
     public SKModule(IMemoryService memoryService, IStateService stateService, HookManager hookManager,
-        ITickService tickService, Dictionary<uint, string> events, IHitRulesProvider rules)
+        ITickService tickService, Dictionary<uint, (string Name, int Required, int Hit)> events, IHitRulesProvider rules)
     {
         _memoryService = memoryService;
         _stateService = stateService;
@@ -124,7 +124,7 @@ public class SKModule : IGameModule, IDisposable, IVersionedGameModule
         OnIgtChanged = null;
     }
 
-    public void UpdateEvents(Dictionary<uint, string> events)
+    public void UpdateEvents(Dictionary<uint, (string Name, int Required, int Hit)> events)
     {
         _eventService?.UpdateEvents(events);
     }

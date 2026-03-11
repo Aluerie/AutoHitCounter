@@ -16,7 +16,7 @@ public class EldenRingModule : IGameModule, IDisposable, IVersionedGameModule
     private readonly IStateService _stateService;
     private readonly HookManager _hookManager;
     private readonly ITickService _tickService;
-    private readonly Dictionary<uint, string> _events;
+    private readonly Dictionary<uint, (string Name, int Required, int Hit)> _events;
     private EldenRingHitService _hitService;
     private EldenRingEventService _eventService;
     private EldenRingSettingsService _settingsService;
@@ -33,7 +33,7 @@ public class EldenRingModule : IGameModule, IDisposable, IVersionedGameModule
     private nint _igtPtr;
 
     public EldenRingModule(IMemoryService memoryService, IStateService stateService, HookManager hookManager,
-        ITickService tickService, Dictionary<uint, string> events)
+        ITickService tickService, Dictionary<uint, (string Name, int Required, int Hit)> events)
     {
         _memoryService = memoryService;
         _stateService = stateService;
@@ -113,7 +113,7 @@ public class EldenRingModule : IGameModule, IDisposable, IVersionedGameModule
         OnIgtChanged = null;
     }
     
-    public void UpdateEvents(Dictionary<uint, string> events)
+    public void UpdateEvents(Dictionary<uint, (string Name, int Required, int Hit)> events)
     {
         _eventService?.UpdateEvents(events);
     }

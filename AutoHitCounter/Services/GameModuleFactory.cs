@@ -21,7 +21,7 @@ public class GameModuleFactory(
     ITickService tickService)
 {
     
-    public IGameModule CreateModule(Game game, Dictionary<uint, string> events, IHitRulesProvider rules)
+    public IGameModule CreateModule(Game game, Dictionary<uint, (string Name, int Required, int Hit)> events, IHitRulesProvider rules)
     {
         return game.Title switch
         {

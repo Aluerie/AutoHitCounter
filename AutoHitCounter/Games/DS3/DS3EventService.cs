@@ -10,7 +10,7 @@ using static AutoHitCounter.Games.DS3.DS3CustomCodeOffsets;
 
 namespace AutoHitCounter.Games.DS3;
 
-public class DS3EventService(IMemoryService memoryService, HookManager hookManager, Dictionary<uint, string> events)
+public class DS3EventService(IMemoryService memoryService, HookManager hookManager, Dictionary<uint, (string Name, int Required, int Hit)> events)
     : EventServiceBase(memoryService, hookManager, events, Base + EventLogWriteIdx, Base + EventLogBuffer)
 {
     public override void InstallHook()

@@ -13,7 +13,7 @@ namespace AutoHitCounter.Games.ER;
 public class EldenRingEventService(
     IMemoryService memoryService,
     HookManager hookManager,
-    Dictionary<uint, string> eldenRingEvents)
+    Dictionary<uint, (string Name, int Required, int Hit)> eldenRingEvents)
     : EventServiceBase(memoryService, hookManager, eldenRingEvents, Base + EventLogWriteIdx, Base + EventLogBuffer)
 {
     public override void InstallHook()

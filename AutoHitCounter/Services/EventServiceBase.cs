@@ -10,20 +10,20 @@ namespace AutoHitCounter.Services;
 public abstract class EventServiceBase(
     IMemoryService memoryService,
     HookManager hookManager,
-    Dictionary<uint, string> events,
+    Dictionary<uint, (string Name, int Required, int Hit)> events,
     nint writeIdx,
     nint logBuffer)
     : IEventService
 {
     private int _readIndex;
-    private Dictionary<uint, string> _events = events;
+    private Dictionary<uint, (string Name, int Required, int Hit)> _events = events;
 
     public abstract void InstallHook();
 
     protected IMemoryService MemoryService => memoryService;
     protected HookManager HookManager => hookManager;
     
-    public void UpdateEvents(Dictionary<uint, string> events)
+    public void UpdateEvents(Dictionary<uint, (string Name, int Required, int Hit)> events)
     {
         _events = events;
     }
@@ -42,11 +42,12 @@ public abstract class EventServiceBase(
             if (dataBytes[offset + 4] == 0) continue;
 
             var eventId = BitConverter.ToUInt32(dataBytes, offset);
-            if (_events.ContainsKey(eventId))
+            if (_events.TryGetValue(eventId, out var entry) && entry.Hit < entry.Required)
             {
+                _events[eventId] = entry with { Hit = entry.Hit + 1 };
                 _readIndex = writeIndex;
 #if DEBUG
-                Console.WriteLine($@"Event {eventId} set to true, splitting {_events[eventId]}");
+                Console.WriteLine($@"Event {eventId} set to true ({entry.Hit + 1}/{entry.Required}), splitting {entry.Name}");
 #endif
                 return true;
             }

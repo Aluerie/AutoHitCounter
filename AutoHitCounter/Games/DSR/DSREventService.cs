@@ -11,7 +11,7 @@ using static AutoHitCounter.Games.DSR.DSROffsets;
 
 namespace AutoHitCounter.Games.DSR;
 
-public class DSREventService(IMemoryService memoryService, HookManager hookManager, Dictionary<uint, string> events)
+public class DSREventService(IMemoryService memoryService, HookManager hookManager, Dictionary<uint, (string Name, int Required, int Hit)> events)
     : EventServiceBase(memoryService, hookManager, events, Base + EventLogWriteIdx, Base + EventLogBuffer)
 {
     public override void InstallHook()

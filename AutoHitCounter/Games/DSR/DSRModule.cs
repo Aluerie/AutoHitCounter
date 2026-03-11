@@ -17,7 +17,7 @@ public class DSRModule : IGameModule, IDisposable, IVersionedGameModule
     private readonly IStateService _stateService;
     private readonly HookManager _hookManager;
     private readonly ITickService _tickService;
-    private readonly Dictionary<uint, string> _events;
+    private readonly Dictionary<uint, (string Name, int Required, int Hit)> _events;
     
     public string GameVersion => DSROffsets.Version.GetDescription();
 
@@ -32,7 +32,7 @@ public class DSRModule : IGameModule, IDisposable, IVersionedGameModule
     public event Action OnVersionDetected;
     
     public DSRModule(IMemoryService memoryService, IStateService stateService, HookManager hookManager,
-        ITickService tickService, Dictionary<uint, string> events)
+        ITickService tickService, Dictionary<uint, (string Name, int Required, int Hit)> events)
     {
         _memoryService = memoryService;
         _stateService = stateService;
@@ -112,7 +112,7 @@ public class DSRModule : IGameModule, IDisposable, IVersionedGameModule
         OnIgtChanged = null;
     }
     
-    public void UpdateEvents(Dictionary<uint, string> events)
+    public void UpdateEvents(Dictionary<uint, (string Name, int Required, int Hit)> events)
     {
         _eventService?.UpdateEvents(events);
     }
