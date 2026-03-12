@@ -85,12 +85,7 @@ namespace AutoHitCounter.ViewModels
 
             ManualSplitCommand = new DelegateCommand(ManualAdvanceSplit);
             AdvanceSplitCommand = new DelegateCommand(() => _splitNav.Advance());
-            PrevSplitCommand = new DelegateCommand(() =>
-            {
-                if (Settings.AllowManualSplitOnAutoSplits)
-                    _splitNav.Previous();
-            });
-
+            PrevSplitCommand = new DelegateCommand(() => _splitNav.Previous());
             IncrementHitCommand = new DelegateCommand(IncrementHit);
             DecrementHitCommand = new DelegateCommand(DecrementHit);
 
@@ -563,11 +558,8 @@ namespace AutoHitCounter.ViewModels
         private void RegisterHotkeys()
         {
             _hotkeyManager.RegisterAction(HotkeyActions.NextSplit, ManualAdvanceSplit);
-            _hotkeyManager.RegisterAction(HotkeyActions.PreviousSplit, () =>
-            {
-                if (Settings.AllowManualSplitOnAutoSplits)
-                    _splitNav.Previous();
-            });
+            _hotkeyManager.RegisterAction(HotkeyActions.PreviousSplit, () => _splitNav.Previous());
+
             _hotkeyManager.RegisterAction(HotkeyActions.Reset, ResetSplits);
             _hotkeyManager.RegisterAction(HotkeyActions.IncrementHit, IncrementHit);
             _hotkeyManager.RegisterAction(HotkeyActions.DecrementHit, DecrementHit);
@@ -649,7 +641,7 @@ namespace AutoHitCounter.ViewModels
 
         private void ManualAdvanceSplit()
         {
-            if (CurrentSplit == null || !Settings.AllowManualSplitOnAutoSplits) return;
+            if (CurrentSplit == null) return;
             _splitNav.Advance();
         }
 

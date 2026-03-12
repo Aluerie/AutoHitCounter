@@ -35,12 +35,11 @@ public class SplitNavigationService
         if (CurrentSplit != null) CurrentSplit.IsCurrent = true;
     }
     
-    public bool Advance()
+    public void Advance()
     {
-        if (IsRunComplete || CurrentSplit == null) return false;
+        if (IsRunComplete || CurrentSplit == null) return;
         AdvanceInternal();
         StateChanged?.Invoke();
-        return true;
     }
     
     public void Previous()

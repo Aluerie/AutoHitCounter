@@ -74,20 +74,7 @@ public class SettingsViewModel : BaseViewModel
             SettingsManager.Default.Save();
         }
     }
-
-    private bool _allowManualSplitOnAutoSplits;
-
-    public bool AllowManualSplitOnAutoSplits
-    {
-        get => _allowManualSplitOnAutoSplits;
-        set
-        {
-            if (!SetProperty(ref _allowManualSplitOnAutoSplits, value)) return;
-            SettingsManager.Default.AllowManualSplitOnAutoSplits = value;
-            SettingsManager.Default.Save();
-        }
-    }
-
+    
     private bool _isPracticeMode;
 
     public bool IsPracticeMode
@@ -273,10 +260,7 @@ public class SettingsViewModel : BaseViewModel
 
         _isShowNotesEnabled = SettingsManager.Default.ShowNotesSection;
         OnPropertyChanged(nameof(IsShowNotesEnabled));
-
-        _allowManualSplitOnAutoSplits = SettingsManager.Default.AllowManualSplitOnAutoSplits;
-        OnPropertyChanged(nameof(AllowManualSplitOnAutoSplits));
-
+        
         _isPracticeMode = SettingsManager.Default.PracticeMode;
         OnPropertyChanged(nameof(IsPracticeMode));
     }

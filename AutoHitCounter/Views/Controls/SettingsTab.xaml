@@ -23,9 +23,6 @@
                     <CheckBox Content="Show notes"
                               IsChecked="{Binding IsShowNotesEnabled}"
                               Margin="0,0,10,0" />
-                    <CheckBox Content="Allow Manually splitting auto splits"
-                              IsChecked="{Binding AllowManualSplitOnAutoSplits}"
-                              Margin="0,0,10,0" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                     <CheckBox Content="Practice Mode"

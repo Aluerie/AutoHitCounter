@@ -32,7 +32,6 @@ public class SettingsManager
     public bool BlockHotkeysFromGame { get; set; }
     public bool AlwaysOnTop { get; set; }
     public bool ShowNotesSection { get; set; }
-    public bool AllowManualSplitOnAutoSplits { get; set; }
     public bool PracticeMode { get; set; }
     [DefaultValue(true)] public bool ShowAttempts { get; set; }
     [DefaultValue(true)] public bool ShowProgress { get; set; }
