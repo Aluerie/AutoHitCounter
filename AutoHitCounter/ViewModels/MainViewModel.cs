@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Threading;
 using AutoHitCounter.Core;
 using AutoHitCounter.Enums;
 using AutoHitCounter.Interfaces;
@@ -26,6 +27,8 @@ namespace AutoHitCounter.ViewModels
         private readonly OverlayServerService _overlayServerService;
         private IGameModule _currentModule;
         private string _lastIgt;
+        private bool _runStateDirty;
+        private readonly DispatcherTimer _autoSaveTimer;
 
         private class RunSnapshot(int currentSplitIndex, int[] hitCounts, bool isRunComplete, TimeSpan inGameTime)
         {
@@ -53,6 +56,12 @@ namespace AutoHitCounter.ViewModels
             _profileService = profileService;
             _overlayServerService = overlayServerService;
             _overlayServerService.Start();
+            
+            _autoSaveTimer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(5) };
+            _autoSaveTimer.Tick += (_, _) => FlushRunState();
+            _autoSaveTimer.Start();
+            
+            
 
             stateService.Subscribe(State.Attached, OnAttached);
             stateService.Subscribe(State.NotAttached, OnNotAttached);
@@ -491,6 +500,13 @@ namespace AutoHitCounter.ViewModels
 
             IsEditingAttempts = false;
         }
+        
+        public void FlushRunState()
+        {
+            if (!_runStateDirty || _activeProfile == null) return;
+            _profileService.SaveProfile(_activeProfile);
+            _runStateDirty = false;
+        }
 
         #endregion
 
@@ -508,6 +524,7 @@ namespace AutoHitCounter.ViewModels
             {
                 if (SelectedSplit == null || SelectedSplit.IsParent) return;
                 SelectedSplit.NumOfHits = 0;
+                MarkRunDirty();
                 _overlayServerService.BroadcastState(OverlayMapper.MapFrom(this));
             });
 
@@ -589,7 +606,7 @@ namespace AutoHitCounter.ViewModels
                 if (IsRunComplete || CurrentSplit == null) return;
                 if (_selectedGame != _activeGame) return;
                 CurrentSplit.NumOfHits += count;
-                SaveRunState();
+                MarkRunDirty();
                 _overlayServerService.BroadcastState(OverlayMapper.MapFrom(this));
             };
             _currentModule.OnEventSet += AutoAdvanceSplit;
@@ -635,7 +652,7 @@ namespace AutoHitCounter.ViewModels
                 CurrentSplit = next;
             }
 
-            SaveRunState();
+            MarkRunDirty();
             _overlayServerService.BroadcastState(OverlayMapper.MapFrom(this));
         }
 
@@ -841,6 +858,7 @@ namespace AutoHitCounter.ViewModels
             {
                 _activeProfile.AttemptCount++;
                 _activeProfile.SavedRun = null;
+                _runStateDirty = false;
                 _profileService.SaveProfile(_activeProfile);
                 OnPropertyChanged(nameof(AttemptCount));
             }
@@ -894,6 +912,7 @@ namespace AutoHitCounter.ViewModels
             CurrentSplit.IsCurrent = false;
             prev.IsCurrent = true;
             CurrentSplit = prev;
+            MarkRunDirty();
             _overlayServerService.BroadcastState(OverlayMapper.MapFrom(this));
         }
 
@@ -901,7 +920,7 @@ namespace AutoHitCounter.ViewModels
         {
             if (IsRunComplete || CurrentSplit == null) return;
             CurrentSplit.NumOfHits++;
-            SaveRunState();
+            MarkRunDirty();
             _overlayServerService.BroadcastState(OverlayMapper.MapFrom(this));
         }
 
@@ -909,13 +928,11 @@ namespace AutoHitCounter.ViewModels
         {
             if (IsRunComplete || CurrentSplit == null || CurrentSplit.NumOfHits <= 0) return;
             CurrentSplit.NumOfHits--;
-            SaveRunState();
+            MarkRunDirty();
             _overlayServerService.BroadcastState(OverlayMapper.MapFrom(this));
         }
         
-        public bool IsRapidSplitting { get; set; }
-        
-        public void SaveRunState()
+        private void MarkRunDirty()
         {
             if (_activeProfile == null || IsRapidSplitting) return;
 
@@ -927,9 +944,10 @@ namespace AutoHitCounter.ViewModels
                 IsRunComplete = IsRunComplete,
                 IgtMilliseconds = (long)InGameTime.TotalMilliseconds
             };
-            Task.Run(() => _profileService.SaveProfile(_activeProfile));
+            _runStateDirty = true;
         }
 
+        
         private void RestoreFromSavedRun(RunState state)
         {
             IsRunComplete = state.IsRunComplete;
