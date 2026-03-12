@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Threading;
 using AutoHitCounter.Core;
 using AutoHitCounter.Enums;
 using AutoHitCounter.Interfaces;
@@ -26,6 +27,8 @@ namespace AutoHitCounter.ViewModels
         private readonly OverlayServerService _overlayServerService;
         private IGameModule _currentModule;
         private string _lastIgt;
+        private bool _runStateDirty;
+        private readonly DispatcherTimer _autoSaveTimer;
 
         private class RunSnapshot(int currentSplitIndex, int[] hitCounts, bool isRunComplete, TimeSpan inGameTime)
         {
@@ -53,6 +56,12 @@ namespace AutoHitCounter.ViewModels
             _profileService = profileService;
             _overlayServerService = overlayServerService;
             _overlayServerService.Start();
+            
+            _autoSaveTimer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(5) };
+            _autoSaveTimer.Tick += (_, _) => FlushRunState();
+            _autoSaveTimer.Start();
+            
+            
 
             stateService.Subscribe(State.Attached, OnAttached);
             stateService.Subscribe(State.NotAttached, OnNotAttached);
@@ -63,6 +72,16 @@ namespace AutoHitCounter.ViewModels
 
             OpenProfileEditorCommand = new DelegateCommand(OpenProfileEditor);
             SaveNotesCommand = new DelegateCommand(SaveNotes);
+            ClearAllNotesCommand = new DelegateCommand(() =>
+            {
+                var confirmed = MsgBox.ShowOkCancel("This will clear all notes. Are you sure?", "Clear Notes");
+                if (!confirmed) return;
+
+                foreach (var split in Splits)
+                    split.Notes = string.Empty;
+
+                SaveNotes();
+            });
             TrackGameCommand = new DelegateCommand(StartTrackingGame);
 
             ManualSplitCommand = new DelegateCommand(ManualAdvanceSplit);
@@ -74,7 +93,7 @@ namespace AutoHitCounter.ViewModels
 
             ResetCommand = new DelegateCommand(ResetSplits);
             SetPbCommand = new DelegateCommand(SetPb);
-
+            
 
             _isUnlocked = SettingsManager.Default.IsUnlocked;
             ToggleLockCommand = new DelegateCommand(() =>
@@ -120,8 +139,10 @@ namespace AutoHitCounter.ViewModels
 
         public DelegateCommand SaveNotesCommand { get; }
 
-        public DelegateCommand ToggleLockCommand { get; set; }
+        public DelegateCommand ClearAllNotesCommand { get; set; }
 
+        public DelegateCommand ToggleLockCommand { get; set; }
+        
         public DelegateCommand ResetSelectedSplitHitsCommand { get; set; }
 
         public DelegateCommand RenameSelectedSplitCommand { get; set; }
@@ -363,11 +384,11 @@ namespace AutoHitCounter.ViewModels
 
             _overlayServerService.BroadcastState(OverlayMapper.MapFrom(this));
         }
-        
+
         public bool HasSplits => TotalSplitCount > 0;
 
         private bool _isSplitListScrollbarVisible;
-        
+
         public bool IsSplitListScrollbarVisible
         {
             get => _isSplitListScrollbarVisible;
@@ -385,7 +406,7 @@ namespace AutoHitCounter.ViewModels
             get => _isEditingAttempts;
             set => SetProperty(ref _isEditingAttempts, value);
         }
-        
+
         private bool _isUnlocked = true;
 
         public bool IsUnlocked
@@ -393,7 +414,7 @@ namespace AutoHitCounter.ViewModels
             get => _isUnlocked;
             set => SetProperty(ref _isUnlocked, value);
         }
-        
+
         public int AttemptCount => _activeProfile?.AttemptCount ?? 0;
 
         public int CurrentSplitNumber
@@ -466,7 +487,7 @@ namespace AutoHitCounter.ViewModels
             _overlayServerService.BroadcastState(OverlayMapper.MapFrom(this));
         }
 
-        
+
         public void CommitAttemptsEdit(string value)
         {
             if (int.TryParse(value, out var count) && count >= 0)
@@ -478,6 +499,13 @@ namespace AutoHitCounter.ViewModels
             }
 
             IsEditingAttempts = false;
+        }
+        
+        public void FlushRunState()
+        {
+            if (!_runStateDirty || _activeProfile == null) return;
+            _profileService.SaveProfile(_activeProfile);
+            _runStateDirty = false;
         }
 
         #endregion
@@ -496,6 +524,7 @@ namespace AutoHitCounter.ViewModels
             {
                 if (SelectedSplit == null || SelectedSplit.IsParent) return;
                 SelectedSplit.NumOfHits = 0;
+                MarkRunDirty();
                 _overlayServerService.BroadcastState(OverlayMapper.MapFrom(this));
             });
 
@@ -577,7 +606,7 @@ namespace AutoHitCounter.ViewModels
                 if (IsRunComplete || CurrentSplit == null) return;
                 if (_selectedGame != _activeGame) return;
                 CurrentSplit.NumOfHits += count;
-                SaveRunState();
+                MarkRunDirty();
                 _overlayServerService.BroadcastState(OverlayMapper.MapFrom(this));
             };
             _currentModule.OnEventSet += AutoAdvanceSplit;
@@ -623,7 +652,7 @@ namespace AutoHitCounter.ViewModels
                 CurrentSplit = next;
             }
 
-            SaveRunState();
+            MarkRunDirty();
             _overlayServerService.BroadcastState(OverlayMapper.MapFrom(this));
         }
 
@@ -829,6 +858,7 @@ namespace AutoHitCounter.ViewModels
             {
                 _activeProfile.AttemptCount++;
                 _activeProfile.SavedRun = null;
+                _runStateDirty = false;
                 _profileService.SaveProfile(_activeProfile);
                 OnPropertyChanged(nameof(AttemptCount));
             }
@@ -882,6 +912,7 @@ namespace AutoHitCounter.ViewModels
             CurrentSplit.IsCurrent = false;
             prev.IsCurrent = true;
             CurrentSplit = prev;
+            MarkRunDirty();
             _overlayServerService.BroadcastState(OverlayMapper.MapFrom(this));
         }
 
@@ -889,7 +920,7 @@ namespace AutoHitCounter.ViewModels
         {
             if (IsRunComplete || CurrentSplit == null) return;
             CurrentSplit.NumOfHits++;
-            SaveRunState();
+            MarkRunDirty();
             _overlayServerService.BroadcastState(OverlayMapper.MapFrom(this));
         }
 
@@ -897,13 +928,13 @@ namespace AutoHitCounter.ViewModels
         {
             if (IsRunComplete || CurrentSplit == null || CurrentSplit.NumOfHits <= 0) return;
             CurrentSplit.NumOfHits--;
-            SaveRunState();
+            MarkRunDirty();
             _overlayServerService.BroadcastState(OverlayMapper.MapFrom(this));
         }
         
-        private void SaveRunState()
+        private void MarkRunDirty()
         {
-            if (_activeProfile == null) return;
+            if (_activeProfile == null || IsRapidSplitting) return;
 
             var children = Splits.Where(s => s.Type == SplitType.Child).ToList();
             _activeProfile.SavedRun = new RunState
@@ -913,8 +944,9 @@ namespace AutoHitCounter.ViewModels
                 IsRunComplete = IsRunComplete,
                 IgtMilliseconds = (long)InGameTime.TotalMilliseconds
             };
-            Task.Run(() => _profileService.SaveProfile(_activeProfile));
+            _runStateDirty = true;
         }
+
         
         private void RestoreFromSavedRun(RunState state)
         {

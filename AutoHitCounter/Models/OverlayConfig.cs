@@ -2,87 +2,53 @@
 
 namespace AutoHitCounter.Models;
 
-public class OverlayConfig(
-    bool showAttempts,
-    int prevSplits,
-    int nextSplits,
-    bool showDiff,
-    bool showPb,
-    bool showIgt,
-    int overlayWidth,
-    int overlayHeight,
-    bool showProgress,
-    string fontFamily,
-    int fontSize,
-    int rowHeight,
-    double backgroundOpacity,
-    bool tableMode,
-    string hitsZeroColor,
-    string hitsActiveColor,
-    string rowHitColor,
-    string rowClearedColor,
-    string currentSplitColor,
-    string currentSplitBorderColor,
-    string currentSplitHitColor,
-    string currentSplitHitBorderColor,
-    string diffPosColor,
-    string diffNegColor,
-    string diffZeroColor,
-    string attemptsZeroColor,
-    string attemptsActiveColor,
-    string headerTextColor,
-    string igtColor,
-    string runCompleteBannerColor,
-    bool fontBold,
-    bool fontItalic,
-    bool fontUnderline,
-    string splitNameColor,
-    string groupNameColor,
-    string pbColor,
-    bool showFooterTotals,
-    string  igtFontFamily,
-    int igtFontSize,
-    string alternatingRows)
+public class OverlayConfig
 {
-    public bool ShowAttempts { get; } = showAttempts;
-    public int PrevSplits { get; } = prevSplits;
-    public int NextSplits { get; } = nextSplits;
-    public bool ShowDiff { get; } = showDiff;
-    public bool ShowPb { get; } = showPb;
-    public bool ShowIgt { get; } = showIgt;
-    public int OverlayWidth { get; } = overlayWidth;
-    public int OverlayHeight { get; } = overlayHeight;
-    public bool ShowProgress { get; } = showProgress;
-    public string FontFamily { get; } = fontFamily;
-    public int FontSize { get; } = fontSize;
-    public int RowHeight { get; } = rowHeight;
-    public double BackgroundOpacity { get; } = backgroundOpacity;
-    public bool TableMode { get; } = tableMode;
-    public string HitsZeroColor { get; } = hitsZeroColor;
-    public string HitsActiveColor { get; } = hitsActiveColor;
-    public string RowHitColor { get; } = rowHitColor;
-    public string RowClearedColor { get; } = rowClearedColor;
-    public string CurrentSplitColor { get; } = currentSplitColor;
-    public string CurrentSplitBorderColor { get; } = currentSplitBorderColor;
-    public string CurrentSplitHitColor { get; } = currentSplitHitColor;
-    public string CurrentSplitHitBorderColor { get; } = currentSplitHitBorderColor;
-    public string DiffPosColor { get; } = diffPosColor;
-    public string DiffNegColor { get; } = diffNegColor;
-    public string DiffZeroColor { get; } = diffZeroColor;
-    public string AttemptsZeroColor { get; } = attemptsZeroColor;
-    public string AttemptsActiveColor { get; } = attemptsActiveColor;
-    public string HeaderTextColor { get; } = headerTextColor;
-    public string IgtColor { get; } = igtColor;
-    public string RunCompleteBannerColor { get; } = runCompleteBannerColor;
-    public bool FontBold { get; } = fontBold;
-    public bool FontItalic { get; } = fontItalic;
-    public bool FontUnderline { get; } = fontUnderline;
-    public string SplitNameColor { get; } = splitNameColor;
-    public string GroupNameColor { get; } = groupNameColor;
-    public string PbColor { get; } = pbColor;
-    public bool ShowFooterTotals { get; } = showFooterTotals;
-    public string IgtFontFamily { get; } = igtFontFamily;
-    public string AlternatingRows { get; } = alternatingRows;
-    public int IgtFontSize { get; } = igtFontSize;
+    // Layout
+    public bool ShowAttempts { get; set; }
+    public int PrevSplits { get; set; }
+    public int NextSplits { get; set; }
+    public bool ShowDiff { get; set; }
+    public bool ShowPb { get; set; }
+    public bool ShowIgt { get; set; }
+    public int OverlayWidth { get; set; }
+    public int OverlayHeight { get; set; }
+    public bool ShowProgress { get; set; }
+    public bool ShowFooterTotals { get; set; }
+    public bool TableMode { get; set; }
+    public double BackgroundOpacity { get; set; }
 
+    // Font
+    public string FontFamily { get; set; }
+    public int FontSize { get; set; }
+    public int RowHeight { get; set; }
+    public bool FontBold { get; set; }
+    public bool FontItalic { get; set; }
+    public bool FontUnderline { get; set; }
+    public string IgtFontFamily { get; set; }
+    public int IgtFontSize { get; set; }
+
+    // Colors
+    public string HeaderTextColor { get; set; }
+    public string AttemptsZeroColor { get; set; }
+    public string AttemptsActiveColor { get; set; }
+    public string SplitNameColor { get; set; }
+    public string GroupNameColor { get; set; }
+    public string HitsZeroColor { get; set; }
+    public string HitsActiveColor { get; set; }
+    public string PbColor { get; set; }
+    public string DiffPosColor { get; set; }
+    public string DiffNegColor { get; set; }
+    public string DiffZeroColor { get; set; }
+    public string RowHitColor { get; set; }
+    public string RowClearedColor { get; set; }
+    public string AlternatingRows { get; set; }
+    public string CurrentSplitColor { get; set; }
+    public string CurrentSplitBorderColor { get; set; }
+    public string CurrentSplitHitColor { get; set; }
+    public string CurrentSplitHitBorderColor { get; set; }
+    public string IgtColor { get; set; }
+    public string RunCompleteBannerColor { get; set; }
+    public string SplitNameOnHitColor { get; set; }
+    public string SplitNameOnHitlessColor { get; set; }
 }
