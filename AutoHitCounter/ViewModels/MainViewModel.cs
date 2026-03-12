@@ -912,9 +912,12 @@ namespace AutoHitCounter.ViewModels
             SaveRunState();
             _overlayServerService.BroadcastState(OverlayMapper.MapFrom(this));
         }
-        private void SaveRunState()
+        
+        public bool IsRapidSplitting { get; set; }
+        
+        public void SaveRunState()
         {
-            if (_activeProfile == null) return;
+            if (_activeProfile == null || IsRapidSplitting) return;
 
             var children = Splits.Where(s => s.Type == SplitType.Child).ToList();
             _activeProfile.SavedRun = new RunState
