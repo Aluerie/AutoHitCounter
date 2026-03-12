@@ -185,6 +185,8 @@ public static class DS2Offsets
         
         Hooks.ClearWetPoisonBit = moduleBase + Version switch
         {
+            Vanilla1_0_11 => 0x28B93B,
+            Vanilla1_0_12 => 0x28EC0B,
             Scholar1_0_2 => 0x21F540,
             Scholar1_0_3 => 0x223050,
             _ => 0

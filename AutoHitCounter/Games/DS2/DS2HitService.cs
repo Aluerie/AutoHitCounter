@@ -187,6 +187,7 @@ public class DS2HitService(IMemoryService memoryService, HookManager hookManager
         InstallVanillaGeneralDamageHook();
         InstallVanillaKillBoxHook();
         InstallVanillaLightPoiseStaggerHook();
+        InstallVanillaClearWetPoisonHook();
     }
 
     private void WriteVanillaPlayerDeadCheck()
@@ -204,6 +205,7 @@ public class DS2HitService(IMemoryService memoryService, HookManager hookManager
 
         var hit = Base + Hit;
         var auxCheckFlag = Base + CheckAuxProcFlag;
+        var wetPoisonFlag = Base + WetPoisonFlag;
         var shouldIgnoreShulvaSpikesFlag = Base + ShouldIgnoreShulvaSpikesFlag;
         var checkPlayerDeadFunc = Base + CheckPlayerDead;
 
@@ -211,17 +213,18 @@ public class DS2HitService(IMemoryService memoryService, HookManager hookManager
 
         AsmHelper.WriteImmediateDwords(bytes, [
             ((int)auxCheckFlag, 2),
-            ((int)GameManagerImp.Base, 0x20 + 2),
-            ((int)MapId, 0x3A + 2),
-            ((int)shouldIgnoreShulvaSpikesFlag, 0x46 + 2),
-            ((int)auxCheckFlag, 0x76 + 2),
-            ((int)hit, 0x97 + 2)
+            ((int)GameManagerImp.Base, 0x24 + 2),
+            ((int)MapId, 0x42 + 2),
+            ((int)shouldIgnoreShulvaSpikesFlag, 0x4E + 2),
+            ((int)wetPoisonFlag, 0x8A + 2),
+            ((int)auxCheckFlag, 0x93 + 2),
+            ((int)hit, 0xB4 + 2)
         ]);
 
 
         AsmHelper.WriteRelativeOffsets(bytes, [
             (code + 0x8, checkPlayerDeadFunc, 5, 0x8 + 1),
-            (code + 0xA5, Hooks.Hit + 6, 5, 0xA5 + 1)
+            (code + 0xC2, Hooks.Hit + 6, 5, 0xC2 + 1)
         ]);
 
         memoryService.WriteBytes(code, bytes);
@@ -234,16 +237,18 @@ public class DS2HitService(IMemoryService memoryService, HookManager hookManager
 
         var hit = Base + Hit;
         var auxCheckFlag = Base + CheckAuxProcFlag;
-
+        var wetPoisonFlag = Base + WetPoisonFlag;
         var code = Base + CountAuxHit;
 
         AsmHelper.WriteImmediateDwords(bytes, [
             ((int)auxCheckFlag, 0x5 + 2),
             ((int)auxCheckFlag, 0xE + 2),
-            ((int)hit, 0x15 + 2)
+            ((int)wetPoisonFlag, 0x1D + 2),
+            ((int)wetPoisonFlag, 0x2B + 2),
+            ((int)hit, 0x32 + 2)
         ]);
 
-        AsmHelper.WriteRelativeOffset(bytes, code + 0x1B, Hooks.CountAuxHit + 5, 5, 0x1B + 1);
+        AsmHelper.WriteRelativeOffset(bytes, code + 0x38, Hooks.CountAuxHit + 5, 5, 0x38 + 1);
 
         memoryService.WriteBytes(code, bytes);
         hookManager.InstallHook(code, Hooks.CountAuxHit, [0xF3, 0x0F, 0x10, 0x55, 0x0C]);
@@ -265,7 +270,7 @@ public class DS2HitService(IMemoryService memoryService, HookManager hookManager
         memoryService.WriteBytes(code, bytes);
         hookManager.InstallHook(code, Hooks.GeneralApplyDamage, [0x89, 0x8E, 0xFC, 0x00, 0x00, 0x00]);
     }
-    
+
     private void InstallVanillaKillBoxHook()
     {
         var bytes = AsmLoader.GetAsmBytes(AsmScript.VanillaKillBox);
@@ -282,7 +287,7 @@ public class DS2HitService(IMemoryService memoryService, HookManager hookManager
         memoryService.WriteBytes(code, bytes);
         hookManager.InstallHook(code, Hooks.KillBox, [0x8B, 0x01, 0x8B, 0x4D, 0x08]);
     }
-    
+
     private void InstallVanillaLightPoiseStaggerHook()
     {
         var bytes = AsmLoader.GetAsmBytes(AsmScript.VanillaLightPoiseStagger);
@@ -301,7 +306,23 @@ public class DS2HitService(IMemoryService memoryService, HookManager hookManager
         hookManager.InstallHook(code, Hooks.LightPoiseStagger, [0xD9, 0x80, 0xB0, 0x01, 0x00, 0x00]);
     }
 
-    #endregion
+    private void InstallVanillaClearWetPoisonHook()
+    {
+        var bytes = AsmLoader.GetAsmBytes(AsmScript.VanillaClearWetPoisonBit);
+        var wetPoisonFlag = Base + WetPoisonFlag;
+        var code = Base + ClearWetPoisonBit;
+        
+        AsmHelper.WriteImmediateDwords(bytes, [
+        ((int)wetPoisonFlag, 0x7 + 2),
+        ((int)GameManagerImp.Base, 0x11 + 1),
+        ((int)wetPoisonFlag, 0x30 + 2),
+        ]);
 
-    
+        AsmHelper.WriteRelativeOffset(bytes, code + 0x38, Hooks.ClearWetPoisonBit + 7, 5, 0x38 + 1);
+
+        memoryService.WriteBytes(code, bytes);
+        hookManager.InstallHook(code, Hooks.ClearWetPoisonBit, [0x8D, 0x94, 0x1A, 0x10, 0x01, 0x00, 0x00]);
+    }
+
+    #endregion
 }

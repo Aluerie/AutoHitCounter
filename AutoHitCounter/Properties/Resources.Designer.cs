@@ -1300,14 +1300,39 @@ namespace AutoHitCounter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 8d 94 1a 10 01 00 00    lea    edx,[edx+ebx*1+0x110]
+        ///80 3d 00 00 00 00 00    cmp    BYTE PTR ds:0x0,0x0
+        ///74 28                   je     38 &lt;early_exit&gt;
+        ///50                      push   eax
+        ///a1 00 00 00 00          mov    eax,ds:0x0
+        ///85 c0                   test   eax,eax
+        ///74 1d                   je     37 &lt;exit&gt;
+        ///8b 40 74                mov    eax,DWORD PTR [eax+0x74]
+        ///85 c0                   test   eax,eax
+        ///74 16                   je     37 &lt;exit&gt;
+        ///83 ff 0b                cmp    edi,0xb
+        ///75 11              [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string VanillaClearWetPoisonBit {
+            get {
+                return ResourceManager.GetString("VanillaClearWetPoisonBit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to f3 0f 10 55 0c          movss  xmm2,DWORD PTR [ebp+0xc]
         ///80 3d 00 00 00 00 00    cmp    BYTE PTR ds:0x0,0x0
-        ///74 0d                   je     1b &lt;skip&gt;
+        ///74 0f                   je     1d &lt;check_wet&gt;
         ///c6 05 00 00 00 00 00    mov    BYTE PTR ds:0x0,0x0
         ///ff 05 00 00 00 00       inc    DWORD PTR ds:0x0
+        ///eb 1b                   jmp    38 &lt;skip&gt;
         ///
-        ///001b &lt;skip&gt;:
-        ///e9 fc ff ff ff          jmp    1c &lt;skip+0x1&gt;.
+        ///001d &lt;check_wet&gt;:
+        ///80 3d 00 00 00 00 00    cmp    BYTE PTR ds:0x0,0x0
+        ///74 12                   je     38 &lt;skip&gt;
+        ///83 f8 00                cmp    eax,0x0
+        ///75 0d                   jne    38 &lt;skip&gt;
+        ///c6 05 00 00 00 0 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string VanillaCountAuxHit {
             get {
@@ -1377,15 +1402,15 @@ namespace AutoHitCounter.Properties {
         ///   Looks up a localized string similar to c6 05 00 00 00 00 00    mov    BYTE PTR ds:0x0,0x0
         ///50                      push   eax
         ///e8 fc ff ff ff          call   9 &lt;_main+0x9&gt;
-        ///0f 84 8b 00 00 00       je     9e &lt;exit&gt;
+        ///0f 84 a8 00 00 00       je     bb &lt;exit&gt;
         ///81 bd f4 fd ff ff e6    cmp    DWORD PTR [ebp-0x20c],0x5f550e6
         ///50 f5 05 
-        ///74 7f                   je     9e &lt;exit&gt;
+        ///0f 84 98 00 00 00       je     bb &lt;exit&gt;
         ///53                      push   ebx
         ///8b 1d 00 00 00 00       mov    ebx,DWORD PTR ds:0x0
         ///8b 5b 74                mov    ebx,DWORD PTR [ebx+0x74]
         ///3b 59 10                cmp    ebx,DWORD PTR [ecx+0x10]
-        ///75 6f            [rest of string was truncated]&quot;;.
+        ///0f 85 84 00 00 0 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string VanillaHit {
             get {
