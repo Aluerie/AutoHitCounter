@@ -131,6 +131,7 @@ public class DS2HitService(IMemoryService memoryService, HookManager hookManager
         AsmHelper.WriteRelativeOffsets(bytes, [
             (code + 0x6, auxCheckFlag, 7, 0x6 + 2),
             (code + 0xF, auxCheckFlag, 7, 0xF + 2),
+            (code + 0x16, hit, 6, 0x16 + 2),
             (code + 0x1E, wetPoisonFlag, 7, 0x1E + 2),
             (code + 0x2C, wetPoisonFlag, 7, 0x2C + 2),
             (code + 0x33, hit, 6, 0x33 + 2),
@@ -243,6 +244,7 @@ public class DS2HitService(IMemoryService memoryService, HookManager hookManager
         AsmHelper.WriteImmediateDwords(bytes, [
             ((int)auxCheckFlag, 0x5 + 2),
             ((int)auxCheckFlag, 0xE + 2),
+            ((int)hit, 0x15 + 2),
             ((int)wetPoisonFlag, 0x1D + 2),
             ((int)wetPoisonFlag, 0x2B + 2),
             ((int)hit, 0x32 + 2)
