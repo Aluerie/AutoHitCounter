@@ -53,6 +53,8 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
         AddSelectedCommand = new DelegateCommand(AddSelected, () => SelectedTemplates.Any());
         RemoveSelectedCommand = new DelegateCommand(RemoveSelected, () => SelectedSplits.Any());
 
+        ClearAutoSplitEventsCommand = new DelegateCommand(ClearEventIds, () => SelectedProfile != null);
+
         Splits.CollectionChanged += (_, _) =>
         {
             OnPropertyChanged(nameof(SplitCount));
@@ -72,7 +74,7 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
         EditSplitEventCommand = new DelegateCommand(EditSplitEvent,
             () => SelectedSplit?.Type == SplitType.Child);
     }
-
+    
     #region Commands
 
     public DelegateCommand<SplitEntry> AddCommand { get; }
@@ -91,6 +93,8 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
     public DelegateCommand AddSelectedCommand { get; private set; }
     public DelegateCommand RemoveSelectedCommand { get; private set; }
     
+    public DelegateCommand ClearAutoSplitEventsCommand { get; private set; }
+    
 
     #endregion
 
@@ -99,7 +103,6 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
     public ObservableCollection<SplitEntry> AllEvents { get; } = new();
     public ObservableCollection<SplitEntry> Splits { get; } = new();
     public ObservableCollection<Profile> Profiles { get; }
-
     public ObservableCollection<SplitEntry> SelectedTemplates { get; } = new();
     public ObservableCollection<SplitEntry> SelectedSplits { get; } = new();
 
@@ -694,6 +697,20 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
         }
 
         entry.GroupId = groupId;
+    }
+    
+    private void ClearEventIds()
+    {
+        bool shouldClearEvents = MsgBox.ShowYesNo(
+            "Are you sure you want to clear all the autosplit events for this profile?",
+            "Clear Events"
+        );
+        
+        if (shouldClearEvents)
+        {
+            SelectedProfile.Splits.ForEach(entry => entry.EventId = null);
+            IsDirty = true;
+        }
     }
 
     #endregion

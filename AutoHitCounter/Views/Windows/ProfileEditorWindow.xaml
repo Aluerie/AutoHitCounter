@@ -12,7 +12,7 @@
         Style="{StaticResource DefaultWindowStyle}"
         WindowStyle="None"
         AllowsTransparency="True"
-        Title="Profile Editor" Height="800" Width="800">
+        Title="Profile Editor" Height="800" Width="850">
     <Window.Resources>
         <converters:ExpanderArrowConverter x:Key="ExpanderArrowConverter" />
         <converters:ParentChildMarginMultiConverter x:Key="ParentChildMarginMultiConverter" />
@@ -110,7 +110,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="3" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="1.15*" />
             </Grid.ColumnDefinitions>
 
             <Border Grid.Column="0" Margin="3,0,6,4">
@@ -323,6 +323,8 @@
                                 CommandParameter="{Binding SelectedSplit}" />
                         <Button Content="Edit Event" Margin="0,0,4,0"
                                 Command="{Binding EditSplitEventCommand}" />
+                        <Button Content="Clear All Events" Margin="0,0,4,0"
+                                Command="{Binding ClearAutoSplitEventsCommand}" />
                     </StackPanel>
 
                     <ListBox Grid.Row="2"
