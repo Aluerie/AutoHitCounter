@@ -265,7 +265,16 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
         if (profile == null) return;
 
         foreach (var split in profile.Splits)
-            Splits.Add(split);
+            Splits.Add(new SplitEntry
+            {
+                EventId = split.EventId,
+                Name = split.Name,
+                DisplayName = split.DisplayName,
+                PersonalBest = split.PersonalBest,
+                Type = split.Type,
+                GroupId = split.GroupId,
+                Notes = split.Notes
+            });
 
         FilterEvents();
         IsDirty = false;
@@ -708,7 +717,8 @@ public class ProfileEditorViewModel : BaseViewModel, IReorderHandler
         
         if (shouldClearEvents)
         {
-            SelectedProfile.Splits.ForEach(entry => entry.EventId = null);
+            foreach (var split in Splits)
+                split.EventId = null;
             IsDirty = true;
         }
     }
