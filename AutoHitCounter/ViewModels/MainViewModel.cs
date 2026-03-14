@@ -128,6 +128,9 @@ namespace AutoHitCounter.ViewModels
 
         public DelegateCommand EditSplitPbCommand { get; set; }
 
+        public DelegateCommand MoveSplitUpCommand { get; set; }
+        public DelegateCommand MoveSplitDownCommand { get; set; }
+
         #endregion
 
         #region Properties
@@ -230,7 +233,11 @@ namespace AutoHitCounter.ViewModels
                 if (_selectedSplit != null && _selectedSplit.IsEditing)
                     CommitRename(_selectedSplit);
 
-                SetProperty(ref _selectedSplit, value);
+                if (SetProperty(ref _selectedSplit, value))
+                {
+                    MoveSplitUpCommand?.RaiseCanExecuteChanged();
+                    MoveSplitDownCommand?.RaiseCanExecuteChanged();
+                }
             }
         }
 
@@ -463,6 +470,42 @@ namespace AutoHitCounter.ViewModels
             _overlayServerService.BroadcastState(OverlayMapper.MapFrom(this));
         }
 
+        private void MoveSplitUp()
+        {
+            if (!CanMoveSplitUp()) return;
+            var split = SelectedSplit;
+            var index = Splits.IndexOf(split);
+            MoveItem(split, index - 1);
+            SelectedSplit = split;
+            MoveSplitUpCommand.RaiseCanExecuteChanged();
+            MoveSplitDownCommand.RaiseCanExecuteChanged();
+        }
+
+        private void MoveSplitDown()
+        {
+            if (!CanMoveSplitDown()) return;
+            var split = SelectedSplit;
+            var index = Splits.IndexOf(split);
+            MoveItem(split, index + 2);
+            SelectedSplit = split;
+            MoveSplitUpCommand.RaiseCanExecuteChanged();
+            MoveSplitDownCommand.RaiseCanExecuteChanged();
+        }
+
+        private bool CanMoveSplitUp()
+        {
+            if (!IsUnlocked || SelectedSplit == null || SelectedSplit.IsParent) return false;
+            var index = Splits.IndexOf(SelectedSplit);
+            return index > 0 && !Splits[index - 1].IsParent;
+        }
+
+        private bool CanMoveSplitDown()
+        {
+            if (!IsUnlocked || SelectedSplit == null || SelectedSplit.IsParent) return false;
+            var index = Splits.IndexOf(SelectedSplit);
+            return index < Splits.Count - 1 && !Splits[index + 1].IsParent;
+        }
+
         public void CommitAttemptsEdit(string value)
         {
             if (int.TryParse(value, out var count) && count >= 0)
@@ -561,7 +604,13 @@ namespace AutoHitCounter.ViewModels
                 IsUnlocked = !IsUnlocked;
                 SettingsManager.Default.IsUnlocked = IsUnlocked;
                 SettingsManager.Default.Save();
+                if (!IsUnlocked) SelectedSplit = null;
+                MoveSplitUpCommand.RaiseCanExecuteChanged();
+                MoveSplitDownCommand.RaiseCanExecuteChanged();
             });
+
+            MoveSplitUpCommand = new DelegateCommand(MoveSplitUp, () => CanMoveSplitUp());
+            MoveSplitDownCommand = new DelegateCommand(MoveSplitDown, () => CanMoveSplitDown());
         }
 
         private void RegisterHotkeys()

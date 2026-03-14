@@ -153,6 +153,17 @@
                                     Padding="8,0"
                                     Visibility="{Binding SelectedGame.IsEventLogSupported, Converter={StaticResource BoolToVisConverter}}" />
 
+                    <StackPanel Grid.Row="1" Orientation="Horizontal"
+                                HorizontalAlignment="Right" Margin="0,-5,8,0">
+                        <Button Content="▲" Width="24" Height="23" FontSize="10"
+                                Command="{Binding MoveSplitUpCommand}"
+                                ToolTip="Move split up (Alt+Up)" />
+                        <Button Content="▼" Width="24" Height="23" FontSize="10"
+                                Margin="2,0,0,0"
+                                Command="{Binding MoveSplitDownCommand}"
+                                ToolTip="Move split down (Alt+Down)" />
+                    </StackPanel>
+
                     <Border Grid.Row="2" BorderBrush="#333333" BorderThickness="0,0,0,4" >
                         <Grid
                             Margin="{Binding IsSplitListScrollbarVisible, Converter={StaticResource ScrollbarVisibleToMarginConverter}}">
@@ -309,6 +320,11 @@
                              ScrollViewer.ScrollChanged="SplitList_ScrollChanged"
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
+                        <ListBox.InputBindings>
+                            <KeyBinding Key="Up" Modifiers="Alt" Command="{Binding MoveSplitUpCommand}" />
+                            <KeyBinding Key="Down" Modifiers="Alt" Command="{Binding MoveSplitDownCommand}" />
+                        </ListBox.InputBindings>
+
                         <!-- Context Menu -->
                         <ListBox.ContextMenu>
                             <ContextMenu>
@@ -330,7 +346,6 @@
                                 <MenuItem Header="Clear All PBs"
                                           Command="{Binding PlacementTarget.DataContext.ClearTotalPbCommand,
                             RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
-
 
                             </ContextMenu>
                         </ListBox.ContextMenu>
@@ -371,6 +386,13 @@
                                                     <Setter TargetName="Border" Property="BorderBrush" Value="#c47fd4" />
                                                     <Setter TargetName="Border" Property="Background" Value="#B37c4d85" />
                                                 </DataTrigger>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
+                                                        <Condition Binding="{Binding DataContext.IsUnlocked, RelativeSource={RelativeSource AncestorType=ListBox}}" Value="True" />
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter TargetName="Border" Property="Background" Value="#3383518c" />
+                                                </MultiDataTrigger>
                                                 <DataTrigger Binding="{Binding IsParent}" Value="True">
                                                     <Setter TargetName="Border" Property="Background" Value="#1A1A1A" />
                                                     <Setter TargetName="Border" Property="BorderBrush"
