@@ -10,6 +10,8 @@ public enum AsmScript
     DSRCheckAuxAttacker,
     DSRAuxProc,
     DSREventLog,
+    DSRClearThrowState,
+    DSRSetThrowState,
     
     VanillaCheckPlayerDead,
     VanillaHit,

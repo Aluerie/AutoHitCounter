@@ -8,6 +8,7 @@ public class DSRCustomCodeOffsets
 
     public const int CheckEnvDeathFlag = 0x0;
     public const int CheckAuxProcFlag = 0x1;
+    public const int InThrowFlag = 0x2;
     
     public const int Hit = 0x10;
     public const int HitCode = 0x100;
@@ -16,6 +17,8 @@ public class DSRCustomCodeOffsets
     public const int KillChr = 0x600;
     public const int CheckAuxAttacker = 0x700;
     public const int CheckAuxProc = 0x800;
+    public const int ClearThrowState = 0xA00;
+    public const int SetThrowState = 0xB00;
     
     
     

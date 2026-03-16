@@ -64,8 +64,8 @@ public static class DSROffsets
         public static nint KillChr;
         public static nint CheckAuxAttacker;
         public static nint CheckAuxProc;
-        
-        
+        public static nint SetThrowState;
+        public static nint ClearThrowState;
         public static nint SetEvent;
     }
 
@@ -120,8 +120,6 @@ public static class DSROffsets
             _ => 0
         };
 
-
-
         
         Hooks.Hit = moduleBase + Version switch
         {
@@ -169,6 +167,26 @@ public static class DSROffsets
             Version1_0_3_1 => 0x11B08D4,
             _ => 0
         };
+        
+        Hooks.SetThrowState = moduleBase + Version switch
+        {
+            Version1_0_1_0 => 0xDE2A81,
+            Version1_0_1_1 => 0xCD88A1,
+            Version1_0_1_2 => 0x2D830E0,
+            Version1_0_3_0 => 0x69B491,
+            Version1_0_3_1 => 0x6FFB31,
+            _ => 0
+        };
+
+        Hooks.ClearThrowState = moduleBase + Version switch
+        {
+            Version1_0_1_0 => 0x3A37C0,
+            Version1_0_1_1 => 0x3A34C0,
+            Version1_0_1_2 => 0x3A69F0,
+            Version1_0_3_0 => 0x3ACEF0,
+            Version1_0_3_1 => 0x3AC500,
+            _ => 0
+        };
 
         
         Hooks.SetEvent = moduleBase + Version switch
@@ -199,6 +217,8 @@ public static class DSROffsets
         PrintOffset("KillChr", Hooks.KillChr);
         PrintOffset("CheckAuxAttacker", Hooks.CheckAuxAttacker);
         PrintOffset("CheckAuxProc", Hooks.CheckAuxProc);
+        PrintOffset("SetThrowState", Hooks.SetThrowState);
+        PrintOffset("ClearThrowState", Hooks.ClearThrowState);
         
         PrintOffset("SetEvent", Hooks.SetEvent);
       

@@ -443,6 +443,25 @@ namespace AutoHitCounter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 88 51 20                mov    BYTE PTR [rcx+0x20],dl
+        ///80 fa 00                cmp    dl,0x0
+        ///75 24                   jne    2c &lt;early_exit&gt;
+        ///50                      push   rax
+        ///48 8b 05 00 00 00 00    mov    rax,QWORD PTR [rip+0x0]        # 10 &lt;_main+0x10&gt;
+        ///48 85 c0                test   rax,rax
+        ///74 16                   je     2b &lt;exit&gt;
+        ///48 8b 40 68             mov    rax,QWORD PTR [rax+0x68]
+        ///48 85 c0                test   rax,rax
+        ///74 0d                   je     2b &lt;exit&gt;
+        ///48 3b 41 08             cmp    r [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DSRClearThrowState {
+            get {
+                return ResourceManager.GetString("DSRClearThrowState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 50                      push   rax
         ///53                      push   rbx
         ///57                      push   rdi
@@ -498,15 +517,15 @@ namespace AutoHitCounter.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to c6 05 00 00 00 00 00    mov    BYTE PTR [rip+0x0],0x0        # 7 &lt;_main+0x7&gt;
+        ///80 3d 00 00 00 00 01    cmp    BYTE PTR [rip+0x0],0x1        # e &lt;_main+0xe&gt;
+        ///0f 84 97 00 00 00       je     ab &lt;skip_all&gt;
         ///50                      push   rax
-        ///48 8b 05 00 00 00 00    mov    rax,QWORD PTR [rip+0x0]        # f &lt;_main+0xf&gt;
+        ///48 8b 05 00 00 00 00    mov    rax,QWORD PTR [rip+0x0]        # 1c &lt;_main+0x1c&gt;
         ///48 85 c0                test   rax,rax
-        ///0f 84 85 00 00 00       je     9d &lt;exit&gt;
+        ///0f 84 85 00 00 00       je     aa &lt;exit&gt;
         ///48 8b 40 68             mov    rax,QWORD PTR [rax+0x68]
         ///48 85 c0                test   rax,rax
-        ///74 7c                   je     9d &lt;exit&gt;
-        ///83 b8 e8 03 00 00 00    cmp    DWORD PTR [rax+0x3e8],0x0
-        ///74 73                   je     9d &lt;exit&gt; [rest of string was truncated]&quot;;.
+        ///74 7c          [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DSRHit {
             get {
@@ -531,6 +550,26 @@ namespace AutoHitCounter.Properties {
         internal static string DSRKillChr {
             get {
                 return ResourceManager.GetString("DSRKillChr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 81 8b dc 01 00 00 00    or     DWORD PTR [rbx+0x1dc],0x200000
+        ///00 20 00 
+        ///50                      push   rax
+        ///51                      push   rcx
+        ///48 8b 43 10             mov    rax,QWORD PTR [rbx+0x10]
+        ///48 85 c0                test   rax,rax
+        ///74 39                   je     4e &lt;exit&gt;
+        ///48 8b 40 10             mov    rax,QWORD PTR [rax+0x10]
+        ///48 85 c0                test   rax,rax
+        ///74 30                   je     4e &lt;exit&gt;
+        ///48 8b 80 48 04 00 00    mov    rax,QWORD PTR [rax+0x448]
+        ///48 85 c0                test   [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DSRSetThrowState {
+            get {
+                return ResourceManager.GetString("DSRSetThrowState", resourceCulture);
             }
         }
         

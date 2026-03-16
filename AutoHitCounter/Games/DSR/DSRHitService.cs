@@ -24,6 +24,8 @@ public class DSRHitService(IMemoryService memoryService, HookManager hookManager
         InstallKillChrHook();
         InstallCheckAuxAttacker();
         InstallAuxProcHook();
+        InstallClearThrowStateHook();
+        InstallSetThrowStateHook();
     }
 
     public bool HasHit()
@@ -39,6 +41,11 @@ public class DSRHitService(IMemoryService memoryService, HookManager hookManager
         if (_hooks.Any(h => memoryService.Read<byte>(h) != 0xE9))
             InstallHooks();
     }
+    
+    public void ResetFlags()
+    {
+        memoryService.Write(Base + InThrowFlag, false);
+    }
 
     private void InstallHook(nint code, nint hookAddr, byte[] originalBytes)
     {
@@ -51,17 +58,19 @@ public class DSRHitService(IMemoryService memoryService, HookManager hookManager
         var bytes = AsmLoader.GetAsmBytes(AsmScript.DSRHit);
         var hit = Base + Hit;
         var envDeathFlag = Base + CheckEnvDeathFlag;
+        var throwFlag = Base + InThrowFlag;
         var code = Base + HitCode;
         var originalBytes = DSROriginalBytes.Hit.GetOriginal();
 
-        Array.Copy(originalBytes, 0, bytes, 0x9E, originalBytes.Length);
+        Array.Copy(originalBytes, 0, bytes, 0xAB, originalBytes.Length);
         
         AsmHelper.WriteRelativeOffsets(bytes, [
             (code, envDeathFlag, 7, 2),
-            (code + 0x8, WorldChrMan.Base, 7, 0x8 + 3),
-            (code + 0x8E, hit, 6, 0x8E + 2),
-            (code + 0x96, envDeathFlag, 7, 0x96 + 2),
-            (code + 0xA3, Hooks.Hit + 5, 5, 0xA3 + 1),
+            (code + 0x7, throwFlag, 7, 0x7 + 2),
+            (code + 0x15, WorldChrMan.Base, 7, 0x15 + 3),
+            (code + 0x9B, hit, 6, 0x9B + 2),
+            (code + 0xA3, envDeathFlag, 7, 0xA3 + 2),
+            (code + 0xB0, Hooks.Hit + 5, 5, 0xB0 + 1),
         ]);
 
         memoryService.WriteBytes(code, bytes);
@@ -145,5 +154,36 @@ public class DSRHitService(IMemoryService memoryService, HookManager hookManager
         
         memoryService.WriteBytes(code, bytes);
         InstallHook(code, Hooks.CheckAuxProc, [0x44, 0x8B, 0x83, 0x34, 0x04, 0x00, 0x00]);
+    }
+
+    private void InstallClearThrowStateHook()
+    {
+        var bytes = AsmLoader.GetAsmBytes(AsmScript.DSRClearThrowState);
+        var code = Base + ClearThrowState;
+        var throwFlag = Base + InThrowFlag;
+        
+        AsmHelper.WriteRelativeOffsets(bytes, [
+            (code + 0x9, WorldChrMan.Base, 7, 0x9 + 3),
+            (code + 0x24, throwFlag, 7, 0x24 + 2),
+        ]);
+        
+        memoryService.WriteBytes(code, bytes);
+        InstallHook(code, Hooks.ClearThrowState, [0x88, 0x51, 0x20, 0xC3, 0xCC]);
+    }
+
+    private void InstallSetThrowStateHook()
+    {
+        var bytes = AsmLoader.GetAsmBytes(AsmScript.DSRSetThrowState);
+        var code = Base + SetThrowState;
+        var throwFlag = Base + InThrowFlag;
+        
+        AsmHelper.WriteRelativeOffsets(bytes, [
+            (code + 0x2D, WorldChrMan.Base, 7, 0x2D + 3),
+            (code + 0x47, throwFlag, 7, 0x47 + 2),
+            (code + 0x50, Hooks.SetThrowState + 10, 5, 0x50 + 1),
+        ]);
+        
+        memoryService.WriteBytes(code, bytes);
+        InstallHook(code, Hooks.SetThrowState, [ 0x81, 0x8B, 0xDC, 0x01, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00]);
     }
 }

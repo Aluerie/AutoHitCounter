@@ -85,7 +85,11 @@ public class DSRModule : IGameModule, IDisposable, IVersionedGameModule
     
     private void Tick()
     {
-        if (!IsLoaded()) return;
+        if (!IsLoaded())
+        {
+            _hitService.ResetFlags();
+            return;
+        }
 
         _hitService.EnsureHooksInstalled();
 
