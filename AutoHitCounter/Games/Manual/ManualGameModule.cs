@@ -13,6 +13,9 @@ public class ManualGameModule : IGameModule, IDisposable
 {
     private readonly Stopwatch _stopwatch = new();
     private readonly DispatcherTimer _timer;
+    private long _offset;
+
+    public long ElapsedMilliseconds => _offset + _stopwatch.ElapsedMilliseconds;
 
     public event Action<int> OnHit;
     public event Action OnEventSet;
@@ -22,7 +25,7 @@ public class ManualGameModule : IGameModule, IDisposable
     public ManualGameModule()
     {
         _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
-        _timer.Tick += (_, _) => OnTimeChanged?.Invoke(_stopwatch.ElapsedMilliseconds);
+        _timer.Tick += (_, _) => OnTimeChanged?.Invoke(ElapsedMilliseconds);
     }
 
     public void StartTimer()
@@ -40,7 +43,14 @@ public class ManualGameModule : IGameModule, IDisposable
     public void ResetTimer()
     {
         _stopwatch.Reset();
+        _offset = 0;
         OnTimeChanged?.Invoke(0);
+    }
+
+    public void SetElapsed(long milliseconds)
+    {
+        _stopwatch.Reset();
+        _offset = milliseconds;
     }
 
     public void UpdateEvents(Dictionary<uint, (string Name, int Required, int Hit)> events) { }

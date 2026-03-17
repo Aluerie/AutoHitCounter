@@ -710,6 +710,9 @@ namespace AutoHitCounter.ViewModels
             {
                 IsAttached = true;
                 AttachedText = $"Custom Game: {_activeGame.GameName}";
+
+                if (_currentModule is ManualGameModule m && InGameTime.TotalMilliseconds > 0)
+                    m.SetElapsed((long)InGameTime.TotalMilliseconds);
             }
             else
             {
