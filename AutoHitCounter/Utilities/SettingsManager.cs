@@ -56,6 +56,8 @@ public class SettingsManager
 
     public string CustomGames { get; set; } = "";
 
+    [DefaultValue(0)] public int MigrationVersion { get; set; }
+
     public void Save()
     {
         try

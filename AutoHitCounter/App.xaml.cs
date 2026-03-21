@@ -30,6 +30,8 @@ namespace AutoHitCounter
 
             base.OnStartup(e);
 
+            ProfileMigrator.RunIfNeeded();
+
             IMemoryService memoryService = new MemoryService();
             IStateService stateService = new StateService();
             IProfileService profileService = new ProfileService();

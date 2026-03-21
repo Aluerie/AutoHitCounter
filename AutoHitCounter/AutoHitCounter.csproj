@@ -209,6 +209,7 @@
         <Compile Include="Utilities\HotkeyManager.cs" />
         <Compile Include="Utilities\MsgBox.cs" />
         <Compile Include="Utilities\OverlayProfileManager.cs" />
+        <Compile Include="Utilities\ProfileMigrator.cs" />
         <Compile Include="Utilities\SettingsManager.cs" />
         <Compile Include="Utilities\UpDownHelper.cs" />
         <Compile Include="Utilities\User32.cs" />
