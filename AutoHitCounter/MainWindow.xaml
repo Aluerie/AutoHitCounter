@@ -59,7 +59,7 @@
                 <Button Command="{Binding CheckUpdateCommand}" Content="Check for Updates"
                         Margin="8,0,0,0" Height="20" FontSize="11"
                         VerticalAlignment="Center" />
-          
+
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                 <Ellipse Width="8" Height="8" VerticalAlignment="Center" Margin="0,0,6,0">
@@ -85,7 +85,7 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="0.5*" />
-                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="20" />
                         <RowDefinition Height="0.3*" />
                         <RowDefinition Height="4*" />
                         <RowDefinition Height="Auto" />
@@ -99,7 +99,7 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                            <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                        <StackPanel Grid.Column="0" Margin="0,0,4,0">
                             <TextBlock Text="GAME" FontFamily="{StaticResource AppFont}" FontSize="10"
                                        Foreground="#666666" Margin="2,0,0,2" />
                             <DockPanel>
@@ -135,7 +135,7 @@
                                     </Style>
                                 </TextBlock.Style>
                             </TextBlock>
-                            </StackPanel>
+                        </StackPanel>
 
                         <StackPanel Grid.Column="1" Margin="0,0,4,0">
                             <TextBlock Text="PROFILE"
@@ -157,18 +157,110 @@
                                     FontSize="14" Padding="0,0,0.5,2.7"
                                     ToolTip="Edit Profile" />
                             <!-- Lock Splits Button -->
-                            <Button Content="{Binding IsUnlocked, Converter={StaticResource LockIconConverter}}"
-                                    Command="{Binding ToggleLockCommand}"
-                                    Width="30" Height="22.1"
-                                    FontSize="13" Padding="0,0,0,0"
-                                    FontFamily="Segoe MDL2 Assets"
-                                    Margin="4,0,0,0"
-                                    ToolTip="{Binding IsUnlocked, Converter={StaticResource LockTooltipConverter}}" />
+                            <ToggleButton
+                                IsChecked="{Binding IsUnlocked, Mode=OneWay}"
+                                Command="{Binding ToggleLockCommand}"
+                                Content="{Binding IsUnlocked, Converter={StaticResource LockIconConverter}}"
+                                ToolTip="{Binding IsUnlocked, Converter={StaticResource LockTooltipConverter}}"
+                                Width="30" Height="22.1"
+                                FontSize="13" Padding="0,0,0,0"
+                                Margin="4,0,0,0"
+                                FontFamily="Segoe MDL2 Assets">
+                                <ToggleButton.Style>
+                                    <Style TargetType="ToggleButton">
+                                        <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+                                        <Setter Property="Background" Value="{StaticResource ControlBackgroundBrush}" />
+                                        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+                                        <Setter Property="BorderThickness" Value="1" />
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ToggleButton">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                            CornerRadius="3">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center"
+                                                                          Margin="{TemplateBinding Padding}" />
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+                                                <Setter Property="BorderBrush" Value="{StaticResource HoverBrush}" />
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter Property="Foreground" Value="#c47fd4" />
+                                                <Setter Property="BorderBrush" Value="#9D61A8" />
+                                                <Setter Property="Background" Value="#9D61A8" />
+                                            </Trigger>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="IsMouseOver" Value="True" />
+                                                    <Condition Property="IsChecked" Value="True" />
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+                                                <Setter Property="BorderBrush" Value="{StaticResource HoverBrush}" />
+                                                <Setter Property="Foreground" Value="#6683518c" />
+                                            </MultiTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ToggleButton.Style>
+                            </ToggleButton>
                         </StackPanel>
                     </Grid>
-                    
+
                     <StackPanel Grid.Row="1" Orientation="Horizontal"
-                                HorizontalAlignment="Left" Margin="8,-5,0,0">
+                                HorizontalAlignment="Left" Margin="9,-5,0,0">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,4,0"
+                                    ToolTip="Stops auto split / auto hit counting"
+                                    ToolTipService.InitialShowDelay="100"
+                                    Visibility="{Binding SelectedGame.IsEventLogSupported, Converter={StaticResource BoolToVisConverter}}">
+                            <TextBlock Text="Practice"
+                                       Foreground="{StaticResource TextBrush}"
+                                       VerticalAlignment="Center" Margin="0,0,4,0" />
+                            <CheckBox IsChecked="{Binding IsPracticeMode}"
+                                      VerticalAlignment="Center">
+                                <CheckBox.Style>
+                                    <Style TargetType="CheckBox">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="CheckBox">
+                                                    <Border x:Name="Track"
+                                                            Width="35" Height="18"
+                                                            CornerRadius="7"
+                                                            Background="#444444"
+                                                            BorderBrush="#555555"
+                                                            BorderThickness="1"
+                                                            Cursor="Hand">
+                                                        <Border x:Name="Thumb"
+                                                                Width="14" Height="14"
+                                                                CornerRadius="7"
+                                                                Background="#AAAAAA"
+                                                                HorizontalAlignment="Left"
+                                                                Margin="1,0,0,0" />
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsChecked" Value="True">
+                                                            <Setter TargetName="Track" Property="Background" Value="#9D61A8" />
+                                                            <Setter TargetName="Track" Property="BorderBrush" Value="#B070BD" />
+                                                            <Setter TargetName="Thumb" Property="Background" Value="#FFFFFF" />
+                                                            <Setter TargetName="Thumb" Property="HorizontalAlignment" Value="Right" />
+                                                            <Setter TargetName="Thumb" Property="Margin" Value="0,0,1,0" />
+                                                        </Trigger>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter TargetName="Track" Property="BorderBrush" Value="{StaticResource HoverBrush}" />
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </CheckBox.Style>
+                            </CheckBox>
+                        </StackPanel>
                         <Button Content="Event Logger"
                                 Command="{Binding OpenEventLogCommand}"
                                 Height="23" FontSize="11"
@@ -221,7 +313,7 @@
                                 ToolTip="Move split down (Alt+Down)" />
                     </StackPanel>
 
-                    <Border Grid.Row="2" BorderBrush="#333333" BorderThickness="0,0,0,4" >
+                    <Border Grid.Row="2" BorderBrush="#333333" BorderThickness="0,0,0,4">
                         <Grid
                             Margin="{Binding IsSplitListScrollbarVisible, Converter={StaticResource ScrollbarVisibleToMarginConverter}}">
                             <Grid.ColumnDefinitions>
@@ -448,8 +540,12 @@
                                                 </DataTrigger>
                                                 <MultiDataTrigger>
                                                     <MultiDataTrigger.Conditions>
-                                                        <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True" />
-                                                        <Condition Binding="{Binding DataContext.IsUnlocked, RelativeSource={RelativeSource AncestorType=ListBox}}" Value="True" />
+                                                        <Condition
+                                                            Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
+                                                            Value="True" />
+                                                        <Condition
+                                                            Binding="{Binding DataContext.IsUnlocked, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                            Value="True" />
                                                     </MultiDataTrigger.Conditions>
                                                     <Setter TargetName="Border" Property="Background" Value="#3383518c" />
                                                 </MultiDataTrigger>
@@ -820,7 +916,7 @@
                             <Rectangle Width="1" Height="16" Fill="#444" Margin="8,0" VerticalAlignment="Center" />
                             <Button Content="Clear PB" Height="24"
                                     Command="{Binding ClearTotalPbCommand}" />
-                            
+
 
                         </StackPanel>
                         <!-- Potentially turn this into a popup window -->
