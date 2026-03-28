@@ -71,6 +71,7 @@ public enum AsmScript
     SKHkbFireEvent,
     SKFadeFallHeight,
     SKDeferredFallCheck,
+    SKApplySpEffectDamage,
     SKEventLog,
 
     EldenRingHit,

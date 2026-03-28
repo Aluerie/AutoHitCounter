@@ -26,6 +26,7 @@ public class SKCustomCodeOffsets
     public const int HkbFireEvent = 0x900;
     public const int FadeFallHeight = 0xB00;
     public const int DeferredFallCheck = 0xC00;
+    public const int ApplySpEffectDamage = 0x1000;
     
     public const int EventLogWriteIdx = 0x2000;
     public const int EventLogCode = 0x2020;

@@ -1142,6 +1142,26 @@ namespace AutoHitCounter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 50                      push   rax
+        ///51                      push   rcx
+        ///52                      push   rdx
+        ///48 8b 0d 00 00 00 00    mov    rcx,QWORD PTR [rip+0x0]        # a &lt;_main+0xa&gt;
+        ///48 85 c9                test   rcx,rcx
+        ///74 31                   je     40 &lt;exit&gt;
+        ///48 8b 89 88 00 00 00    mov    rcx,QWORD PTR [rcx+0x88]
+        ///48 85 c9                test   rcx,rcx
+        ///74 25                   je     40 &lt;exit&gt;
+        ///48 39 c1                cmp    rcx,rax
+        ///75 20                   jne    40 &lt;exit&gt;
+        ///48 8b 89 d0 11 00 00   [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SKApplySpEffectDamage {
+            get {
+                return ResourceManager.GetString("SKApplySpEffectDamage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to d3 e0                   shl    eax,cl
         ///41 09 41 4c             or     DWORD PTR [r9+0x4c],eax
         ///80 3d 00 00 00 00 00    cmp    BYTE PTR [rip+0x0],0x0        # d &lt;_main+0xd&gt;

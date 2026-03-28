@@ -71,6 +71,7 @@ public static class SKOffsets
         public static nint FadeFallHeight;
         public static nint DeferredFallCheck;
         public static nint SetEvent;
+        public static nint ApplySpEffectDamage;
     }
 
     public static class Functions
@@ -216,6 +217,14 @@ public static class SKOffsets
             _ => 0
         };
         
+        Hooks.ApplySpEffectDamage = moduleBase + Version switch
+        {
+            Version1_2_0 => 0xB4EE2D,
+            Version1_3_0 or Version1_4_0 => 0xB4F4DD,
+            Version1_5_0 or Version1_6_0 => 0xB65ADD,
+            _ => 0
+        };
+        
         Hooks.SetEvent = moduleBase + Version switch
         {
             Version1_2_0 => 0x6C1B90,
@@ -295,7 +304,8 @@ public static class SKOffsets
         PrintOffset("CheckAuxAttacker", Hooks.CheckAuxAttacker);
         PrintOffset("HkbFireEvent", Hooks.HkbFireEvent);
         PrintOffset("FadeFallHeight", Hooks.FadeFallHeight);
-        PrintOffset("FadeFallHeight", Hooks.DeferredFallCheck);
+        PrintOffset("DeferredFallCheck", Hooks.DeferredFallCheck);
+        PrintOffset("ApplySpEffectDamage", Hooks.ApplySpEffectDamage);
         PrintOffset("SetEvent", Hooks.SetEvent);
 
 

@@ -28,6 +28,7 @@ public class SKHitService(IMemoryService memoryService, HookManager hookManager)
         InstallHkbFireEventHook();
         InstallFadeFallHeightHook();
         InstallDeferredFallCheckHook();
+        InstallApplySpEffectDamageHook();
     }
 
     public bool HasHit()
@@ -259,5 +260,22 @@ public class SKHitService(IMemoryService memoryService, HookManager hookManager)
         
         memoryService.WriteBytes(code, bytes);
         hookManager.InstallHook(code, Hooks.DeferredFallCheck, [0x48, 0x8B, 0x06, 0x41, 0x0F, 0x28, 0xC9]);
+    }
+
+    private void InstallApplySpEffectDamageHook()
+    {
+        var bytes = AsmLoader.GetAsmBytes(AsmScript.SKApplySpEffectDamage);
+        var hit = Base + Hit;
+        var code = Base + ApplySpEffectDamage;
+        
+        AsmHelper.WriteRelativeOffsets(bytes, [
+            (code + 0x3, WorldChrMan.Base, 7, 0x3 + 3),
+            (code + 0x31, Functions.HasSpEffectId, 5, 0x31 + 1),
+            (code + 0x3A, hit, 6, 0x3A + 2),
+            (code + 0x4A, Hooks.ApplySpEffectDamage + 7, 5, 0x4A + 1),
+        ]);
+        
+        memoryService.WriteBytes(code, bytes);
+        hookManager.InstallHook(code, Hooks.ApplySpEffectDamage, [0x48, 0x8B, 0x88, 0xF8, 0x1F, 0x00, 0x00]);
     }
 }
