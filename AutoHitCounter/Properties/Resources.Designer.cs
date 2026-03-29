@@ -1344,11 +1344,11 @@ namespace AutoHitCounter.Properties {
         ///48 89 44 24 50          mov    QWORD PTR [rsp+0x50],rax
         ///50                      push   rax
         ///e8 00 00 00 00          call   12 &lt;_main+0x12&gt;
-        ///0f 84 7d 01 00 00       je     195 &lt;skip_count&gt;
+        ///0f 84 a5 01 00 00       je     1bd &lt;skip_count&gt;
         ///48 8b 05 00 00 00 00    mov    rax,QWORD PTR [rip+0x0]        # 1f &lt;_main+0x1f&gt;
         ///48 8b 80 88 00 00 00    mov    rax,QWORD PTR [rax+0x88]
         ///48 39 d0                cmp    rax,rdx
-        ///0f 84 66 01 00 00       je     195 &lt;skip_count&gt;
+        ///0f 84 8e 01 00 00       je     1bd &lt;skip_count&gt;
         ///48 8b 80 f8 1f 00 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SKHit {
@@ -1413,6 +1413,25 @@ namespace AutoHitCounter.Properties {
         internal static string SKPostHit {
             get {
                 return ResourceManager.GetString("SKPostHit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to f3 0f 10 a5 10 02 00    movss  xmm4,DWORD PTR [rbp+0x210]
+        ///00 
+        ///80 3d 00 00 00 00 00    cmp    BYTE PTR [rip+0x0],0x0        # f &lt;_main+0xf&gt;
+        ///74 3c                   je     4d &lt;exit&gt;
+        ///c6 05 00 00 00 00 00    mov    BYTE PTR [rip+0x0],0x0        # 18 &lt;_main+0x18&gt;
+        ///83 7d 6c 00             cmp    DWORD PTR [rbp+0x6c],0x0
+        ///75 2f                   jne    4d &lt;exit&gt;
+        ///51                      push   rcx
+        ///52                      push   rdx
+        ///50                      push   rax
+        ///ba c9 26 02 00          mov    edx,0x226c [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SKSakuraDance {
+            get {
+                return ResourceManager.GetString("SKSakuraDance", resourceCulture);
             }
         }
         

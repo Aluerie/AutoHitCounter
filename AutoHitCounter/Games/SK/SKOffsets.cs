@@ -72,6 +72,7 @@ public static class SKOffsets
         public static nint DeferredFallCheck;
         public static nint SetEvent;
         public static nint ApplySpEffectDamage;
+        public static nint SakuraDance;
     }
 
     public static class Functions
@@ -225,6 +226,15 @@ public static class SKOffsets
             _ => 0
         };
         
+        Hooks.SakuraDance = moduleBase + Version switch
+        {
+            Version1_2_0 => 0xB56BA3,
+            Version1_3_0 or Version1_4_0 => 0xB57253,
+            Version1_5_0 or Version1_6_0 => 0xB6D853,
+            _ => 0
+        };
+
+        
         Hooks.SetEvent = moduleBase + Version switch
         {
             Version1_2_0 => 0x6C1B90,
@@ -306,6 +316,7 @@ public static class SKOffsets
         PrintOffset("FadeFallHeight", Hooks.FadeFallHeight);
         PrintOffset("DeferredFallCheck", Hooks.DeferredFallCheck);
         PrintOffset("ApplySpEffectDamage", Hooks.ApplySpEffectDamage);
+        PrintOffset("SakuraDance", Hooks.SakuraDance);
         PrintOffset("SetEvent", Hooks.SetEvent);
 
 

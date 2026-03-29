@@ -29,6 +29,7 @@ public class SKHitService(IMemoryService memoryService, HookManager hookManager)
         InstallFadeFallHeightHook();
         InstallDeferredFallCheckHook();
         InstallApplySpEffectDamageHook();
+        InstallSakuraDanceHook();
     }
 
     public bool HasHit()
@@ -57,6 +58,7 @@ public class SKHitService(IMemoryService memoryService, HookManager hookManager)
         var pendingHitFlag = Base + PendingHitFlag;
         var staggerCheckFlag = Base + StaggerCheckFlag;
         var shouldCountRoberto = Base + ShouldCountRobertoStagger;
+        var pureLightningFlag = Base + PureLightningFlag;
         var hit = Base + Hit;
         var checkPlayerDeadFunc = Base + CheckPlayerDead;
         var code = Base + HitCode;
@@ -71,14 +73,15 @@ public class SKHitService(IMemoryService memoryService, HookManager hookManager)
             (code + 0x9C, Functions.HasSpEffectId, 5, 0x9C + 1),
             (code + 0x114, WorldChrMan.Base, 7, 0x114 + 3),
             (code + 0x12E, Functions.HasSpEffectId, 5, 0x12E + 1),
-            (code + 0x139, staggerCheckFlag, 7, 0x139 + 2),
-            (code + 0x146, EventFlagMan.Base, 7, 0x146 + 3),
-            (code + 0x152, Functions.GetEvent, 5, 0x152 + 1),
-            (code + 0x15F, hit, 6, 0x15F + 2),
-            (code + 0x169, WorldChrMan.Base, 7, 0x169 + 3),
-            (code + 0x183, Functions.HasSpEffectId, 5, 0x183 + 1),
-            (code + 0x18E, pendingHitFlag, 7, 0x18E + 2),
-            (code + 0x196, Hooks.Hit + 5, 5, 0x196 + 1),
+            (code + 0x13D, staggerCheckFlag, 7, 0x13D + 2),
+            (code + 0x14A, EventFlagMan.Base, 7, 0x14A + 3),
+            (code + 0x156, Functions.GetEvent, 5, 0x156 + 1),
+            (code + 0x163, hit, 6, 0x163 + 2),
+            (code + 0x16D, WorldChrMan.Base, 7, 0x16D + 3),
+            (code + 0x187, Functions.HasSpEffectId, 5, 0x187 + 1),
+            (code + 0x1AD, pureLightningFlag, 7, 0x1AD + 2),
+            (code + 0x1B6, pendingHitFlag, 7, 0x1B6 + 2),
+            (code + 0x1BE, Hooks.Hit + 5, 5, 0x1BE + 1),
         ]);
         memoryService.WriteBytes(code, bytes);
         hookManager.InstallHook(code, Hooks.Hit, [0x48, 0x89, 0x44, 0x24, 0x50]);
@@ -281,5 +284,25 @@ public class SKHitService(IMemoryService memoryService, HookManager hookManager)
         
         memoryService.WriteBytes(code, bytes);
         hookManager.InstallHook(code, Hooks.ApplySpEffectDamage, [0x48, 0x8B, 0x88, 0xF8, 0x1F, 0x00, 0x00]);
+    }
+
+    private void InstallSakuraDanceHook()
+    {
+        var bytes = AsmLoader.GetAsmBytes(AsmScript.SKSakuraDance);
+        var hit = Base + Hit;
+        var pureLightningFlag = Base + PureLightningFlag;
+        var code = Base + SakuraDance;
+        
+        AsmHelper.WriteRelativeOffsets(bytes, [
+        (code + 0x8, pureLightningFlag, 7, 0x8 + 2),
+        (code + 0x11, pureLightningFlag, 7, 0x11 + 2),
+        (code + 0x26, WorldChrMan.Base, 7, 0x26 + 3),
+        (code + 0x3B, Functions.HasSpEffectId, 5, 0x3B + 1),
+        (code + 0x47, hit, 6, 0x47 + 2),
+        (code + 0x4D, Hooks.SakuraDance  + 8, 5, 0x4D + 1),
+        ]);
+        
+        memoryService.WriteBytes(code, bytes);
+        hookManager.InstallHook(code, Hooks.SakuraDance, [0xF3, 0x0F, 0x10, 0xA5, 0x10, 0x02, 0x00, 0x00]);
     }
 }
