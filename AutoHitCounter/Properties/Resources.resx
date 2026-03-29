@@ -2613,7 +2613,7 @@ e8 00 00 00 00          call   6d &lt;_main+0x6d&gt;
 84 c0                   test   al,al
 75 11                   jne    82 &lt;count_hit&gt;
 48 89 d9                mov    rcx,rbx
-ba db 24 00 00          mov    edx,0x24db
+ba da 24 00 00          mov    edx,0x24da
 e8 00 00 00 00          call   7e &lt;_main+0x7e&gt;
 84 c0                   test   al,al
 74 06                   je     88 &lt;exit_pop_rbx&gt;
